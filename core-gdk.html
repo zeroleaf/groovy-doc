@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<title>Groovy Development Kit (Peter Ledbrook)</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="assets/css/view-example.css">
+<script src='assets/js/jquery-2.1.1.min.js'></script>
+<script src='assets/js/view-example.js'></script></head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Groovy Development Kit (Peter Ledbrook)</h1>
+<span id="revnumber">version 2.4.0-SNAPSHOT</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_working_with_io_peter_ledbrook">1. Working with IO (Peter Ledbrook)</a></li>
+<li><a href="#_working_with_collections_tbd">2. Working with collections (TBD)</a></li>
+<li><a href="#_handy_utilities">3. Handy utilities</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_configslurper">3.1. ConfigSlurper</a></li>
+<li><a href="#_expando">3.2. Expando</a></li>
+<li><a href="#_observable_list_map_and_set">3.3. Observable list, map and set</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_working_with_io_peter_ledbrook">1. Working with IO (Peter Ledbrook)</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_working_with_collections_tbd">2. Working with collections (TBD)</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_handy_utilities">3. Handy utilities</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_configslurper">3.1. ConfigSlurper</h3>
+<div class="paragraph">
+<p><code>ConfigSlurper</code> is a utility class for reading configuration files defined in the form of Groovy scripts. Like it is
+the case with Java <code>*.properties</code> files, <code>ConfigSlurper</code> allows a dot notation. But in addition, it allows for Closure scoped
+configuration values and arbitrary object types.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def config = new ConfigSlurper().parse('''
+    app.date = new Date()  <i class="conum" data-value="1"></i><b>(1)</b>
+    app.age  = 42
+    app {                  <i class="conum" data-value="2"></i><b>(2)</b>
+        name = "Test${42}"
+    }
+''')
+
+assert config.app.date instanceof Date
+assert config.app.age == 42
+assert config.app.name == 'Test42'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Usage of the dot notation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Usage of Closure scopes as an alternative to the dot notation</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As can be seen in the above example, the <code>parse</code> method can be used to retrieve <code>groovy.util.ConfigObject</code> instances. The
+<code>ConfigObject</code> is a specialized <code>java.util.Map</code> implementation that either returns the configured value or a new <code>ConfigObject</code>
+instance but never <code>null</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def config = new ConfigSlurper().parse('''
+    app.date = new Date()
+    app.age  = 42
+    app.name = "Test${42}"
+''')
+
+assert config.test != null   <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>config.test</code> has not been specified yet it returns a <code>ConfigObject</code> when being called.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the case of a dot being part of a configuration variable name, it can be escaped by using single or double quotes.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def config = new ConfigSlurper().parse('''
+    app."person.age"  = 42
+''')
+
+assert config.app."person.age" == 42</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition, <code>ConfigSlurper</code> comes with support for <code>environments</code>. The <code>environments</code> method can be used to hand over
+a Closure instance that itself may consist of a several sections. Let&#8217;s say we wanted to create a particular configuration
+value for the development environment. When creating the <code>ConfigSlurper</code> instance we can use the <code>ConfigSlurper(String)</code>
+constructor to specify the target environment.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def config = new ConfigSlurper('development').parse('''
+  environments {
+       development {
+           app.port = 8080
+       }
+
+       test {
+           app.port = 8082
+       }
+
+       production {
+           app.port = 80
+       }
+  }
+''')
+
+assert config.app.port == 8080</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>ConfigSlurper</code> environments aren&#8217;t restricted to any particular environment names. It solely depends on the
+<code>ConfigSlurper</code> client code what value are supported and interpreted accordingly.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>environments</code> method is built-in but the <code>registerConditionalBlock</code> method can be used to register other method names
+in addition to the <code>environments</code> name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def slurper = new ConfigSlurper()
+slurper.registerConditionalBlock('myProject', 'developers')   <i class="conum" data-value="1"></i><b>(1)</b>
+
+def config = slurper.parse('''
+  sendMail = true
+
+  myProject {
+       developers {
+           sendMail = false
+       }
+  }
+''')
+
+assert !config.sendMail</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Once the new block is registered <code>ConfigSlurper</code> can parse it.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For Java integration purposes the <code>toProperties</code> method can be used to convert the <code>ConfigObject</code> to a <code>java.util.Properties</code>
+object that might be stored to a <code>*.properties</code> text file. Be aware though that the configuration values are converted to
+<code>String</code> instances during adding them to the newly created <code>Properties</code> instance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def config = new ConfigSlurper().parse('''
+    app.date = new Date()
+    app.age  = 42
+    app {
+        name = "Test${42}"
+    }
+''')
+
+def properties = config.toProperties()
+
+assert properties."app.date" instanceof String
+assert properties."app.age" == '42'
+assert properties."app.name" == 'Test42'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_expando">3.2. Expando</h3>
+<div class="paragraph">
+<p>The <code>Expando</code> class can be used to create a dynamically expandable object. Despite its name it does not use the
+<code>ExpandoMetaClass</code> underneath. Each <code>Expando</code> object represents a standalone, dynamically-crafted instance that can be
+extended with properties (or methods) at runtime.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def expando = new Expando()
+expando.name = 'John'
+
+assert expando.name == 'John'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A special case occurs when a dynamic property registers a <code>Closure</code> code block. Once being registered it can be invoked
+as it would be done with a method call.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def expando = new Expando()
+expando.toString = { -&gt; 'John' }
+expando.say = { String s -&gt; "John says: ${s}" }
+
+assert expando as String == 'John'
+assert expando.say('Hi') == 'John says: Hi'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_observable_list_map_and_set">3.3. Observable list, map and set</h3>
+<div class="paragraph">
+<p>Groovy comes with observable lists, maps and sets. Each of these collections trigger <code>java.beans.PropertyChangeEvent</code> events when elements
+are added, removed or changed. Note that a <code>PropertyChangeEvent</code> is not only signaling that a certain event has
+ occurred, moreover, it holds information on the property name and the old/new value a certain property has been changed to.</p>
+</div>
+<div class="paragraph">
+<p>Depending on the type of change that has happened, observable collections might fire more specialized <code>PropertyChangeEvent</code>
+ types. For example, adding an element to an observable list fires an <code>ObservableList.ElementAddedEvent</code> event.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def event                                       <i class="conum" data-value="1"></i><b>(1)</b>
+def listener = {
+    if (it instanceof ObservableList.ElementEvent)  {  <i class="conum" data-value="2"></i><b>(2)</b>
+        event = it
+    }
+} as PropertyChangeListener
+
+
+def observable = [1, 2, 3] as ObservableList    <i class="conum" data-value="3"></i><b>(3)</b>
+observable.addPropertyChangeListener(listener)  <i class="conum" data-value="4"></i><b>(4)</b>
+
+observable.add 42                               <i class="conum" data-value="5"></i><b>(5)</b>
+
+assert event instanceof ObservableList.ElementAddedEvent
+
+def elementAddedEvent = event as ObservableList.ElementAddedEvent
+assert elementAddedEvent.changeType == ObservableList.ChangeType.ADDED
+assert elementAddedEvent.index == 3
+assert elementAddedEvent.oldValue == null
+assert elementAddedEvent.newValue == 42</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Declares a <code>PropertyChangeEventListener</code> that is capturing the fired events</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>ObservableList.ElementEvent</code> and its descendant types are relevant for this listener</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Registers the listener</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Creates an <code>ObservableList</code> from the given list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Triggers an <code>ObservableList.ElementAddedEvent</code> event</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+Be aware that adding an element in fact causes two events to be triggered. The first is of type <code>ObservableList.ElementAddedEvent</code>,
+the second is a plain <code>PropertyChangeEvent</code> that informs listeners about the change of property <code>size</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>ObservableList.ElementClearedEvent</code> event type is another interesting one. Whenever multiple
+ elements are removed, for example when calling <code>clear()</code>, it holds the elements being removed from the list.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def event
+def listener = {
+    if (it instanceof ObservableList.ElementEvent)  {
+        event = it
+    }
+} as PropertyChangeListener
+
+
+def observable = [1, 2, 3] as ObservableList
+observable.addPropertyChangeListener(listener)
+
+observable.clear()
+
+assert event instanceof ObservableList.ElementClearedEvent
+
+def elementClearedEvent = event as ObservableList.ElementClearedEvent
+assert elementClearedEvent.values == [1, 2, 3]
+assert observable.size() == 0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To get an overview of all the supported event types the reader is encouraged to have a look at the JavaDoc documentation
+or the source code of the observable collection in use.</p>
+</div>
+<div class="paragraph">
+<p><code>ObservableMap</code> and <code>ObservableSet</code> come with the same concepts as we have seen for <code>ObservableList</code> in this section.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.4.0-SNAPSHOT<br>
+Last updated 2014-07-10 23:39:15 CST
+</div>
+</div>
+</body>
+</html>

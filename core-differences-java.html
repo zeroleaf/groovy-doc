@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<title>Differences with Java</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="assets/css/view-example.css">
+<script src='assets/js/jquery-2.1.1.min.js'></script>
+<script src='assets/js/view-example.js'></script></head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Differences with Java</h1>
+<span id="revnumber">version 2.4.0-SNAPSHOT</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_default_imports">1. Default imports</a></li>
+<li><a href="#_multi_methods">2. Multi-methods</a></li>
+<li><a href="#_array_initializers">3. Array initializers</a></li>
+<li><a href="#_package_scope_visibility">4. Package scope visibility</a></li>
+<li><a href="#_arm_blocks">5. ARM blocks</a></li>
+<li><a href="#_inner_classes">6. Inner classes</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_static_inner_classes">6.1. Static inner classes</a></li>
+<li><a href="#_anonymous_inner_classes">6.2. Anonymous Inner Classes</a></li>
+<li><a href="#_creating_instances_of_non_static_inner_classes">6.3. Creating Instances of Non-Static Inner Classes</a></li>
+</ul>
+</li>
+<li><a href="#_lambdas">7. Lambdas</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy tries to be as natural as possible for Java developers. We’ve
+tried to follow the principle of least surprise when designing Groovy,
+particularly for developers learning Groovy who’ve come from a Java
+background.</p>
+</div>
+<div class="paragraph">
+<p>Here we list all the major differences between Java and Groovy.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_default_imports">1. Default imports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All these packages and classes are imported by default, i.e. you do not
+have to use an explicit <code>import</code> statement to use them:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>java.io.*</p>
+</li>
+<li>
+<p>java.lang.*</p>
+</li>
+<li>
+<p>java.math.BigDecimal</p>
+</li>
+<li>
+<p>java.math.BigInteger</p>
+</li>
+<li>
+<p>java.net.*</p>
+</li>
+<li>
+<p>java.util.*</p>
+</li>
+<li>
+<p>groovy.lang.*</p>
+</li>
+<li>
+<p>groovy.util.*</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_multi_methods">2. Multi-methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, the methods which will be invoked are chosen at runtime. This is called runtime dispatch or multi-methods. It
+means that the method will be chosen based on the types of the arguments at runtime. In Java, this is the opposite: methods
+are chosen at compile time, based on the declared types.</p>
+</div>
+<div class="paragraph">
+<p>The following code, written as Java code, can be compiled in both Java and Groovy, but it will behave differently:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="java language-java">int method(String arg) {
+    return 1;
+}
+int method(Object arg) {
+    return 2;
+}
+Object o = "Object";
+int result = method(o);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Java, you would have:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="java language-java">assertEquals(2, result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Whereas in Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="java language-java">assertEquals(1, result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That is because Java will use the static information type, which is that <code>o</code> is declared as an <code>Object</code>, whereas
+Groovy will choose at runtime, when the method is actually called. Since it is called with a <code>String</code>, then the
+<code>String</code> version is called.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_array_initializers">3. Array initializers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, the <code>{ ... }</code> block is reserved for closures. That means that you cannot create array literals with this
+syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int[] array = { 1, 2, 3}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You actually have to use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int[] array = [1,2,3]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_package_scope_visibility">4. Package scope visibility</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Groovy, omitting a modifier on a field doesn&#8217;t result in a package-private field like in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Person {
+    String name
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, it is used to create a <em>property</em>, that is to say a <em>private field</em>, an associated <em>getter</em> and an associated
+_setter.</p>
+</div>
+<div class="paragraph">
+<p>It is possible to create a package-private field by annotating it with <code>@PackageScope</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Person {
+    @PackageScope String name
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arm_blocks">5. ARM blocks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ARM (Automatic Resource Management) block from Java 7 are not supported in Groovy. Instead, Groovy provides various
+methods relying on closures, which have the same effect while being more idiomatic. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="java language-java">Path file = Paths.get("/path/to/file");
+Charset charset = Charset.forName("UTF-8");
+try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
+    String line;
+    while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+    }
+
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>can be written like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">new File('/path/to/file').eachLine('UTF-8') {
+   println it
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or, if you want a version closer to Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">new File('/path/to/file').withReader('UTF-8') { reader -&gt;
+   reader.eachLine {
+       println it
+   }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inner_classes">6. Inner classes</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The implementation of anonymous inner classes and nested classes follows the Java lead, but
+you should not take out the Java Language Spec and keep shaking the head
+about things that are different. The implementation done looks much like
+what we do for <code>groovy.lang.Closure</code>, with some benefits and some
+differences. Accessing private fields and methods for example can become
+a problem, but on the other hand local variables don’t have to be final.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_static_inner_classes">6.1. Static inner classes</h3>
+<div class="paragraph">
+<p>Here’s an example of static inner class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class A {
+    static class B {}
+}
+
+new A.B()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The usage of static inner classes is the best supported one. If you
+absolutely need an inner class, you should make it a static one.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_anonymous_inner_classes">6.2. Anonymous Inner Classes</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">boolean called = false
+
+Timer timer = new Timer()
+timer.schedule(new TimerTask() {
+    void run() {
+        called = true
+    }
+}, 0)
+sleep 100
+
+assert called</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_instances_of_non_static_inner_classes">6.3. Creating Instances of Non-Static Inner Classes</h3>
+<div class="paragraph">
+<p>In Java you can do this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="java language-java">public class Y {
+    public class X {}
+    public X foo() {
+        return new X();
+    }
+    public static X createX(Y y) {
+        return y.new X();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy doesn&#8217;t support the <code>y.new X()</code> syntax. Instead, you have to write <code>new X(y)</code>, like in the code below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">public class Y {
+    public class X {}
+    public X foo() {
+        return new X()
+    }
+    public static X createX(Y y) {
+        return new X(y)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Caution though, Groovy supports calling methods with one
+parameter without giving an argument. The parameter will then have the
+value null. Basically the same rules apply to calling a constructor.
+There is a danger that you will write new X() instead of new X(this) for
+example. Since this might also be the regular way we have not yet found
+a good way to prevent this problem.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lambdas">7. Lambdas</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java 8 supports lambdas and method references:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Runnable run = () -&gt; System.out.println("Run");
+list.forEach(System.out::println);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Java 8 lambdas can be more or less considered as anonymous inner classes. Groovy doesn&#8217;t support that syntax, but has closures
+instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Runnable run = { println 'run' }
+list.each { println it } // or list.each(this.&amp;println)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.4.0-SNAPSHOT<br>
+Last updated 2014-07-10 23:39:15 CST
+</div>
+</div>
+</body>
+</html>

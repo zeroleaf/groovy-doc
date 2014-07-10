@@ -1,0 +1,3518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<title>Semantics</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="assets/css/view-example.css">
+<script src='assets/js/jquery-2.1.1.min.js'></script>
+<script src='assets/js/view-example.js'></script></head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Semantics</h1>
+<span id="revnumber">version 2.4.0-SNAPSHOT</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_statements">1. Statements</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_variable_definition">1.1. Variable definition</a></li>
+<li><a href="#_variable_assignment">1.2. Variable assignment</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_multiple_assignment">1.2.1. Multiple assignment</a></li>
+<li><a href="#_overflow_and_underflow">1.2.2. Overflow and Underflow</a></li>
+<li><a href="#_object_destructuring_with_multiple_assignment">1.2.3. Object destructuring with multiple assignment</a></li>
+</ul>
+</li>
+<li><a href="#_control_structures_wip">1.3. Control structures (WIP)</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_conditional_structures">1.3.1. Conditional structures</a></li>
+<li>
+<ul class="sectlevel4">
+<li><a href="#_if_else">if / else</a></li>
+<li><a href="#_switch_case">switch / case</a></li>
+</ul>
+</li>
+<li><a href="#_looping_structures">1.3.2. Looping structures</a></li>
+<li>
+<ul class="sectlevel4">
+<li><a href="#_classic_for_loop">Classic for loop</a></li>
+<li><a href="#_for_in_loop">for in loop</a></li>
+<li><a href="#_while_loop">while loop</a></li>
+</ul>
+</li>
+<li><a href="#_exception_handling">1.3.3. Exception handling</a></li>
+<li><a href="#_try_catch_finally">1.3.4. try / catch / finally</a></li>
+<li><a href="#_multi_catch">1.3.5. Multi-catch</a></li>
+</ul>
+</li>
+<li><a href="#_power_assertion_tbd">1.4. Power assertion (TBD)</a></li>
+<li><a href="#_labeled_statements_tbd">1.5. Labeled statements (TBD)</a></li>
+</ul>
+</li>
+<li><a href="#_expressions_tbd">2. Expressions (TBD)</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_gpath_expressions_tbd">2.1. GPath expressions (TBD)</a></li>
+</ul>
+</li>
+<li><a href="#_promotion_and_coercion_tbd">3. Promotion and coercion (TBD)</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_number_promotion_tbd">3.1. Number promotion (TBD)</a></li>
+<li><a href="#_closure_to_type_coercion">3.2. Closure to type coercion</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_assigning_a_closure_to_a_sam_type">3.2.1. Assigning a closure to a SAM type</a></li>
+<li><a href="#_calling_a_method_accepting_a_sam_type_with_a_closure">3.2.2. Calling a method accepting a SAM type with a closure</a></li>
+<li><a href="#_closure_to_arbitrary_type_coercion">3.2.3. Closure to arbitrary type coercion</a></li>
+</ul>
+</li>
+<li><a href="#_map_to_type_coercion">3.3. Map to type coercion</a></li>
+<li><a href="#_string_to_enum_coercion">3.4. String to enum coercion</a></li>
+<li><a href="#_custom_type_coercion">3.5. Custom type coercion</a></li>
+<li><a href="#_class_literals_vs_variables_and_the_as_operator">3.6. Class literals vs variables and the as operator</a></li>
+</ul>
+</li>
+<li><a href="#_optionality_tbd">4. Optionality (TBD)</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_optional_parentheses_tbd">4.1. Optional parentheses (TBD)</a></li>
+<li><a href="#_optional_semicolons_tbd">4.2. Optional semicolons (TBD)</a></li>
+<li><a href="#_optional_return_keyword_tbd">4.3. Optional return keyword (TBD)</a></li>
+<li><a href="#_optional_public_keyword_tbd">4.4. Optional public keyword (TBD)</a></li>
+</ul>
+</li>
+<li><a href="#Groovy-Truth">5. The Groovy Truth (TBD)</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_customizing_the_truth_with_asboolean_methods_tbd">5.1. Customizing the truth with asBoolean() methods (TBD)</a></li>
+</ul>
+</li>
+<li><a href="#_typing_wip">6. Typing (WIP)</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_optional_typing">6.1. Optional typing</a></li>
+<li><a href="#static-type-checking">6.2. Static type checking</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_the_code_typechecked_code_annotation">6.2.1. The <code>@TypeChecked</code> annotation</a></li>
+<li>
+<ul class="sectlevel4">
+<li><a href="#_activating_type_checking_at_compile_time">Activating type checking at compile time</a></li>
+<li><a href="#_skipping_sections">Skipping sections</a></li>
+</ul>
+</li>
+<li><a href="#_type_checking_assignments">6.2.2. Type checking assignments</a></li>
+<li><a href="#_list_and_map_constructors">6.2.3. List and map constructors</a></li>
+<li><a href="#_method_resolution">6.2.4. Method resolution</a></li>
+<li><a href="#type-inference">6.2.5. Type inference</a></li>
+<li>
+<ul class="sectlevel4">
+<li><a href="#_principles">Principles</a></li>
+<li><a href="#_variables_vs_fields_in_type_inference">Variables vs fields in type inference</a></li>
+<li><a href="#_collection_literal_type_inference">Collection literal type inference</a></li>
+<li><a href="#section-lub">Least upper bound</a></li>
+<li><a href="#_instanceof_inference">instanceof inference</a></li>
+<li><a href="#section-flow-typing">Flow typing</a></li>
+<li><a href="#_advanced_type_inference">Advanced type inference</a></li>
+</ul>
+</li>
+<li><a href="#_closures_and_type_inference">6.2.6. Closures and type inference</a></li>
+<li>
+<ul class="sectlevel4">
+<li><a href="#_return_type_inference">Return type inference</a></li>
+<li><a href="#_parameter_type_inference">Parameter type inference</a></li>
+<li>
+<ul class="sectlevel5">
+<li><a href="#_explicit_closure_parameters">Explicit closure parameters</a></li>
+<li><a href="#_parameters_inferred_from_single_abstract_method_types">Parameters inferred from single-abstract method types</a></li>
+<li><a href="#_the_code_closureparams_code_annotation">The <code>@ClosureParams</code> annotation</a></li>
+</ul>
+</li>
+<li><a href="#__code_delegatesto_code"><code>@DelegatesTo</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_static_compilation_wip">6.3. Static compilation (WIP)</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_dynamic_vs_static">6.3.1. Dynamic vs static</a></li>
+<li><a href="#compilestatic-annotation">6.3.2. The <code>@CompileStatic</code> annotation</a></li>
+<li><a href="#_key_benefits">6.3.3. Key benefits</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter covers the semantics of the Groovy programming language.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_statements">1. Statements</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_variable_definition">1.1. Variable definition</h3>
+<div class="paragraph">
+<p>Variables can be defined using either their type (like <code>String</code>) or by using the keyword <code>def</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String x
+def o</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>def</code> is a replacement for a type name. In variable definitions it is used to indicate that you don&#8217;t care about the type. In variable definitions it is mandatory to either provide a type name explicitly or to use "def" in replacement. This is needed to the make variable definitions detectable for the Groovy parser.</p>
+</div>
+<div class="paragraph">
+<p>You can think of <code>def</code> as an alias of <code>Object</code> and you will understand it in an instant.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+Variable definition types can be refined by using generics, like in <code>List&lt;String&gt; names</code>.
+To learn more about the generics support, please read the <a href="#generics">generics section</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_variable_assignment">1.2. Variable assignment</h3>
+<div class="paragraph">
+<p>You can assign values to variables for later use. Try the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">x = 1
+println x
+
+x = new java.util.Date()
+println x
+
+x = -3.1499392
+println x
+
+x = false
+println x
+
+x = "Hi"
+println x</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_multiple_assignment">1.2.1. Multiple assignment</h4>
+<div class="paragraph">
+<p>Groovy supports multiple assignment, i.e. where multiple variables can be assigned at once, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def (a, b, c) = [10, 20, 'foo']
+assert a == 10 &amp;&amp; b == 20 &amp;&amp; c == 'foo'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can provide types as part of the declaration if you wish:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def (int i, String j) = [10, 'foo']
+assert i == 10 &amp;&amp; j == 'foo'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As well as used when declaring variables it also applies to existing variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def nums = [1, 3, 5]
+def a, b, c
+(a, b, c) = nums
+assert a == 1 &amp;&amp; b == 3 &amp;&amp; c == 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The syntax works for arrays as well as lists, as well as methods that return either of these:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def (_, month, year) = "18th June 2009".split()
+assert "In $month of $year" == 'In June of 2009'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_overflow_and_underflow">1.2.2. Overflow and Underflow</h4>
+<div class="paragraph">
+<p>If the left hand side has too many variables, excess ones are filled with null&#8217;s:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def (a, b, c) = [1, 2]
+assert a == 1 &amp;&amp; b == 2 &amp;&amp; c == null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the right hand side has too many variables, the extra ones are ignored:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def (a, b) = [1, 2, 3]
+assert a == 1 &amp;&amp; b == 2</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_object_destructuring_with_multiple_assignment">1.2.3. Object destructuring with multiple assignment</h4>
+<div class="paragraph">
+<p>In the section describing the various <a href="#groovy-operators">Groovy operators</a>,
+the case of the <a href="#subscript-operator">subscript operator</a> has been covered,
+explaining how you can override the <code>getAt()</code>/<code>putAt()</code> method.</p>
+</div>
+<div class="paragraph">
+<p>With this technique, we can combine multiple assignments and the subscript operator methods to implement <em>object destructuring</em>.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following immutable <code>Coordinates</code> class, containing a pair of longitude and latitude doubles,
+and notice our implementation of the <code>getAt()</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Immutable
+class Coordinates {
+    double latitude
+    double longitude
+
+    double getAt(int idx) {
+        if (idx == 0) latitude
+        else if (idx == 1) longitude
+        else throw new Exception("Wrong coordinate index, use 0 or 1")
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s instantiate this class and destructure its longitude and latitude:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def coordinates = new Coordinates(latitude: 43.23, longitude: 3.67) <i class="conum" data-value="1"></i><b>(1)</b>
+
+def (la, lo) = coordinates                                          <i class="conum" data-value="2"></i><b>(2)</b>
+
+assert la == 43.23                                                  <i class="conum" data-value="3"></i><b>(3)</b>
+assert lo == 3.67</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>we create an instance of the <code>Coordinates</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>then, we use a multiple assignment to get the individual longitude and latitude values</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and we can finally assert their values.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_control_structures_wip">1.3. Control structures (WIP)</h3>
+<div class="sect3">
+<h4 id="_conditional_structures">1.3.1. Conditional structures</h4>
+<div class="sect4">
+<h5 id="_if_else">if / else</h5>
+<div class="paragraph">
+<p>Groovy supports the usual if - else syntax from Java</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def x = false
+def y = false
+
+if ( !x ) {
+    x = true
+}
+
+assert x == true
+
+if ( x ) {
+    x = false
+} else {
+    y = true
+}
+
+assert x == y</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groovy also supports the normal Java "nested" if then else if syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">if ( ... ) {
+    ...
+} else if (...) {
+    ...
+} else {
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_switch_case">switch / case</h5>
+<div class="paragraph">
+<p>The switch statement in Groovy is backwards compatible with Java code; so you can fall through cases sharing the same code for multiple matches.</p>
+</div>
+<div class="paragraph">
+<p>One difference though is that the Groovy switch statement can handle any kind of switch value and different kinds of matching can be performed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def x = 1.23
+def result = ""
+
+switch ( x ) {
+    case "foo":
+        result = "found foo"
+        // lets fall through
+
+    case "bar":
+        result += "bar"
+
+    case [4, 5, 6, 'inList']:
+        result = "list"
+        break
+
+    case 12..30:
+        result = "range"
+        break
+
+    case Integer:
+        result = "integer"
+        break
+
+    case Number:
+        result = "number"
+        break
+
+    case ~/fo*/: // toString() representation of x matches the pattern?
+        result = "foo regex"
+        break
+
+    case { it &lt; 0 }: // or { x &lt; 0 }
+        result = "negative"
+        break
+
+    default:
+        result = "default"
+}
+
+assert result == "number"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Switch supports the following kinds of comparisons:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Class case values matches if the switch value is an instance of the class</p>
+</li>
+<li>
+<p>Regular expression case values match if the <code>toString()</code> representation of the switch value matches the regex</p>
+</li>
+<li>
+<p>Collection case values match if the switch value is contained in the collection. This also includes ranges (since they are Lists)</p>
+</li>
+<li>
+<p>Closure case values match if the calling the closure returns a result which is true according to the <a href="#Groovy-Truth">Groovy truth</a></p>
+</li>
+<li>
+<p>If none of the above are used then the case value matches if the case value equals the switch value</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>default</code> must go at the end of the switch/case. While in Java the default can be placed anywhere in the switch/case, the default in Groovy is used more as an else than assigning a default case.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+when using a closure case value, the default <code>it</code> parameter is actually the switch value (in our example, variable <code>x</code>)
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_looping_structures">1.3.2. Looping structures</h4>
+<div class="sect4">
+<h5 id="_classic_for_loop">Classic for loop</h5>
+<div class="paragraph">
+<p>Groovy supports the standard Java / C for loop:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String message = ''
+for (int i = 0; i &lt; 5; i++) {
+    message += 'Hi '
+}
+assert message == 'Hi Hi Hi Hi Hi '</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_for_in_loop">for in loop</h5>
+<div class="paragraph">
+<p>The for loop in Groovy is much simpler and works with any kind of array, collection, Map, etc.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">// iterate over a range
+def x = 0
+for ( i in 0..9 ) {
+    x += i
+}
+assert x == 45
+
+// iterate over a list
+x = 0
+for ( i in [0, 1, 2, 3, 4] ) {
+    x += i
+}
+assert x == 10
+
+// iterate over an array
+def array = (0..4).toArray()
+x = 0
+for ( i in array ) {
+    x += i
+}
+assert x == 10
+
+// iterate over a map
+def map = ['abc':1, 'def':2, 'xyz':3]
+x = 0
+for ( e in map ) {
+    x += e.value
+}
+assert x == 6
+
+// iterate over values in a map
+x = 0
+for ( v in map.values() ) {
+    x += v
+}
+assert x == 6
+
+// iterate over the characters in a string
+def text = "abc"
+def list = []
+for (c in text) {
+    list.add(c)
+}
+assert list == ["a", "b", "c"]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+Groovy also supports the Java colon variation with colons: <code>for (char c : text) {}</code>,
+where the type of the variable is mandatory.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_while_loop">while loop</h5>
+<div class="paragraph">
+<p>Groovy supports the usual while {&#8230;} loops like Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def x = 0
+def y = 5
+
+while ( y-- &gt; 0 ) {
+    x++
+}
+
+assert x == 5</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exception_handling">1.3.3. Exception handling</h4>
+<div class="paragraph">
+<p>Exception handling is the same as Java.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_try_catch_finally">1.3.4. try / catch / finally</h4>
+<div class="paragraph">
+<p>You can specify a complete <code>try-catch-finally</code>, a <code>try-catch</code>, or a <code>try-finally</code> set of blocks.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+Braces are required around each block&#8217;s body.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">try {
+    'moo'.toLong()   // this will generate an exception
+    assert false     // asserting that this point should never be reached
+} catch ( e ) {
+    assert e in NumberFormatException
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can put code within a <em>finally</em> clause following a matching <em>try</em> clause, so that regardless of whether the code in the <em>try</em> clause throws an exception, the code in the finally clause will always execute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def z
+try {
+    def i = 7, j = 0
+    try {
+        def k = i / j
+        assert false        //never reached due to Exception in previous line
+    } finally {
+        z = 'reached here'  //always executed even if Exception thrown
+    }
+} catch ( e ) {
+    assert e in ArithmeticException
+    assert z == 'reached here'
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_multi_catch">1.3.5. Multi-catch</h4>
+<div class="paragraph">
+<p>With the multi catch block (since Groovy 2.0), we&#8217;re able to define several exceptions to be catch and treated by the same catch block:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">try {
+    /* ... */
+} catch ( IOException | NullPointerException e ) {
+    /* one block to handle 2 exceptions */
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_power_assertion_tbd">1.4. Power assertion (TBD)</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_labeled_statements_tbd">1.5. Labeled statements (TBD)</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_expressions_tbd">2. Expressions (TBD)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_gpath_expressions_tbd">2.1. GPath expressions (TBD)</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_promotion_and_coercion_tbd">3. Promotion and coercion (TBD)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_number_promotion_tbd">3.1. Number promotion (TBD)</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_closure_to_type_coercion">3.2. Closure to type coercion</h3>
+<div class="sect3">
+<h4 id="_assigning_a_closure_to_a_sam_type">3.2.1. Assigning a closure to a SAM type</h4>
+<div class="paragraph">
+<p>A SAM type is a type which defines a single abstract method. This includes:</p>
+</div>
+<div class="listingblock">
+<div class="title">Functional interfaces</div>
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface Predicate&lt;T&gt; {
+    boolean accept(T obj)
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Abstract classes with single abstract method</div>
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">abstract class Greeter {
+    abstract String getName()
+    void greet() {
+        println "Hello, $name"
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Any closure can be converted into a SAM type using the <code>as</code> operator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Predicate filter = { it.contains 'G' } as Predicate
+assert filter.accept('Groovy') == true
+
+Greeter greeter = { 'Groovy' } as Greeter
+greeter.greet()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, the <code>as Type</code> expression is optional since Groovy 2.2.0. You can omit it and simply write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Predicate filter = { it.contains 'G' }
+assert filter.accept('Groovy') == true
+
+Greeter greeter = { 'Groovy' }
+greeter.greet()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which means you are also allowed to use method pointers, as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">boolean doFilter(String s) { s.contains('G') }
+
+Predicate filter = this.&amp;doFilter
+assert filter.accept('Groovy') == true
+
+Greeter greeter = GroovySystem.&amp;getVersion
+greeter.greet()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_calling_a_method_accepting_a_sam_type_with_a_closure">3.2.2. Calling a method accepting a SAM type with a closure</h4>
+<div class="paragraph">
+<p>The second and probably more important use case for closure to SAM type coercion is calling a method which accepts
+a SAM type. Imagine the following method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">public &lt;T&gt; List&lt;T&gt; filter(List&lt;T&gt; source, Predicate&lt;T&gt; predicate) {
+    source.findAll { predicate.accept(it) }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can call it with a closure, without having to create an explicit implementation of the interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">assert filter(['Java','Groovy'], { it.contains 'G'} as Predicate) == ['Groovy']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But since Groovy 2.2.0, you are also able to omit the explicit coercion and call the method as if it used a closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">assert filter(['Java','Groovy']) { it.contains 'G'} == ['Groovy']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, this has the advantage of letting you use the closure syntax for method calls, that is to say put the
+closure outside of the parenthesis, improving the readability of your code.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closure_to_arbitrary_type_coercion">3.2.3. Closure to arbitrary type coercion</h4>
+<div class="paragraph">
+<p>In addition to SAM types, a closure can be coerced to any type and in particular interfaces. Let&#8217;s define the
+following interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface FooBar {
+    int foo()
+    void bar()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can coerce a closure into the interface using the <code>as</code> keyword:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def impl = { println 'ok'; 123 } as FooBar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces a class for which all methods are implemented using the closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">assert impl.foo() == 123
+impl.bar()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But it is also possible to coerce a closure to any class. For example, we can replace the <code>interface</code> that we defined
+with <code>class</code> without changing the assertions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class FooBar {
+    int foo() { 1 }
+    void bar() { println 'bar' }
+}
+
+def impl = { println 'ok'; 123 } as FooBar
+
+assert impl.foo() == 123
+impl.bar()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_map_to_type_coercion">3.3. Map to type coercion</h3>
+<div class="paragraph">
+<p>Usually using a single closure to implement an interface or a class with multiple methods is not the way to go. As an
+alternative, Groovy allows you to coerce a map into an interface or a class. In that case, keys of the map are
+interpreted as method names, while the values are the method implementation. The following example illustrates the
+coercion of a map into an <code>Iterator</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def map
+map = [
+  i: 10,
+  hasNext: { map.i &gt; 0 },
+  next: { map.i-- },
+]
+def iter = map as Iterator</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course this is a rather contrived example, but illustrates the concept. You only need to implement those methods
+that are actually called, but if a method is called that doesn&#8217;t exist in the map a <code>MissingMethodException</code> or an
+<code>UnsupportedOperationException</code> is thrown, depending on the arguments passed to the call,
+as in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface X {
+    void f()
+    void g(int n)
+    void h(String s, int n)
+}
+
+x = [ f: {println "f called"} ] as X
+x.f() // method exists
+x.g() // MissingMethodException here
+x.g(5) // UnsupportedOperationException here</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The type of the exception depends on the call itself:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>MissingMethodException</code> if the arguments of the call do not match those from the interface/class</p>
+</li>
+<li>
+<p><code>UnsupportedOperationException</code> if the arguments of the call match one of the overloaded methods of the interface/class</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_string_to_enum_coercion">3.4. String to enum coercion</h3>
+<div class="paragraph">
+<p>Groovy allows transparent <code>String</code> (or <code>GString</code>) to enum values coercion. Imagine you define the following enum:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">enum State {
+    up,
+    down
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>then you can assign a string to the enum without having to use an explicit <code>as</code> coercion:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">State st = 'up'
+assert st == State.up</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is also possible to use a <code>GString</code> as the value:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def val = "up"
+State st = "${val}"
+assert st == State.up</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, this would throw a runtime error (<code>IllegalArgumentException</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">State st = 'not an enum value'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that it is also possible to use implicit coercion in switch statements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">State switchState(State st) {
+    switch (st) {
+        case 'up':
+            return State.down // explicit constant
+        case 'down':
+            return 'up' // implicit coercion for return types
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in particular, see how the <code>case</code> use string constants. But if you call a method that uses an enum with a <code>String</code>
+argument, you still have to use an explicit <code>as</code> coercion:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">assert switchState('up' as State) == State.down
+assert switchState(State.down) == State.up</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_type_coercion">3.5. Custom type coercion</h3>
+<div class="paragraph">
+<p>It is possible for a class to define custom coercion strategies by implementing the <code>asType</code> method. Custom coercion
+is invoked using the <code>as</code> operator and is never implicit. As an example,
+imagine you defined two classes, <code>Polar</code> and <code>Cartesian</code>, like in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Polar {
+    double r
+    double phi
+}
+class Cartesian {
+   double x
+   double y
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And that you want to convert from polar coordinates to cartesian coordinates. One way of doing this is to define
+the <code>asType</code> method in the <code>Polar</code> class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def asType(Class target) {
+    if (Cartesian==target) {
+        return new Cartesian(x: r*cos(phi), y: r*sin(phi))
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which allows you to use the <code>as</code> coercion operator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def sigma = 1E-16
+def polar = new Polar(r:1.0,phi:PI/2)
+def cartesian = polar as Cartesian
+assert abs(cartesian.x-sigma) &lt; sigma</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Putting it all together, the <code>Polar</code> class looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Polar {
+    double r
+    double phi
+    def asType(Class target) {
+        if (Cartesian==target) {
+            return new Cartesian(x: r*cos(phi), y: r*sin(phi))
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but it is also possible to define <code>asType</code> outside of the <code>Polar</code> class, which can be practical if you want to define
+custom coercion strategies for "closed" classes or classes for which you don&#8217;t own the source code, for example using
+a metaclass:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Polar.metaClass.asType = { Class target -&gt;
+    if (Cartesian==target) {
+        return new Cartesian(x: r*cos(phi), y: r*sin(phi))
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_class_literals_vs_variables_and_the_as_operator">3.6. Class literals vs variables and the as operator</h3>
+<div class="paragraph">
+<p>Using the <code>as</code> keyword is only possible if you have a static reference to a class, like in the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface Greeter {
+    void greet()
+}
+def greeter = { println 'Hello, Groovy!' } as Greeter // Greeter is known statically
+greeter.greet()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But what if you get the class by reflection, for example by calling <code>Class.forName</code>?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Class clazz = Class.forName('Greeter')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Trying to use the reference to the class with the <code>as</code> keyword would fail:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">greeter = { println 'Hello, Groovy!' } as clazz
+// throws:
+// unable to resolve class clazz
+// @ line 9, column 40.
+//   greeter = { println 'Hello, Groovy!' } as clazz</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is failing because the <code>as</code> keyword only works with class literals. Instead, you need to call the <code>asType</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">greeter = { println 'Hello, Groovy!' }.asType(clazz)
+greeter.greet()</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_optionality_tbd">4. Optionality (TBD)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_optional_parentheses_tbd">4.1. Optional parentheses (TBD)</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_optional_semicolons_tbd">4.2. Optional semicolons (TBD)</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_optional_return_keyword_tbd">4.3. Optional return keyword (TBD)</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_optional_public_keyword_tbd">4.4. Optional public keyword (TBD)</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Groovy-Truth">5. The Groovy Truth (TBD)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_customizing_the_truth_with_asboolean_methods_tbd">5.1. Customizing the truth with asBoolean() methods (TBD)</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_typing_wip">6. Typing (WIP)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_optional_typing">6.1. Optional typing</h3>
+<div class="paragraph">
+<p>Optional typing is the idea that a program can work even if you don&#8217;t put an explicit type on a variable. Being a dynamic
+language, Groovy naturally implements that feature, for example when you declare a variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String aString = 'foo'                      <i class="conum" data-value="1"></i><b>(1)</b>
+assert aString.toUpperCase()                <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>foo</code> is declared using an explicit type, <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we can call the <code>toUpperCase</code> method on a <code>String</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Groovy will let you write this instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def aString = 'foo'                         <i class="conum" data-value="1"></i><b>(1)</b>
+assert aString.toUpperCase()                <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>foo</code> is declared using <code>def</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we can still call the <code>toUpperCase</code> method, because the type of <code>aString</code> is resolved at runtime</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>So it doesn&#8217;t matter that you use an explicit type here. It is in particular interesting when you combine this feature
+with <a href="#typechecking">static type checking</a>, because the type checker performs type inference.</p>
+</div>
+<div class="paragraph">
+<p>Likewise, Groovy doesn&#8217;t make it mandatory to declare the types of a parameter in a method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String concat(String a, String b) {
+    a+b
+}
+assert concat('foo','bar') == 'foobar'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>can be rewritten using <code>def</code> as both return type and parameter types, in order to take advantage of duck typing, as
+illustrated in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def concat(def a, def b) {                              <i class="conum" data-value="1"></i><b>(1)</b>
+    a+b
+}
+assert concat('foo','bar') == 'foobar'                  <i class="conum" data-value="2"></i><b>(2)</b>
+assert concat(1,2) == 3                                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>both the return type and the parameter types use <code>def</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>it makes it possible to use the method with <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>but also with <code>int`s since the `plus</code> method is defined</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Using the <code>def</code> keyword here is recommanded to describe the intent of a method which is supposed to work on any
+type, but technically, we could use <code>Object</code> instead and the result would be the same: <code>def</code> is, in Groovy, strictly
+equivalent to using <code>Object</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Eventually, the type can be removed altogether from both the return type and the descriptor. But if you want to remove
+it from the return type, you then need to add an explicit modifier for the method, so that the compiler can make a difference
+between a method declaration and a method call, like illustrated in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">private concat(a,b) {                                   <i class="conum" data-value="1"></i><b>(1)</b>
+    a+b
+}
+assert concat('foo','bar') == 'foobar'                  <i class="conum" data-value="2"></i><b>(2)</b>
+assert concat(1,2) == 3                                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>if we want to omit the return type, an explicit modifier has to be set.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>it is still possible to use the method with <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and also with `int`s</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Omitting types is in general considered a bad practice in method parameters or method return types for public APIs.
+While using <code>def</code> in a local variable is not really a problem because the visibility of the variable is limited to the
+method itself, while set on a method parameter, <code>def</code> will be converted to <code>Object</code> in the method signature, making it
+difficult for users to know which is the expected type of the arguments. This means that you should limit this to cases
+where you are explicitly relying on duck typing.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="static-type-checking">6.2. Static type checking</h3>
+<div class="paragraph">
+<p>By default, Groovy performs minimal type checking at compile time. Since it is primarily a dynamic language,
+most checks that a static compiler would normally do aren&#8217;t possible at compile time. A method added via runtime
+metaprogramming might alter a class or object&#8217;s runtime behavior. Let&#8217;s illustrate why in the
+following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Person {                                                          <i class="conum" data-value="1"></i><b>(1)</b>
+    String firstName
+    String lastName
+}
+def p = new Person(firstName: 'Raymond', lastName: 'Devos')             <i class="conum" data-value="2"></i><b>(2)</b>
+assert p.formattedName == 'Raymond Devos'                               <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Person</code> class only defines two properties, <code>firstName</code> and <code>lastName</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we can create an instance of Person</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and call a method named <code>formattedName</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is quite common in dynamic languages for code such as the above example not to throw any error. How can this be?
+In Java, this would typically fail at compile time. However, in Groovy, it will not fail at compile time, and if coded
+correctly, will also not fail at runtime. In fact, to make this work at runtime, <strong>one</strong> possibility is to rely on
+runtime metaprogramming. So just adding this line after the declaration of the <code>Person</code> class is enough:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Person.metaClass.getFormattedName = { "$delegate.firstName $delegate.lastName" }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This means that in general, in Groovy, you can&#8217;t make any assumption about the type of an object beyond its declaration
+type, and even if you know it, you can&#8217;t determine at compile time what method will be called, or which property will
+be retrieved, and this is <strong>perfectly fine</strong>. This is how dynamic languages work, and it has a lot of interest.</p>
+</div>
+<div class="paragraph">
+<p>However, if your program doesn&#8217;t rely on dynamic features and that you come from the static world (in particular, from
+a Java mindset), not catching such "errors" at compile time can be surprising. As we have seen in the previous example,
+the compiler cannot be sure this is an error. To make it aware that it is, you have to explicitly instruct the compiler
+that you are switching to a type checked mode. This can be done by annotating a class or a method with <code>@groovy.lang.TypeChecked</code>.</p>
+</div>
+<div class="paragraph">
+<p>When type checking is activated, the compiler performs much more work:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>type inference is activated, meaning that even if you use <code>def</code> on a local variable for example, the type checker will be
+able to infer the type of the variable from the assignments</p>
+</li>
+<li>
+<p>method calls are resolved at compile time, meaning that if a method is not declared on a class, the compiler will throw an error</p>
+</li>
+<li>
+<p>in general, all the compile time errors that you are used to find in a static language will appear: method not found, property not found,
+incompatible types for method calls, number precision errors, &#8230;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this section, we will describe the behavior of the type checker in various situations and explain the limits of using
+<code>@TypeChecked</code> on your code.</p>
+</div>
+<div class="sect3">
+<h4 id="_the_code_typechecked_code_annotation">6.2.1. The <code>@TypeChecked</code> annotation</h4>
+<div class="sect4">
+<h5 id="_activating_type_checking_at_compile_time">Activating type checking at compile time</h5>
+<div class="paragraph">
+<p>The <code>groovy.lang.TypeChecked</code> annotation enabled type checking. It can be placed on a class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TypeChecked
+class Calculator {
+    int sum(int x, int y) { x+y }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or on a method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Calculator {
+    @groovy.transform.TypeChecked
+    int sum(int x, int y) { x+y }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the first case, all methods, properties, fields, inner classes, &#8230; of the annotated class will be type checked, whereas
+in the second case, only the method and potential closures or anonymous inner classes that it contains will be type checked.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_skipping_sections">Skipping sections</h5>
+<div class="paragraph">
+<p>The scope of type checking can be restricted. For example, if a class is type checked, you can instruct the type checker
+to skip a method by annotating it with <code>@TypeChecked(TypeCheckingMode.SKIP)</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.TypeChecked
+import groovy.transform.TypeCheckingMode
+
+@TypeChecked                                        <i class="conum" data-value="1"></i><b>(1)</b>
+class GreetingService {
+    String greeting() {                             <i class="conum" data-value="2"></i><b>(2)</b>
+        doGreet()
+    }
+
+    @TypeChecked(TypeCheckingMode.SKIP)             <i class="conum" data-value="3"></i><b>(3)</b>
+    private String doGreet() {
+        def b = new SentenceBuilder()
+        b.Hello.my.name.is.John                     <i class="conum" data-value="4"></i><b>(4)</b>
+        b
+    }
+}
+def s = new GreetingService()
+assert s.greeting() == 'Hello my name is John'</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>GreetingService</code> class is marked as type checked</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>so the <code>greeting</code> method is automatically type checked</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>but <code>doGreet</code> is marked with <code>SKIP</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the type checker doesn&#8217;t complain about missing properties here</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the previous example, <code>SentenceBuilder</code> relies on dynamic code. There&#8217;s no real <code>Hello</code> method or property, so the
+type checker would normally complain and compilation would fail. Since the method that uses the builder is marked with
+<code>TypeCheckingMode.SKIP</code>, type checking is <em>skipped</em> for this method, so the code will compile, even if the rest of the
+class is type checked.</p>
+</div>
+<div class="paragraph">
+<p>The following sections describe the semantics of type checking in Groovy.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_type_checking_assignments">6.2.2. Type checking assignments</h4>
+<div class="paragraph">
+<p>An object <code>o</code> of type <code>A</code> can be assigned to a variable of type <code>T</code> if and only if:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>T</code> equals <code>A</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Date now = new Date()</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is one of <code>String</code>, <code>boolean</code>, <code>Boolean</code> or <code>Class</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String s = new Date() // implicit call to toString
+Boolean boxed = 'some string'       // Groovy truth
+boolean prim = 'some string'        // Groovy truth
+Class clazz = 'java.lang.String'    // class coercion</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>o</code> is null and <code>T</code> is not a primitive type</p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String s = null         // passes
+int i = null            // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is an array and <code>A</code> is an array and the component type of <code>A</code> is assignable to the component type of <code>B</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int[] i = new int[4]        // passes
+int[] i = new String[4]     // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is an array and <code>A</code> is a list and the component type of <code>A</code> is assignable to the component type of <code>B</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int[] i = [1,2,3]               // passes
+int[] i = [1,2, new Date()]     // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is a superclass of <code>A</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">AbstractList list = new ArrayList()     // passes
+LinkedList list = new ArrayList()       // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is an interface implemented by <code>A</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">List list = new ArrayList()             // passes
+RandomAccess list = new LinkedList()    // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> or <code>A</code> are a primitive type and their boxed types are assignable</p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int i = 0
+Integer bi = 1
+int x = new Integer(123)
+double d = new Float(5f)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> extends <code>groovy.lang.Closure</code> and <code>A</code> is a SAM-type (single abstract method type)</p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Runnable r = { println 'Hello' }
+interface SAMType {
+    int doSomething()
+}
+SAMType sam = { 123 }
+assert sam.doSomething() == 123
+abstract class AbstractSAM {
+    int calc() { 2* value() }
+    abstract int value()
+}
+AbstractSAM c = { 123 }
+assert c.calc() == 246</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> and <code>A</code> derive from <code>java.lang.Number</code> and conform to the following table</p>
+</li>
+</ul>
+</div>
+<table id="number-assignment" class="tableblock frame-all grid-all" style="width: 100%;">
+<caption class="title">Table 1. Number types (java.lang.XXX)</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">T</th>
+<th class="tableblock halign-left valign-top">A</th>
+<th class="tableblock halign-left valign-top">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any but BigDecimal or BigInteger</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Double d1 = 4d
+Double d2 = 4f
+Double d3 = 4l
+Double d4 = 4i
+Double d5 = (short) 4
+Double d6 = (byte) 4</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Float</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any type but BigDecimal, BigInteger or Double</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Float f1 = 4f
+Float f2 = 4l
+Float f3 = 4i
+Float f4 = (short) 4
+Float f5 = (byte) 4</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any type but BigDecimal, BigInteger, Double or Float</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Long l1 = 4l
+Long l2 = 4i
+Long l3 = (short) 4
+Long l4 = (byte) 4</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any type but BigDecimal, BigInteger, Double, Float or Long</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Integer i1 = 4i
+Integer i2 = (short) 4
+Integer i3 = (byte) 4</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Short</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any type but BigDecimal, BigInteger, Double, Float, Long or Integer</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Short s1 = (short) 4
+Short s2 = (byte) 4</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Byte</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Byte</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Byte b1 = (byte) 4</code></pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_list_and_map_constructors">6.2.3. List and map constructors</h4>
+<div class="paragraph">
+<p>In addition to the assignment rules above, if an assignment is deemed invalid, in type checked mode, a <em>list</em> literal or a <em>map</em> literal <code>A</code> can be assigned
+to a variable of type <code>T</code> if:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the assignment is a variable declaration and <code>A</code> is a list literal and <code>T</code> has a constructor whose parameters match the types of the elements in the list literal</p>
+</li>
+<li>
+<p>the assignment is a variable declaration and <code>A</code> is a map literal and <code>T</code> has a no-arg constructor and a property for each of the map keys</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, instead of writing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TupleConstructor
+class Person {
+    String firstName
+    String lastName
+}
+Person classic = new Person('Ada','Lovelace')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use a "list constructor":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Person list = ['Ada','Lovelace']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or a "map constructor":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Person map = [firstName:'Ada', lastName:'Lovelace']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you use a map constructor, additional checks are done on the keys of the map to check if a property of the same name
+is defined. For example, the following will fail at compile time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TupleConstructor
+class Person {
+    String firstName
+    String lastName
+}
+Person map = [firstName:'Ada', lastName:'Lovelace', age: 24]     <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The type checker will throw an error <code>No such property: age for class: Person</code> at compile time</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_method_resolution">6.2.4. Method resolution</h4>
+<div class="paragraph">
+<p>In type checked mode, methods are resolved at compile time. Resolution works by name and arguments. The return type is
+irrelevant to method selection. Types of arguments are matched against the types of the parameters following those rules:</p>
+</div>
+<div class="paragraph">
+<p>An argument <code>o</code> of type <code>A</code> can be used for a parameter of type <code>T</code> if and only if:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>T</code> equals <code>A</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int sum(int x, int y) {
+    x+y
+}
+assert sum(3,4) == 7</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is a <code>String</code> and <code>A</code> is a <code>GString</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String format(String str) {
+    "Result: $str"
+}
+assert format("${3+4}") == "Result: 7"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>o</code> is null and <code>T</code> is not a primitive type</p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String format(int value) {
+    "Result: $value"
+}
+assert format(7) == "Result: 7"
+format(null)           // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is an array and <code>A</code> is an array and the component type of <code>A</code> is assignable to the component type of <code>B</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String format(String[] values) {
+    "Result: ${values.join(' ')}"
+}
+assert format(['a','b'] as String[]) == "Result: a b"
+format([1,2] as int[])              // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is a superclass of <code>A</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String format(AbstractList list) {
+    list.join(',')
+}
+format(new ArrayList())              // passes
+String format(LinkedList list) {
+    list.join(',')
+}
+format(new ArrayList())              // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> is an interface implemented by <code>A</code></p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String format(List list) {
+    list.join(',')
+}
+format(new ArrayList())                  // passes
+String format(RandomAccess list) {
+    'foo'
+}
+format(new LinkedList())                 // fails</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> or <code>A</code> are a primitive type and their boxed types are assignable</p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int sum(int x, Integer y) {
+    x+y
+}
+assert sum(3, new Integer(4)) == 7
+assert sum(new Integer(3), 4) == 7
+assert sum(new Integer(3), new Integer(4)) == 7
+assert sum(new Integer(3), 4) == 7</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> extends <code>groovy.lang.Closure</code> and <code>A</code> is a SAM-type (single abstract method type)</p>
+<div class="exampleblock result">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface SAMType {
+    int doSomething()
+}
+int twice(SAMType sam) { 2*sam.doSomething() }
+assert twice { 123 } == 246
+abstract class AbstractSAM {
+    int calc() { 2* value() }
+    abstract int value()
+}
+int eightTimes(AbstractSAM sam) { 4*sam.calc() }
+assert eightTimes { 123 } == 984</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><em>or</em> <code>T</code> and <code>A</code> derive from <code>java.lang.Number</code> and conform to the same rules as <a href="#number-assignment">assignment of numbers</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If a method with the appropriate name and arguments is not found at compile time, an error is thrown. The difference with "normal" Groovy is
+illustrated in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class MyService {
+    void doSomething() {
+        printLine 'Do something'            <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>printLine</code> is an error, but since we&#8217;re in a dynamic mode, the error is not caught at compile time</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The example above shows a class that Groovy will be able to compile. However, if you try to create an instance of <code>MyService</code> and call the
+<code>doSomething</code> method, then it will fail <strong>at runtime</strong>, because <code>printLine</code> doesn&#8217;t exist. Of course, we already showed how Groovy could make
+this a perfectly valid call, for example by catching <code>MethodMissingException</code> or implementing a custom meta-class, but if you know you&#8217;re
+not in such a case, <code>@TypeChecked</code> comes handy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class MyService {
+    void doSomething() {
+        printLine 'Do something'            <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>printLine</code> is this time a compile-time error</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Just adding <code>@TypeChecked</code> will trigger compile time method resolution. The type checker will try to find a method <code>printLine</code> accepting
+a <code>String</code> on the <code>MyService</code> class, but cannot find one. It will fail compilation with the following message:</p>
+</div>
+<div class="paragraph">
+<p><code>Cannot find matching method MyService#printLine(java.lang.String)</code></p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-important" title="Important"></i>
+</td>
+<td class="content">
+It is important to understand the logic behind the type checker: it is a compile-time check, so by definition, the type checker
+is not aware of any kind of <strong>runtime</strong> metaprogramming that you do. This means that code which is perfectly valid without <code>@TypeChecked</code> will
+<strong>not</strong> compile anymore if you activate type checking. This is in particular true if you think of duck typing:<br>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Duck {
+    void quack() {              <i class="conum" data-value="1"></i><b>(1)</b>
+        println 'Quack!'
+    }
+}
+class QuackingBird {
+    void quack() {              <i class="conum" data-value="2"></i><b>(2)</b>
+        println 'Quack!'
+    }
+}
+@groovy.transform.TypeChecked
+void accept(quacker) {
+    quacker.quack()             <i class="conum" data-value="3"></i><b>(3)</b>
+}
+accept(new Duck())              <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>we define a <code>Duck</code> class which defines a <code>quack</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we define another <code>QuackingBird</code> class which also defines a <code>quack</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>quacker</code> is loosely typed, so since the method is <code>@TypeChecked</code>, we will obtain a compile-time error</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>even if in non type-checked Groovy, this would have passed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There are possible workarounds, like introducing an interface, but basically, by activating type checking, you gain type safety
+but you loose some features of the language. Hopefully, Groovy introduces some features like flow typing to reduce the gap between
+type-checked and non type-checked Groovy.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="type-inference">6.2.5. Type inference</h4>
+<div class="sect4">
+<h5 id="_principles">Principles</h5>
+<div class="paragraph">
+<p>When code is annotated with <code>@TypeChecked</code>, the compiler performs type inference. It doesn&#8217;t simply rely on static types, but also uses various
+techniques to infer the types of variables, return types, literals, &#8230; so that the code remains as clean as possible even if you activate the
+type checker.</p>
+</div>
+<div class="paragraph">
+<p>The simplest example is infering the type of a variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def message = 'Welcome to Groovy!'              <i class="conum" data-value="1"></i><b>(1)</b>
+println message.toUpperCase()                   <i class="conum" data-value="2"></i><b>(2)</b>
+println message.upper() // compile time error   <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a variable is declared using the <code>def</code> keyword</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>calling <code>toUpperCase</code> is allowed by the type checker</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>calling <code>upper</code> will fail at compile time</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The reason the call to <code>toUpperCase</code> works is because the type of <code>message</code> was <em>inferred</em> as being a <code>String</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_variables_vs_fields_in_type_inference">Variables vs fields in type inference</h5>
+<div class="paragraph">
+<p>It is worth noting that although the compiler performs type inference on local variables, it does <strong>not</strong> perform any kind
+of type inference on fields, always falling back to the <strong>declared type</strong> of a field. To illustrate this, let&#8217;s take a
+look at this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class SomeClass {
+    def someUntypedField                                                                <i class="conum" data-value="1"></i><b>(1)</b>
+    String someTypedField                                                               <i class="conum" data-value="2"></i><b>(2)</b>
+
+    void someMethod() {
+        someUntypedField = '123'                                                        <i class="conum" data-value="3"></i><b>(3)</b>
+        someUntypedField = someUntypedField.toUpperCase()  // compile-time error        <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+
+    void someSafeMethod() {
+        someTypedField = '123'                                                          <i class="conum" data-value="5"></i><b>(5)</b>
+        someTypedField = someTypedField.toUpperCase()                                   <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+
+    void someMethodUsingLocalVariable() {
+        def localVariable = '123'                                                       <i class="conum" data-value="7"></i><b>(7)</b>
+        someUntypedField = localVariable.toUpperCase()                                  <i class="conum" data-value="8"></i><b>(8)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>someUntypedField</code> uses <code>def</code> as a declaration type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>someTypedField</code> uses <code>String</code> as a declaration type</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>we can assign <strong>anything</strong> to <code>someUntypedField</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>yet calling <code>toUpperCase</code> fails at compile time because the field is not typed properly</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>we can assign a <code>String</code> to a field of type <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>and this time <code>toUpperCase</code> is allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>if we assign a <code>String</code> to a local variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>then calling <code>toUpperCase</code> is allowed on the local variable</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Why such a difference? The reason is <em>thread safety</em>. At compile time, we can&#8217;t make <strong>any</strong> guarantee about the type of
+a field. Any thread can access any field at any time and between the moment a field is assigned a variable of some
+type in a method and the time is is used the line after, another thread may have changed the contents of the field. This
+is not the case for local variables: we know if they "escape" or not, so we can make sure that the type of a variable is
+constant (or not) over time. Note that even if a field is final, the JVM makes no guarantee about it, so the type checker
+doesn&#8217;t behave differently if a field is final or not.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This is one of the reasons why we recommend to use <strong>typed</strong> fields. While using <code>def</code> for local variables is perfectly
+fine thanks to type inference, this is not the case for fields, which also belong to the public API of a class, hence the
+type is important.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_collection_literal_type_inference">Collection literal type inference</h5>
+<div class="paragraph">
+<p>Groovy provides a syntax for various type literals. There are three native collection literals in Groovy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>lists, using the <code>[]</code> literal</p>
+</li>
+<li>
+<p>maps, using the <code>[:]</code> literal</p>
+</li>
+<li>
+<p>ranges, using the <code>(..,..)</code> literal</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The inferred type of a literal depends on the elements of the literal, as illustrated in the following table:</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 100%;">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Literal</th>
+<th class="tableblock halign-left valign-top">Inferred type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def list = []</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>java.util.List</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def list = ['foo','bar']</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>java.util.List&lt;String&gt;</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def list = ["${foo}","${bar}"]</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>java.util.List&lt;GString&gt;</code> be careful, a <code>GString</code> is <strong>not</strong> a <code>String</code>!</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def map = [:]</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>java.util.LinkedHashMap</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def map1 = [someKey: 'someValue']
+def map2 = ['someKey': 'someValue']</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>java.util.LinkedHashMap&lt;String,String&gt;</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def map1 = [someKey: 'someValue']
+def map2 = ['someKey': 'someValue']</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>java.util.LinkedHashMap&lt;GString,String&gt;</code> be careful, the key is a <code>GString</code>!</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def intRange = (0..10)</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>groovy.lang.IntRange</code></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def charRange = ('a'..'z')</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>groovy.lang.Range&lt;String&gt;</code> : uses the type of the bounds to infer the component type of the range</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>As you can see, with the noticeable exception of the <code>IntRange</code>, the inferred type makes use of generics types to describe
+the contents of a collection. In case the collection contains elements of different types, the type checker still performs
+type inference of the components, but uses the notion of <a href="#section-lub">least upper bound</a>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="section-lub">Least upper bound</h5>
+<div class="paragraph">
+<p>In Groovy, the <em>least upper bound</em> of two types <code>A</code> and <code>B</code> is defined as a type which:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>superclass corresponds to the common super class of <code>A</code> and <code>B</code></p>
+</li>
+<li>
+<p>interfaces correspond to the interfaces implemented by both <code>A</code> and <code>B</code></p>
+</li>
+<li>
+<p>if <code>A</code> or <code>B</code> is a primitive type and that <code>A</code> isn&#8217;t equal to <code>B</code>, the least upper bound of <code>A</code> and <code>B</code> is the least
+upper bound of their wrapper types</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If <code>A</code> and <code>B</code> only have one (1) interface in common and that their common superclass is <code>Object</code>, then the LUB of both
+is the common interface.</p>
+</div>
+<div class="paragraph">
+<p>The least upper bound represents the minimal type to which both <code>A</code> and <code>B</code> can be assigned. So for example, if <code>A</code> and <code>B</code>
+are both <code>String</code>, then the LUB (least upper bound) of both is also <code>String</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Top {}
+class Bottom1 extends Top {}
+class Bottom2 extends Top {}
+
+assert leastUpperBound(String, String) == String                    <i class="conum" data-value="1"></i><b>(1)</b>
+assert leastUpperBound(ArrayList, LinkedList) == AbstractList       <i class="conum" data-value="2"></i><b>(2)</b>
+assert leastUpperBound(ArrayList, List) == List                     <i class="conum" data-value="3"></i><b>(3)</b>
+assert leastUpperBound(List, List) == List                          <i class="conum" data-value="4"></i><b>(4)</b>
+assert leastUpperBound(Bottom1, Bottom2) == Top                     <i class="conum" data-value="5"></i><b>(5)</b>
+assert leastUpperBound(List, Serializable) == Object                <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the LUB of <code>String</code> and <code>String</code> is <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the LUB of <code>ArrayList</code> and <code>LinkedList</code> is their common super type, <code>AbstractList</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the LUB of <code>ArrayList</code> and <code>List</code> is their only common interface, <code>List</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>the LUB of two identical interfaces is the interface itself</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>the LUB of <code>Bottom1</code> and <code>Bottom2</code> is their superclass <code>Top</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>the LUB of two types which have nothing in common is <code>Object</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In those examples, the LUB is always representable as a normal, JVM supported, type. But Groovy internally represents the LUB
+as a type which can be more complex, and that you wouldn&#8217;t be able to use to define a variable for example. To illustrate this,
+let&#8217;s continue with this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface Foo {}
+class Top {}
+class Bottom extends Top implements Serializable, Foo {}
+class SerializableFooImpl implements Serializable, Foo {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What is the least upper bound of <code>Bottom</code> and <code>SerializableFooImpl</code>? They don&#8217;t have a common super class (apart from <code>Object</code>),
+but they do share 2 interfaces (<code>Serializable</code> and <code>Foo</code>), so their least upper bound is a type which represents the union of
+two interfaces (<code>Serializable</code> and <code>Foo</code>). This type cannot be defined in the source code, yet Groovy knows about it.</p>
+</div>
+<div class="paragraph">
+<p>In the context of collection type inference (and generic type inference in general), this becomes handy, because the type of the
+components is inferred as the least upper bound. We can illustrate why this is important in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface Greeter { void greet() }                  <i class="conum" data-value="1"></i><b>(1)</b>
+interface Salute { void salute() }                  <i class="conum" data-value="2"></i><b>(2)</b>
+
+class A implements Greeter, Salute {                <i class="conum" data-value="3"></i><b>(3)</b>
+    void greet() { println "Hello, I'm A!" }
+    void salute() { println "Bye from A!" }
+}
+class B implements Greeter, Salute {                <i class="conum" data-value="4"></i><b>(4)</b>
+    void greet() { println "Hello, I'm B!" }
+    void salute() { println "Bye from B!" }
+    void exit() { println 'No way!' }               <i class="conum" data-value="5"></i><b>(5)</b>
+}
+def list = [new A(), new B()]                       <i class="conum" data-value="6"></i><b>(6)</b>
+list.each {
+    it.greet()                                      <i class="conum" data-value="7"></i><b>(7)</b>
+    it.salute()                                     <i class="conum" data-value="8"></i><b>(8)</b>
+    it.exit()                                       <i class="conum" data-value="9"></i><b>(9)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>Greeter</code> interface defines a single method, <code>greet</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the <code>Salute</code>  interface defines a single method, <code>salute</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>class <code>A</code> implements both <code>Greeter</code> and <code>Salute</code> but there&#8217;s no explicit interface extending both</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>same for <code>B</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>but <code>B</code> defines an additional <code>exit</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>the type of <code>list</code> is inferred as "list of the LUB of <code>A</code> and <code>B</code>"</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>so it is possible to call <code>greet</code> which is defined on both <code>A</code> and <code>B</code> through the <code>Greeter</code> interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>and it is possible to call <code>salut</code> which is defined on both <code>A</code> and <code>B</code> through the <code>Salut</code> interface</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>yet calling <code>exit</code> is a compile time error because it doesn&#8217;t belong to the LUB of <code>A</code> and <code>B</code> (only defined in <code>B</code>)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The error message will look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[Static type checking] - Cannot find matching method Greeter or Salute#exit()</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which indicates that the <code>exit</code> method is neither defines on <code>Greeter</code> nor <code>Salute</code>, which are the two interfaces defined
+in the least upper bound of <code>A</code> and <code>B</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_instanceof_inference">instanceof inference</h5>
+<div class="paragraph">
+<p>In normal, non type checked, Groovy, you can write things like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Greeter {
+    String greeting() { 'Hello' }
+}
+
+void doSomething(def o) {
+    if (o instanceof Greeter) {     <i class="conum" data-value="1"></i><b>(1)</b>
+        println o.greeting()        <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+
+doSomething(new Greeter())</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>guard the method call with an <code>instanceof</code> check</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>make the call</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The method call works because of dynamic dispatch (the method is selected at runtime). The equivalent code in Java would
+require to cast <code>o</code> to a <code>Greeter</code> before calling the <code>greeting</code> method, because methods are selected at compile time:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">if (o instanceof Greeter) {
+    System.out.println(((Greeter)o).greeting());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, in Groovy, even if you add <code>@TypeChecked</code> (and thus activate type checking) on the <code>doSomething</code> method, the
+cast is <strong>not</strong> necessary. The compiler embeds <em>instanceof</em> inference that makes the cast optional.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="section-flow-typing">Flow typing</h5>
+<div class="paragraph">
+<p>Flow typing is an important concept of Groovy in type checked mode and an extension of type inference. The idea is that
+the compiler is capable of infering the type of variables in the flow of the code, not just at initialization:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TypeChecked
+void flowTyping() {
+    def o = 'foo'                       <i class="conum" data-value="1"></i><b>(1)</b>
+    o = o.toUpperCase()                 <i class="conum" data-value="2"></i><b>(2)</b>
+    o = 9d                              <i class="conum" data-value="3"></i><b>(3)</b>
+    o = Math.sqrt(o)                    <i class="conum" data-value="4"></i><b>(4)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>first, <code>o</code> is declared using <code>def</code> and assigned a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>the compiler inferred that <code>o</code> is a <code>String</code>, so calling <code>toUpperCase</code> is allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>o</code> is reassigned with a <code>double</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>calling <code>Math.sqrt</code> passes compilation because the compiler knows that at this point, <code>o</code> is a <code>double</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>So the type checker is <em>aware</em> of the fact that the concrete type of a variable is different over time. In particular,
+if you replace the last assignment with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">o = 9d
+o = o.toUpperCase()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The type checker will now fail at compile time, because it knows that <code>o</code> is a <code>double</code> when <code>toUpperCase</code> is called,
+so it&#8217;s a type error.</p>
+</div>
+<div class="paragraph">
+<p>It is important to understand that it is not the fact of declaring a variable with <code>def</code> that triggers type inference.
+Flow typing works for <strong>any</strong> variable of any type. Declaring a variable with an explicit type only constraints what you
+can assign to a variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TypeChecked
+void flowTypingWithExplicitType() {
+    List list = ['a','b','c']           <i class="conum" data-value="1"></i><b>(1)</b>
+    list = list*.toUpperCase()          <i class="conum" data-value="2"></i><b>(2)</b>
+    list = 'foo'                        <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>list</code> is declared as an unchecked <code>List</code> and assigned a list literal of `String`s</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>this line passes compilation because of flow typing: the type checker knows that <code>list</code> is at this point a <code>List&lt;String&gt;</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>but you can&#8217;t assign a <code>String</code> to a <code>List</code> so this is a type checking error</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can also note that even if the variable is declared <strong>without</strong> generics information, the type checker knows what is
+the component type. Therefore, such code would fail compilation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TypeChecked
+void flowTypingWithExplicitType() {
+    List list = ['a','b','c']           <i class="conum" data-value="1"></i><b>(1)</b>
+    list.add(1)                         <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>list</code> is inferred as <code>List&lt;String&gt;</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>so adding an <code>int</code> to a <code>List&lt;String&gt;</code> is a compile-time error</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Fixing this requires adding an explicit generic type to the declaration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TypeChecked
+void flowTypingWithExplicitType() {
+    List&lt;? extends Serializable&gt; list = []                      <i class="conum" data-value="1"></i><b>(1)</b>
+    list.addAll(['a','b','c'])                                  <i class="conum" data-value="2"></i><b>(2)</b>
+    list.add(1)                                                 <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>list</code> declared as <code>List&lt;? extends Serializable&gt;</code> and initialized with an empty list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>elements added to the list conform to the declaration type of the list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>so adding an <code>int</code> to a <code>List&lt;? extends Serializable&gt;</code> is allowed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Flow typing has been introduced to reduce the difference in semantics between classic and static Groovy. In particular,
+consider the behavior of this code in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="java language-java">public Integer compute(String str) {
+    return str.length();
+}
+public String compute(Object o) {
+    return "Nope";
+}
+// ...
+Object string = "Some string";          <i class="conum" data-value="1"></i><b>(1)</b>
+Object result = compute(string);        <i class="conum" data-value="2"></i><b>(2)</b>
+System.out.println(result);             <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>o</code> is declared as an <code>Object</code> and assigned a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we call the <code>compute</code> method with <code>o</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>and print the result</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In Java, this code will output <code>0</code>, because method selection is done at compile time and based on the <strong>declared</strong> types.
+So even if <code>o</code> is a <code>String</code> at runtime, it is still the <code>Object</code> version which is called, because <code>o</code> has been declared
+as an <code>Object</code>. To be short, in Java, declared types are most important, be it variable types, parameter types or return
+types.</p>
+</div>
+<div class="paragraph">
+<p>In Groovy, we could write:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">int compute(String string) { string.length() }
+String compute(Object o) { "Nope" }
+Object o = 'string'
+def result = compute(o)
+println result</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But this time, it will return <code>6</code>, because the method which is chosen is chosen <strong>at runtime</strong>, based on the <em>actual</em>
+argument types. So at runtime, <code>o</code> is a <code>String</code> so the <code>String</code> variant is used. Note that this behavior has nothing
+to do with type checking, it&#8217;s the way Groovy works in general: dynamic dispatch.</p>
+</div>
+<div class="paragraph">
+<p>In type checked Groovy, we want to make sure the type checker selects the same method <strong>at compile time</strong>, that the runtime
+would choose. It is not possible in general, due to the semantics of the language, but we can make things better with flow
+typing. With flow typing, <code>o</code> is <em>inferred</em> as a <code>String</code> when the <code>compute</code> method is called, so the version which takes
+a <code>String</code> and returns an <code>int</code> is chosen. This means that we can infer the return type of the method to be an <code>int</code>, and
+not a <code>String</code>. This is important for subsequent calls and type safety.</p>
+</div>
+<div class="paragraph">
+<p>So in type checked Groovy, flow typing is a very important concept, which also implies that if <code>@TypeChecked</code> is applied,
+methods are selected based on the <em>inferred types</em> of the arguments, not on the declared types. This doesn&#8217;t ensure 100%
+type safety, because the type checker <em>may</em> select a wrong method, but it ensures the closest semantics to dynamic Groovy.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_advanced_type_inference">Advanced type inference</h5>
+<div class="paragraph">
+<p>A combination of <a href="#section-flow-typing">flow typing</a> and <a href="#section-lub">least upper bound inference</a> is used to perform
+advanced type inference and ensure type safety in multiple situations. In particular, program control structures are
+likely to alter the inferred type of a variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Top {
+   void methodFromTop() {}
+}
+class Bottom extends Top {
+   void methodFromBottom() {}
+}
+def o
+if (someCondition) {
+    o = new Top()                               <i class="conum" data-value="1"></i><b>(1)</b>
+} else {
+    o = new Bottom()                            <i class="conum" data-value="2"></i><b>(2)</b>
+}
+o.methodFromTop()                               <i class="conum" data-value="3"></i><b>(3)</b>
+o.methodFromBottom()  // compilation error      <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>if <code>someCondition</code> is true, <code>o</code> is assigned a <code>Top</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>if <code>someCondition</code> is false, <code>o</code> is assigned a <code>Bottom</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>calling <code>methodFromTop</code> is safe</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>but calling <code>methodFromBottom</code> is not, so it&#8217;s a compile time error</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When the type checker visits an <code>if/else</code> control structure, it checks all variables which are assigned in <code>if/else</code> branches
+and computes the <a href="#section-lub">least upper bound</a> of all assignments. This type is the type of the inferred variable
+after the <code>if/else</code> block, so in this example, <code>o</code> is assigned a <code>Top</code> in the <code>if</code> branch and a <code>Bottom</code> in the <code>else</code>
+branch. The <a href="#section-lub">LUB</a> of those is a <code>Top</code>, so after the conditional branches, the compiler infers <code>o</code> as being
+a <code>Top</code>. Calling <code>methodFromTop</code> will therefore be allowed, but not <code>methodFromBottom</code>.</p>
+</div>
+<div class="paragraph">
+<p>The same reasoning exists with closures and in particular closure shared variables. A closure shared variable is a variable
+which is defined outside of a closure, but used inside a closure, as in this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def text = 'Hello, world!'                          <i class="conum" data-value="1"></i><b>(1)</b>
+def closure = {
+    println text                                    <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a variable named <code>text</code> is declared</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>text</code> is used from inside a closure. It is a <em>closure shared variable</em>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Groovy allows developers to use those variables without requiring them to be final. This means that a closure shared
+variable can be reassigned inside a closure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">String result
+doSomething { String it -&gt;
+    result = "Result: $it"
+}
+result = result?.toUpperCase()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The problem is that a closure is an independent block of code that can be executed (or not) at <strong>any</strong> time. In particular,
+<code>doSomething</code> may be asynchronous, for example. This means that the body of a closure doesn&#8217;t belong to the main control
+flow. For that reason, the type checker also computes, for each closure shared variable, the <a href="#section-lub">LUB</a> of all
+assignments of the variable, and will use that <code>LUB</code> as the inferred type outside of the scope of the closure, like in
+this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Top {
+   void methodFromTop() {}
+}
+class Bottom extends Top {
+   void methodFromBottom() {}
+}
+def o = new Top()                               <i class="conum" data-value="1"></i><b>(1)</b>
+Thread.start {
+    o = new Bottom()                            <i class="conum" data-value="2"></i><b>(2)</b>
+}
+o.methodFromTop()                               <i class="conum" data-value="3"></i><b>(3)</b>
+o.methodFromBottom()  // compilation error      <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a closure-shared variable is first assigned a <code>Top</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>inside the closure, it is assigned a <code>Bottom</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>methodFromTop</code> is allowed</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>methodFromBottom</code> is a compilation error</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here, it is clear that when <code>methodFromBottom</code> is called, there&#8217;s no guarantee, at compile-time or runtime that the
+type of <code>o</code> will <em>effectively</em> be a <code>Bottom</code>. There are chances that it will be, but we can&#8217;t make sure, because it&#8217;s
+asynchronous. So the type checker will only allow calls on the <a href="#section-lub">least upper bound</a>, which is here a <code>Top</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closures_and_type_inference">6.2.6. Closures and type inference</h4>
+<div class="paragraph">
+<p>The type checker performs special inference on closures, resulting on additional checks on one side and improved fluency
+on the other side.</p>
+</div>
+<div class="sect4">
+<h5 id="_return_type_inference">Return type inference</h5>
+<div class="paragraph">
+<p>The first thing that the type checker is capable of doing is infering the <em>return type</em> of a closure. This is simply
+ illustrated in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@groovy.transform.TypeChecked
+int testClosureReturnTypeInference(String arg) {
+    def cl = { "Arg: $arg" }                                <i class="conum" data-value="1"></i><b>(1)</b>
+    def val = cl()                                          <i class="conum" data-value="2"></i><b>(2)</b>
+
+    val.length()                                            <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>a closure is defined, and it returns a string (more precisely a <code>GString</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we call the closure and assign the result to a variable</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>the type checker inferred that the closure would return a string, so calling <code>length()</code> is allowed</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can see, unlike a method which declares its return type explicitly, there&#8217;s no need to declare the return type
+of a closure: its type is inferred from the body of the closure.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Closures vs methods</div>
+<div class="paragraph">
+<p>It&#8217;s worth noting that return type inference is only applicable to closures. While the type checker could do the
+same on a method, it is in practice not desirable: <em>in general</em>, methods can be overriden and it is not statically
+possible to make sure that the method which is called is not an overriden version. So flow typing would actually
+think that a method returns something, while in reality, it could return something else, like illustrated in the
+following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@TypeChecked
+class A {
+    def compute() { 'some string' }             <i class="conum" data-value="1"></i><b>(1)</b>
+    def computeFully() {
+        compute().toUpperCase()                 <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}
+@TypeChecked
+class B extends A {
+    def compute() { 123 }                       <i class="conum" data-value="3"></i><b>(3)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>class <code>A</code> defines a method <code>compute</code> which effectively returns a <code>String</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>this will fail compilation because the return type of <code>compute</code> is <code>def</code>(aka <code>Object</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>class <code>B</code> extends <code>A</code> and redefines <code>compute</code>, this type returning an <code>int</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As you can see, if the type checker relied on the inferred return type of a method, with <a href="#section-flow-typing">flow typing</a>,
+the type checker could determine that it is ok to call <code>toUpperCase</code>. It is in fact an <strong>error</strong>, because a subclass can
+override <code>compute</code> and return a different object. Here, <code>B#compute</code> returns an <code>int</code>, so someone calling <code>computeFully</code>
+on an instance of <code>B</code> would see a runtime error. The compiler prevents this from happening by using the declared return
+type of methods instead of the inferred return type.</p>
+</div>
+<div class="paragraph">
+<p>For consistency, this behavior is the same for <strong>every</strong> method, even if they are static or final.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_parameter_type_inference">Parameter type inference</h5>
+<div class="paragraph">
+<p>In addition to the return type, it is possible for a closure to infer its parameter types from the context. There are
+two ways for the compiler to infer the parameter types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>through <em>implicit SAM type coercion</em></p>
+</li>
+<li>
+<p>through API metadata</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To illustrate this, lets start with an example that will fail compilation due to the inability for the type checker
+to infer the parameter types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Person {
+    String name
+    int age
+}
+
+void inviteIf(Person p, Closure&lt;Boolean&gt; predicate) {           <i class="conum" data-value="1"></i><b>(1)</b>
+    if (predicate.call(p)) {
+        // send invite
+        // ...
+    }
+}
+
+@groovy.transform.TypeChecked
+void failCompilation() {
+    Person p = new Person(name: 'Gerard', age: 55)
+    inviteIf(p) {                                               <i class="conum" data-value="2"></i><b>(2)</b>
+        it.age &gt;= 18 // No such property: age                   <i class="conum" data-value="3"></i><b>(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the <code>inviteIf</code> method accepts a <code>Person</code> and a <code>Closure</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>we call it with a <code>Person</code> and a <code>Closure</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>yet <code>it</code> is not statically known as being a <code>Person</code> and compilation fails</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In this example, the closure body contains <code>it.age</code>. With dynamic, not type checked code, this would work, because the
+type of <code>it</code> would be a <code>Person</code> at runtime. Unfortunately, at compile-time, there&#8217;s no way to know what is the type
+of <code>it</code>, just by reading the signature of <code>inviteIf</code>.</p>
+</div>
+<div class="sect5">
+<h6 id="_explicit_closure_parameters">Explicit closure parameters</h6>
+<div class="paragraph">
+<p>To be short, the type checker doesn&#8217;t have enough contextual information on the <code>inviteIf</code> method to determine statically
+the type of <code>it</code>. This means that the method call needs to be rewritten like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">inviteIf(p) { Person it -&gt;                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    it.age &gt;= 18
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the type of <code>it</code> needs to be declared explicitly</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>By explicitly declaring the type of the <code>it</code> variable, you can workaround the problem and make this code statically
+checked.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_inferred_from_single_abstract_method_types">Parameters inferred from single-abstract method types</h6>
+<div class="paragraph">
+<p>For an API or framework designer, there are two ways to make this more elegant for users, so that they don&#8217;t have to
+declare an explicit type for the closure parameters. The first one, and easiest, is to replace the closure with a
+SAM type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">interface Predicate&lt;On&gt; { boolean apply(On e) }                 <i class="conum" data-value="1"></i><b>(1)</b>
+
+void inviteIf(Person p, Predicate&lt;Person&gt; predicate) {          <i class="conum" data-value="2"></i><b>(2)</b>
+    if (predicate.apply(p)) {
+        // send invite
+        // ...
+    }
+}
+
+@groovy.transform.TypeChecked
+void passesCompilation() {
+    Person p = new Person(name: 'Gerard', age: 55)
+
+    inviteIf(p) {                                               <i class="conum" data-value="3"></i><b>(3)</b>
+        it.age &gt;= 18                                            <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>declare a <code>SAM</code> interface with an <code>apply</code> method</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>inviteIf</code> now uses a <code>Predicate&lt;Person&gt;</code> instead of a <code>Closure&lt;Boolean&gt;</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>there&#8217;s no need to declare the type of the <code>it</code> variable anymore</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>it.age</code> compiles properly, the type of <code>it</code> is inferred from the <code>Predicate#apply</code> method signature</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+By using this technique, we leverage the <em>automatic coercion of closures to SAM types</em> feature of Groovy. The
+question whether you should use a <em>SAM type</em> or a <em>Closure</em> really depends on what you need to do. In a lot of cases,
+using a SAM interface is enough, especially if you consider functional interfaces as they are found in Java 8. However,
+closures provide features that are not accessible to functional interfaces. In particular, closures can have a delegate,
+and owner and can be manipulated as objects (for example, cloned, serialized, curried, &#8230;) before being called. They can
+also support multiple signatures (polymorphism). So if you need that kind of manipulation, it is preferable to switch to
+the most advanced type inference annotations which are described below.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The original issue that needs to be solved when it comes to closure parameter type inference, that is to say, statically
+determining the types of the arguments of a closure <em>without</em> having to have them explicitly declared, is that the Groovy
+type system inherits the Java type system, which is insufficient to describe the types of the arguments.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_the_code_closureparams_code_annotation">The <code>@ClosureParams</code> annotation</h6>
+<div class="paragraph">
+<p>Groovy provides an annotation, <code>@ClosureParams</code> which is aimed at completing type information. This annotation is primarily
+aimed at framework and API developers who want to extend the capabilities of the type checker by providing type inference
+metadata. This is important if your library makes use of closures and that you want the maximum level of tooling support
+too.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s illustrate this by fixing the original example, introducing the <code>@ClosureParams</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FirstParam
+void inviteIf(Person p, @ClosureParams(FirstParam) Closure&lt;Boolean&gt; predicate) {        <i class="conum" data-value="1"></i><b>(1)</b>
+    if (predicate.call(p)) {
+        // send invite
+        // ...
+    }
+}
+inviteIf(p) {                                                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    it.age &gt;= 18
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>the closure parameter is annotated with <code>@ClosureParams</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>it&#8217;s not necessary to use an explicit type for <code>it</code>, which is inferred</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>@ClosureParams</code> annotation minimally accepts one argument, which is named a <em>type hint</em>. A type hint is a class which
+is reponsible for completing type information at compile time for the closure. In this example, the type hint being used
+is <code>groovy.transform.stc.FirstParam</code> which indicated to the type checker that the closure will accept one parameter
+whose type is the type of the first parameter of the method. In this case, the first parameter of the method is <code>Person</code>,
+so it indicates to the type checker that the first parameter of the closure is in fact a <code>Person</code>.</p>
+</div>
+<div class="paragraph">
+<p>The second argument is optional and named <em>options</em>. It&#8217;s semantics depends on the <em>type hint</em> class. Groovy comes with
+various bundled type hints, illustrated in the table below:</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 100%;">
+<caption class="title">Table 2. Predefined type hints</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 16%;">
+<col style="width: 66%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type hint</th>
+<th class="tableblock halign-left valign-top">Polymorphic?</th>
+<th class="tableblock halign-left valign-top">Description and examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>FirstParam</code><br>
+<code>SecondParam</code><br>
+<code>ThirdParam</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>The first (resp. second, third) parameter type of the method<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.FirstParam
+void doSomething(String str, @ClosureParams(FirstParam) Closure c) {
+    c(str)
+}
+doSomething('foo') { println it.toUpperCase() }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.SecondParam
+void withHash(String str, int seed, @ClosureParams(SecondParam) Closure c) {
+    c(31*str.hashCode()+seed)
+}
+withHash('foo', (int)System.currentTimeMillis()) {
+    int mod = it%2
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.ThirdParam
+String format(String prefix, String postfix, String o, @ClosureParams(ThirdParam) Closure c) {
+    "$prefix${c(o)}$postfix"
+}
+assert format('foo', 'bar', 'baz') {
+    it.toUpperCase()
+} == 'fooBAZbar'</code></pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>FirstParam.FirstGenericType</code><br>
+<code>SecondParam.FirstGenericType</code><br>
+<code>ThirdParam.FirstGenericType</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>The first generic type of the first (resp. second, third) parameter of the method<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.FirstParam
+public &lt;T&gt; void doSomething(List&lt;T&gt; strings, @ClosureParams(FirstParam.FirstGenericType) Closure c) {
+    strings.each {
+        c(it)
+    }
+}
+doSomething(['foo','bar']) { println it.toUpperCase() }
+doSomething([1,2,3]) { println(2*it) }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Variants for <code>SecondGenericType</code> and <code>ThirdGenericType</code> exist for all <code>FirstParam</code>, <code>SecondParam</code> and <code>ThirdParam</code>
+type hints.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>SimpleType</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>A type hint for which the type of closure parameters comes from the options string.<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.SimpleType
+public void doSomething(@ClosureParams(value=SimpleType,options=['java.lang.String','int']) Closure c) {
+    c('foo',3)
+}
+doSomething { str, len -&gt;
+    assert str.length() == len
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This type hint supports a <strong>single</strong> signature and each of the parameter is specified as a value of the <em>options</em> array
+using a fully-qualified type name or a primitive type.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>MapEntryOrKeyValue</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>A dedicated type hint for closures that either work on a <code>Map.Entry</code> single parameter, or two parameters corresponding
+to the key and the value.<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.MapEntryOrKeyValue
+public &lt;K,V&gt; void doSomething(Map&lt;K,V&gt; map, @ClosureParams(MapEntryOrKeyValue) Closure c) {
+    // ...
+}
+doSomething([a: 'A']) { k,v -&gt;
+    assert k.toUpperCase() == v.toUpperCase()
+}
+doSomething([abc: 3]) { e -&gt;
+    assert e.key.length() == e.value
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This type hint <strong>requires</strong> that the first argument is a <code>Map</code> type, and infers the closure parameter types from the map
+actual key/value types.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>FromAbstractTypeMethods</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Infers closure parameter types from the abstract method of some type. A signature is inferred for <strong>each</strong> abstract method.<br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.FromAbstractTypeMethods
+abstract class Foo {
+    abstract void firstSignature(int x, int y)
+    abstract void secondSignature(String str)
+}
+void doSomething(@ClosureParams(value=FromAbstractTypeMethods, options=["Foo"]) Closure cl) {
+    // ...
+}
+doSomething { a, b -&gt; a+b }
+doSomething { s -&gt; s.toUpperCase() }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If there are multiple signatures like in the example above, the type checker will <strong>only</strong> be able to infer the types of
+the arguments if the arity of each method is different. In the example above, <code>firstSignature</code> takes 2 arguments and
+<code>secondSignature</code> takes 1 argument, so the type checker can infer the argument types based on the number of arguments.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p><code>FromString</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Infers the closure parameter typs from the <code>options</code> argument. The <code>options</code> argument consists of an array of comma-separated
+non-primitive types. Each element of the array corresponds to a single signature, and each comma in an element separate
+parameters of the signature. In short, this is the most generic type hint, and each string of the <code>options</code> map is <strong>parsed</strong>
+as if it was a signature literal. While being very powerful, this type hint must be avoided if you can because it increases
+the compilation times due to the necessity of parsing the type signatures.</p>
+</div>
+<div class="paragraph">
+<p>A single signature for a closure accepting a <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.FromString
+void doSomething(@ClosureParams(value=FromString, options=["String","String,Integer"]) Closure cl) {
+    // ...
+}
+doSomething { s -&gt; s.toUpperCase() }
+doSomething { s,i -&gt; s.toUpperCase()*i }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A polymorphic closure, accepting either a <code>String</code> or a <code>String, Integer</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.FromString
+void doSomething(@ClosureParams(value=FromString, options=["String","String,Integer"]) Closure cl) {
+    // ...
+}
+doSomething { s -&gt; s.toUpperCase() }
+doSomething { s,i -&gt; s.toUpperCase()*i }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A polymorphic closure, accepting either a <code>T</code> or a pair <code>T,T</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.transform.stc.FromString
+public &lt;T&gt; void doSomething(T e, @ClosureParams(value=FromString, options=["T","T,T"]) Closure cl) {
+    // ...
+}
+doSomething('foo') { s -&gt; s.toUpperCase() }
+doSomething('foo') { s1,s2 -&gt; assert s1.toUpperCase() == s2.toUpperCase() }</code></pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Even though you use <code>FirstParam</code>, <code>SecondParam</code> or <code>ThirdParam</code> as a type hint, it doesn&#8217;t stricly mean that the
+argument which will be passed to the closure <strong>will</strong> be the first (resp. second, third) argument of the method call. It
+only means that the <strong>type</strong> of the parameter of the closure will be the <strong>same</strong> as the type of the first (resp.  second,
+ third) argument of the method call.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In short, the lack of the <code>@ClosureParams</code> annotation on a method accepting a <code>Closure</code> will <strong>not</strong> fail compilation. If
+ present (and it can be present in Java sources as well as Groovy sources), then the type checker has <strong>more</strong> information
+ and can perform additional type inference. This makes this feature particularily interesting for framework developers.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="__code_delegatesto_code"><code>@DelegatesTo</code></h5>
+<div class="paragraph">
+<p>The <code>@DelegatesTo</code> annotation is used by the type checker to infer the type of the delegate. It allows the API designer
+to instruct the compiler what is the type of the delegate and the delegation strategy. The <code>@DelegatesTo</code> annotation is
+discussed in a <a href="core-domain-specific-languages.html#section-delegatesto">specific section</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_compilation_wip">6.3. Static compilation (WIP)</h3>
+<div class="sect3">
+<h4 id="_dynamic_vs_static">6.3.1. Dynamic vs static</h4>
+<div class="paragraph">
+<p>In the <a href="#typechecking">type checking section</a>, we have seen that Groovy provides optional type checking thanks to the
+<code>@TypeChecked</code> annotation. The type checker runs at compile time and performs a static analysis of dynamic code. The
+program will behave exactly the same whether type checking has been enabled or not. This means that the <code>@TypeChecked</code>
+annotation is neutral with regards to the semantics of a program. Even though it may be necessary to add type information
+in the sources so that the program is considered type safe, in the end, the semantics of the program are the same.</p>
+</div>
+<div class="paragraph">
+<p>While this may sound fine, there is actually one issue with this: type checking of dynamic code, done at compile time, is
+by definition only correct if no runtime specific behavior occurs. For example, the following program passes type checking:</p>
+</div>
+<div id="typechecked-defeated" class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Computer {
+    int compute(String str) {
+        str.length()
+    }
+    String compute(int x) {
+        String.valueOf(x)
+    }
+}
+
+@groovy.transform.TypeChecked
+void test() {
+    def computer = new Computer()
+    computer.with {
+        assert compute(compute('foobar')) =='6'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are two <code>compute</code> methods. One accepts a <code>String</code> and returns an <code>int</code>, the other accepts an <code>int</code> and returns
+a <code>String</code>. If you compile this, it is considered type safe: the inner <code>compute('foobar')</code> call will return an <code>int</code>,
+and calling <code>compute</code> on this <code>int</code> will in turn return a <code>String</code>.</p>
+</div>
+<div class="paragraph">
+<p>Now, before calling <code>test()</code>, consider adding the following line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Computer.metaClass.compute = { String str -&gt; new Date() }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using runtime metaprogramming, we&#8217;re actually modifying the behavior of the <code>compute(String)</code> method, so that instead of
+returning the length of the provided argument, it will return a <code>Date</code>. If you execute the program, it will fail at
+runtime. Since this line can be added from anywhere, in any thread, there&#8217;s absolutely no way for the type checker to
+statically make sure that no such thing happens. In short, the type checker is vulnerable to monkey patching. This is
+just one example, but this illustrates the concept that doing static analysis of a dynamic program is inherently wrong.</p>
+</div>
+<div class="paragraph">
+<p>The Groovy language provides an alternative annotation to <code>@TypeChecked</code> which will actually make sure that the methods
+which are inferred as being called <strong>will</strong> effectively be called at runtime. This annotation turns the Groovy compiler
+into a <strong>static compiler</strong>, where all method calls are resolved at compile time <strong>and</strong> the generated bytecode makes sure
+that this happens: the annotation is <code>@groovy.transform.CompileStatic</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="compilestatic-annotation">6.3.2. The <code>@CompileStatic</code> annotation</h4>
+<div class="paragraph">
+<p>The <code>@CompileStatic</code> annotation can be added anywhere the <code>@TypeChecked</code> annotation can be used, that is to say on
+a class or a method. It is not necessary to add both <code>@TypeChecked</code> and <code>@CompileStatic</code>, as <code>@CompileStatic</code> performs
+everything <code>@TypeChecked</code> does, but in addition triggers static compilation.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take the <a href="#typechecked-defeated">example which failed</a>, but this time let&#8217;s replace the <code>@TypeChecked</code> annotation
+with <code>@CompileStatic</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">class Computer {
+    int compute(String str) {
+        str.length()
+    }
+    String compute(int x) {
+        String.valueOf(x)
+    }
+}
+
+@groovy.transform.CompileStatic
+void test() {
+    def computer = new Computer()
+    computer.with {
+        assert compute(compute('foobar')) =='6'
+    }
+}
+Computer.metaClass.compute = { String str -&gt; new Date() }
+run()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the <strong>only</strong> difference. If we execute this program, this time, there is no runtime error. The <code>test</code> method
+became immune to monkey patching, because the <code>compute</code> methods which are called in its body are linked at compile
+time, so even if the metaclass of <code>Computer</code> changes, the program still behaves <strong>as expected by the type checker</strong>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_key_benefits">6.3.3. Key benefits</h4>
+<div class="paragraph">
+<p>There are several benefits of using <code>@CompileStatic</code> on your code:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>type safety</p>
+</li>
+<li>
+<p>immunity to <a href="#compilestatic-annotation">monkey patching</a></p>
+</li>
+<li>
+<p>performance improvements</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The performance improvements depend on the kind of program you are executing. It it is I/O bound, the difference between
+statically compiled code and dynamic code is barely noticeable. On highly CPU intensive code, since the bytecode which
+is generated is very close, if not equal, to the one that Java would produce for an equivalent program, the performance
+is greatly improved.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Using the <em>invokedynamic</em> version of Groovy, which is accessible to people using JDK 7 and above, the performance
+of the dynamic code should be very close to the performance of statically compiled code. Sometimes, it can even be faster!
+There is only one way to determine which version you should choose: measuring. The reason is that depending on your program
+<strong>and</strong> the JVM that you use, the performance can be significantly different. In particular, the <em>invokedynamic</em> version of
+Groovy is very sensitive to the JVM version in use.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.4.0-SNAPSHOT<br>
+Last updated 2014-07-10 23:39:15 CST
+</div>
+</div>
+</body>
+</html>

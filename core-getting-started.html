@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<title>Getting started</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="assets/css/view-example.css">
+<script src='assets/js/jquery-2.1.1.min.js'></script>
+<script src='assets/js/view-example.js'></script></head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Getting started</h1>
+<span id="revnumber">version 2.4.0-SNAPSHOT</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_download">1. Download</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_stable">1.1. Stable</a></li>
+<li><a href="#_snapshots">1.2. Snapshots</a></li>
+</ul>
+</li>
+<li><a href="#_maven_repository">2. Maven Repository</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_stable_release">2.1. Stable Release</a></li>
+<li><a href="#_snapshot_releases">2.2. Snapshot Releases</a></li>
+</ul>
+</li>
+<li><a href="#_gvm_the_groovy_environment_manager">3. GVM (the Groovy enVironment Manager)</a></li>
+<li><a href="#_other_ways_to_get_groovy">4. Other ways to get Groovy</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_installation_on_mac_os_x">4.1. Installation on Mac OS X</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#_macports">4.1.1. MacPorts</a></li>
+<li><a href="#_homebrew">4.1.2. Homebrew</a></li>
+</ul>
+</li>
+<li><a href="#_installation_on_windows">4.2. Installation on Windows</a></li>
+<li><a href="#_other_distributions">4.3. Other Distributions</a></li>
+<li><a href="#_source_code">4.4. Source Code</a></li>
+<li><a href="#_ide_plugin">4.5. IDE plugin</a></li>
+</ul>
+</li>
+<li><a href="#_install_binary">5. Install Binary</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_download">1. Download</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this download area, you will be able to download the distribution (binary and source), the Windows installer and the documentation for <strong>Groovy</strong>.</p>
+</div>
+<div class="paragraph">
+<p>For a quick and effortless start on Mac OSX, Linux or Cygwin, you can use <a href="http://gvmtool.net">GVM</a> (the Groovy enVironment Manager) to download and configure any <strong>Groovy</strong> version of your choice. Basic <a href="#gvm-the-groovy-environment-manager">instructions</a> can be found below.</p>
+</div>
+<div class="sect2">
+<h3 id="_stable">1.1. Stable</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Download zip</strong>: <a href="http://dist.groovy.codehaus.org/distributions/groovy-binary-2.4.0-SNAPSHOT.zip"><strong>Binary Release</strong></a> | <a href="http://dist.groovy.codehaus.org/distributions/groovy-src-2.4.0-SNAPSHOT.zip">Source Release</a></p>
+</li>
+<li>
+<p><strong>Download documentation</strong>: <a href="http://dist.groovy.codehaus.org/distributions/groovy-docs-2.4.0-SNAPSHOT.zip"><strong>JavaDoc and zipped online documentation</strong></a></p>
+</li>
+<li>
+<p><strong>Combined binary / source / documentation bundle</strong>: <a href="http://dist.groovy.codehaus.org/distributions/groovy-sdk-2.4.0-SNAPSHOT.zip"><strong>Distribution bundle</strong></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can learn more about this version in the <a href="http://groovy.codehaus.org/Groovy+2.4+release+notes">release notes</a> or in the <a href="http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=10242&amp;version=19074">JIRA release notes</a>.</p>
+</div>
+<div class="paragraph">
+<p>If you plan on using invokedynamic support, <a href="invokedynamic-support.html">read those notes</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_snapshots">1.2. Snapshots</h3>
+<div class="paragraph">
+<p>For those who want to test the very latest versions of Groovy and live on the bleeding edge, you can use our <a href="http://snapshots.repository.codehaus.org/org/codehaus/groovy/groovy-all/">snapshot builds</a>. As soon as a build succeeds on our continuous integration server a snapshot is deployed to Codehaus&#8217; snapshot repository.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_repository">2. Maven Repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you wish to embed Groovy in your application, you may just prefer to point to your favourite maven repositories or the <a href="http://repository.codehaus.org/org/codehaus/groovy">codehaus maven repository</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_stable_release">2.1. Stable Release</h3>
+<table class="tableblock frame-all grid-all" style="width: 100%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Gradle</th>
+<th class="tableblock halign-left valign-top">Maven</th>
+<th class="tableblock halign-left valign-top">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'org.codehaus.groovy:groovy:2.4.0-SNAPSHOT&#8217;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+&lt;artifactId&gt;groovy&lt;/artifactId&gt;
+&lt;version&gt;2.4.0-SNAPSHOT&lt;/version&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Just the core of groovy without the modules (see below). Treats Antlr, ASM, etc. as standard dependencies. Only useful if you happen to also use the same versions of these jars yourself as it will save you having two copies of these jars.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'org.codehaus.groovy:groovy-$module:2.4.0-SNAPSHOT&#8217;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+&lt;artifactId&gt;groovy-$module&lt;/artifactId&gt;
+&lt;version&gt;2.4.0-SNAPSHOT&lt;/version&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"$module" stands for the different optional groovy modules "ant", "bsf", "console", "docgenerator", "groovydoc", "groovysh", "jmx", "json", "jsr223", "servlet", "sql", "swing", "test", "testng" and "xml". Example: &lt;artifactId&gt;groovy-sql&lt;/artifactId&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'org.codehaus.groovy:groovy-all:2.4.0-SNAPSHOT&#8217;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;groupId&gt;org.codehaus.groovy&lt;/groupId&gt;
+&lt;artifactId&gt;groovy-all&lt;/artifactId&gt;
+&lt;version&gt;2.4.0-SNAPSHOT&lt;/version&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The core plus all the modules. Also includes jar versions of Antlr, ASM, Commons-CLI and Retrotranslator runtime. Allows you or your other dependencies (e.g. Hibernate) to use other versions of these jars. Optional dependencies are marked as optional. You may need to include some of the optional dependencies to use some features of Groovy, e.g. AntBuilder, GroovyMBeans, etc.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To use the <a href="invokedynamic-support.html">InvokeDynamic</a> version of the jars just append ':indy&#8217; for Gradle or &lt;classifier&gt;indy&lt;/classifier&gt; for Maven.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_snapshot_releases">2.2. Snapshot Releases</h3>
+<div class="paragraph">
+<p>In addition to the stable and milestone releases you can find intermediate SNAPSHOT releases at the <a href="http://snapshots.repository.codehaus.org/org/codehaus/groovy">codehaus snapshot maven repository</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gvm_the_groovy_environment_manager">3. GVM (the Groovy enVironment Manager)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tool makes installing Groovy on any Bash platform (Mac OSX, Linux, Cygwin, Solaris or FreeBSD) very easy.</p>
+</div>
+<div class="paragraph">
+<p>Simply open a new terminal and enter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">$ curl -s get.gvmtool.net | bash</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Follow the instructions on-screen to complete installation.</p>
+</div>
+<div class="paragraph">
+<p>Open a new terminal or type the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">$ source "$HOME/.gvm/bin/gvm-init.sh"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then install the latest stable Groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">$ gvm install groovy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After installation is complete and you&#8217;ve made it your default version, test it with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">$ groovy -version</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s all there is to it!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_other_ways_to_get_groovy">4. Other ways to get Groovy</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_installation_on_mac_os_x">4.1. Installation on Mac OS X</h3>
+<div class="sect3">
+<h4 id="_macports">4.1.1. MacPorts</h4>
+<div class="paragraph">
+<p>If you&#8217;re on MacOS and have <a href="http://www.macports.org">MacPorts</a> installed, you can run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">sudo port install groovy</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_homebrew">4.1.2. Homebrew</h4>
+<div class="paragraph">
+<p>If you&#8217;re on MacOS and have <a href="http://mxcl.github.com/homebrew">Homebrew</a> installed, you can run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">brew install groovy</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installation_on_windows">4.2. Installation on Windows</h3>
+<div class="paragraph">
+<p>If you&#8217;re on Windows, you can also use the <a href="TODO-Windows+NSIS-Installer">NSIS Windows installer</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_distributions">4.3. Other Distributions</h3>
+<div class="paragraph">
+<p>You may download other distributions of Groovy from <a href="http://dist.codehaus.org/groovy/distributions/">this site</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_source_code">4.4. Source Code</h3>
+<div class="paragraph">
+<p>If you prefer to live on the bleeding edge, you can also grab the <a href="https://github.com/groovy/groovy-core">source code from GitHub</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ide_plugin">4.5. IDE plugin</h3>
+<div class="paragraph">
+<p>If you are an IDE user, you can just grab the latest <a href="tools/tools-ide.html">IDE plugin</a> and follow the plugin installation instructions.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_install_binary">5. Install Binary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>These instructions describe how to install a binary distribution of <strong>Groovy</strong>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First, <a href="#download-groovy">Download</a> a binary distribution of Groovy and unpack it into some file on your local file system.</p>
+</li>
+<li>
+<p>Set your <code>GROOVY_HOME</code> environment variable to the directory you unpacked the distribution.</p>
+</li>
+<li>
+<p>Add <code>GROOVY_HOME/bin</code> to your <code>PATH</code> environment variable.</p>
+</li>
+<li>
+<p>Set your <code>JAVA_HOME</code> environment variable to point to your JDK. On OS X this is <code>/Library/Java/Home</code>, on other unixes its often <code>/usr/java</code> etc. If you&#8217;ve already installed tools like Ant or Maven you&#8217;ve probably already done this step.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You should now have Groovy installed properly. You can test this by typing the following in a command shell:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">groovysh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Which should create an interactive groovy shell where you can type Groovy statements. Or to run the <a href="tools/tools-groovyconsole.html">Swing interactive console</a> type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">groovyConsole</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run a specific Groovy script type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="shell language-shell">groovy SomeScript</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.4.0-SNAPSHOT<br>
+Last updated 2014-07-10 23:39:15 CST
+</div>
+</div>
+</body>
+</html>

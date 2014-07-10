@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<meta name="author" content="== Quick start">
+<title>Dependency management with Grape</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="assets/css/view-example.css">
+<script src='assets/js/jquery-2.1.1.min.js'></script>
+<script src='assets/js/view-example.js'></script></head>
+<body id="section-grape" class="book toc2 toc-left">
+<div id="header">
+<h1>Dependency management with Grape</h1>
+<span id="author" class="author">== Quick start</span><br>
+<span id="revnumber">version 2.4.0-SNAPSHOT,</span>
+<span id="revdate">=== Add a Dependency</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#Grape-SpecifyAdditionalRepositories">1. Specify Additional Repositories</a></li>
+<li><a href="#Grape-MavenClassifiers">2. Maven Classifiers</a></li>
+<li><a href="#Grape-ExcludingTransitiveDependencies">3. Excluding Transitive Dependencies</a></li>
+<li><a href="#Grape-JDBCDrivers">4. JDBC Drivers</a></li>
+<li><a href="#Grape-UsingGrapeFromtheGroovyShell">5. Using Grape From the Groovy Shell</a></li>
+<li><a href="#Grape-Proxysettings">6. Proxy settings</a></li>
+<li><a href="#Grape-Logging">7. Logging</a></li>
+<li><a href="#Grape-Detail">1. Detail</a></li>
+<li><a href="#Grape-Usage">2. Usage</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#Grape-Annotation">2.1. Annotation</a></li>
+<li><a href="#Grape-MultipleGrapeAnnotations">2.2. Multiple Grape Annotations</a></li>
+<li><a href="#Grape-Methodcall">2.3. Method call</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#Grape-grabHashMapParameters">2.3.1. grab(HashMap) Parameters</a></li>
+<li><a href="#Grape-ArgumentsMaparguments">2.3.2. Arguments Map arguments</a></li>
+</ul>
+</li>
+<li><a href="#Grape-CommandLineTool">2.4. Command Line Tool</a></li>
+<li><a href="#Grape-Advancedconfiguration">2.5. Advanced configuration</a></li>
+<li>
+<ul class="sectlevel3">
+<li><a href="#Grape-RepositoryDirectory">2.5.1. Repository Directory</a></li>
+<li><a href="#Grape-CustomizeIvysettings">2.5.2. Customize Ivy settings</a></li>
+<li><a href="#Grape-AddyourlocalMaven2repository">2.5.3. Add your local Maven2 repository</a></li>
+</ul>
+</li>
+<li><a href="#Grape-MoreExamples">2.6. More Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Grape is a JAR dependency manager embedded into Groovy. Grape lets you quickly add maven repository dependencies to your
+classpath, making scripting even easier. The simplest use is as simple as adding an annotation to your script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Grab(group='org.springframework', module='spring-orm', version='3.2.5.RELEASE')
+import org.springframework.jdbc.core.JdbcTemplate</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>@Grab</code> also supports a shorthand notation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Grab('org.springframework:spring-orm:3.2.5.RELEASE')
+import org.springframework.jdbc.core.JdbcTemplate</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that we are using an annotated import here, which is the recommanded way. You can also search for
+dependencies on <a href="http://mvnrepository.com">mvnrepository.com</a> and it will
+provide you the <code>@Grab</code> annotation form of the <code>pom.xml</code> entry.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-SpecifyAdditionalRepositories">1. Specify Additional Repositories</h3>
+<div class="paragraph">
+<p>Not all dependencies are in maven central. You can add new ones like
+this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@GrabResolver(name='restlet', root='http://maven.restlet.org/')
+@Grab(group='org.restlet', module='org.restlet', version='1.1.6')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-MavenClassifiers">2. Maven Classifiers</h3>
+<div class="paragraph">
+<p>Some maven dependencies need classifiers in order to be able to resolve.
+You can fix that like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Grab(group='net.sf.json-lib', module='json-lib', version='2.2.3', classifier='jdk15')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-ExcludingTransitiveDependencies">3. Excluding Transitive Dependencies</h3>
+<div class="paragraph">
+<p>Sometimes you will want to exclude transitive dependencies as you might
+be already using a slightly different but compatible version of some
+artifact. You can do this as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Grab('net.sourceforge.htmlunit:htmlunit:2.8')
+@GrabExclude('xml-apis:xml-apis')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-JDBCDrivers">4. JDBC Drivers</h3>
+<div class="paragraph">
+<p>Because of the way JDBC drivers are loaded, you’ll need to configure
+Grape to attach JDBC driver dependencies to the system class loader.
+I.e:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@GrabConfig(systemClassLoader=true)
+@Grab(group='mysql', module='mysql-connector-java', version='5.1.6')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-UsingGrapeFromtheGroovyShell">5. Using Grape From the Groovy Shell</h3>
+<div class="paragraph">
+<p>From groovysh use the method call variant:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">groovy.grape.Grape.grab(group:'org.springframework', module:'spring', version:'2.5.6')</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-Proxysettings">6. Proxy settings</h3>
+<div class="paragraph">
+<p>If you are behind a firewall and/or need to use Groovy/Grape through a
+proxy server, you can specify those settings on the command like via the
+http.proxyHost and http.proxyPort system properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy -Dhttp.proxyHost=yourproxy -Dhttp.proxyPort=8080 yourscript.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or you can make this system wide by adding these properties to your
+JAVA_OPTS environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>JAVA_OPTS = -Dhttp.proxyHost=yourproxy -Dhttp.proxyPort=8080</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-Logging">7. Logging</h3>
+<div class="paragraph">
+<p>If you want to see what Grape is doing set the system property
+&#8220;groovy.grape.report.downloads&#8221; to &#8220;true&#8221; (e.g. add
+&#8220;-Dgroovy.grape.report.downloads=true&#8221; to JAVA_OPTS) and Grape will
+print the following infos to System.error:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Starting resolve of a dependency</p>
+</li>
+<li>
+<p>Starting download of an artifact</p>
+</li>
+<li>
+<p>Retrying download of an artifact</p>
+</li>
+<li>
+<p>Download size and time for downloaded artifacts</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Grape-Detail">1. Detail</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Grape (The <em>Groovy Adaptable Packaging Engine</em> or <em>Groovy Advanced
+Packaging Engine</em>) is the infrastructure enabling the grab() calls in
+Groovy, a set of classes leveraging <a href="http://ant.apache.org/ivy/">Ivy</a> to allow for a repository driven
+module system for Groovy. This allows a developer to write a script with
+an essentially arbitrary library requirement, and ship just the script.
+Grape will, at runtime, download as needed and link the named libraries
+and all dependencies forming a transitive closure when the script is run
+from existing repositories such as JCenter, Ibiblio, Codehaus, and java.net.</p>
+</div>
+<div class="paragraph">
+<p>Grape follows the Ivy conventions for module version identification,
+with naming change.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>group</code> - Which module group the module comes from. Translates
+directly to a Maven groupId or an Ivy Organization. Any group matching
+<code>/groovy[x][\..*]^/</code> is reserved and may have special meaning to the
+groovy endorsed modules.</p>
+</li>
+<li>
+<p><code>module</code> - The name of the module to load. Translated directly to a
+Maven artifactId or an Ivy artifact.</p>
+</li>
+<li>
+<p><code>version</code> - The version of the module to use. Either a literal version
+&#8216;1.1-RC3&#8217; or an Ivy Range &#8216;[2.2.1,)&#8217; meaning 2.2.1 or any greater
+version).</p>
+</li>
+<li>
+<p><code>classifier</code> - The optional classifier to use (for example, <em>jdk15</em>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The downloaded modules will be stored according to Ivy’s standard
+mechanism with a cache root of <code>~/.groovy/grape</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Grape-Usage">2. Usage</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Grape-Annotation">2.1. Annotation</h3>
+<div class="paragraph">
+<p>One or more <code>groovy.lang.Grab</code> annotations can be added at any place that
+annotations are accepted to tell the compiler that this code relies on
+the specific library. This will have the effect of adding the library to
+the classloader of the groovy compiler. This annotation is detected and
+evaluated before any other resolution of classes in the script, so
+imported classes can be properly resolved by a <code>@Grab</code> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import com.jidesoft.swing.JideSplitButton
+@Grab(group='com.jidesoft', module='jide-oss', version='[2.2.1,2.3.0)')
+public class TestClassAnnotation {
+    public static String testMethod () {
+        return JideSplitButton.class.name
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An appropriate <code>grab(...)</code> call will be added to the static initializer
+of the class of the containing class (or script class in the case of an
+annotated script element).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-MultipleGrapeAnnotations">2.2. Multiple Grape Annotations</h3>
+<div class="paragraph">
+<p>In order to use a Grape annotation multiple times on the same node you must use the
+<code>@Grapes</code> annotation, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Grapes([
+   @Grab(group='commons-primitives', module='commons-primitives', version='1.0'),
+   @Grab(group='org.ccil.cowan.tagsoup', module='tagsoup', version='0.9.7')])
+class Example {
+// ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise you’ll encounter the following error:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Cannot specify duplicate annotation on the same member</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-Methodcall">2.3. Method call</h3>
+<div class="paragraph">
+<p>Typically a call to grab will occur early in the script or in class
+initialization. This is to insure that the libraries are made available
+to the ClassLoader before the groovy code relies on the code. A couple
+of typical calls may appear as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">import groovy.grape.Grape
+// random maven library
+Grape.grab(group:'com.jidesoft', module:'jide-oss', version:'[2.2.0,)')
+Grape.grab([group:'org.apache.ivy', module:'ivy', version:'2.0.0-beta1', conf:['default', 'optional']],
+     [group:'org.apache.ant', module:'ant', version:'1.7.0'])
+
+// endorsed Groovy Module
+// FUTURE grab('Scriptom')</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple calls to grab in the same context with the same parameters
+should be idempotent. However, if the same code is called with a
+different <code>ClassLoader</code> context then resolution may be re-run.</p>
+</li>
+<li>
+<p>If the <code>args</code> map passed into the <code>grab</code> call has an attribute
+<code>noExceptions</code> that evaluates true no exceptions will be thrown.</p>
+</li>
+<li>
+<p><code>grab</code> requires that a <code>RootLoader</code> or <code>GroovyClassLoader</code> be specified or
+be in the <code>ClassLoader</code> chain of the calling class. By default failure to
+have such a <code>ClassLoader</code> available will result in module resolution and
+an exception being thrown</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The ClassLoader passed in via the <code>classLoader:</code> argument and it’s
+parent classloaders.</p>
+</li>
+<li>
+<p>The ClassLoader of the object passed in as the <code>referenceObject:</code>
+argument, and it’s parent classloaders.</p>
+</li>
+<li>
+<p>The ClassLoader of the class issuing the call to <code>grab</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="Grape-grabHashMapParameters">2.3.1. grab(HashMap) Parameters</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>group:</code> - &lt;String&gt; - Which module group the module comes from.
+Translates directly to a Maven groupId. Any group matching
+<code>/groovy(|\..|x|x\..)/</code> is reserved and may have special meaning to the
+groovy endorsed modules.</p>
+</li>
+<li>
+<p><code>module:</code> - &lt;String&gt; - The name of the module to load. Translated
+directly to a Maven artifactId.</p>
+</li>
+<li>
+<p><code>version:</code> - &lt;String&gt; and possibly &lt;Range&gt; - The version of the module
+to use. Either a literal version &#8216;1.1-RC3&#8217; or an Ivy Range &#8216;[2.2.1,)&#8217;
+meaning 2.2.1 or any greater version).</p>
+</li>
+<li>
+<p><code>classifier:</code> - &lt;String&gt; - The Maven classifier to resolve by.</p>
+</li>
+<li>
+<p><code>conf:</code> - &lt;String&gt;, default <code>default' - The configuration or scope of
+the module to download. The default conf is `default:</code> which maps to the
+maven <code>runtime</code> and <code>master</code> scopes.</p>
+</li>
+<li>
+<p><code>force:</code>- &lt;boolean&gt;, defaults true - Used to indicate that this
+revision must be used in case of conflicts, independently of</p>
+</li>
+<li>
+<p>conflicts manager</p>
+</li>
+<li>
+<p><code>changing:</code> - &lt;boolean&gt;, default false - Whether the artifact can
+change without it’s version designation changing.</p>
+</li>
+<li>
+<p><code>transitive:</code> - &lt;boolean&gt;, default true - Whether to resolve other
+dependencies this module has or not.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There are two principal variants of <code>grab</code>, one with a single Map and
+one with an arguments Map and multiple dependencies map. A call to the
+single map grab is the same as calling grab with the same map passed in
+twice, so grab arguments and dependencies can be mixed in the same map,
+and grab can be called as a single method with named parameters.</p>
+</div>
+<div class="paragraph">
+<p>There are synonyms for these parameters. Submitting more than one is a
+runtime exception.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>group:</code>, <code>groupId:</code>, <code>organisation:</code>, <code>organization:</code>, <code>org:</code></p>
+</li>
+<li>
+<p><code>module:</code>, <code>artifactId:</code>, <code>artifact:</code></p>
+</li>
+<li>
+<p><code>version:</code>, <code>revision:</code>, <code>rev:</code></p>
+</li>
+<li>
+<p><code>conf:</code>, <code>scope:</code>, <code>configuration:</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Grape-ArgumentsMaparguments">2.3.2. Arguments Map arguments</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>classLoader:</code> - &lt;GroovyClassLaoder&gt; or &lt;RootClassLoader&gt; - The
+ClassLoader to add resolved Jars to</p>
+</li>
+<li>
+<p><code>refObject:</code> - &lt;Object&gt; - The closest parent ClassLoader for the
+object’s class will be treated as though it were passed in as
+<code>classLoader:</code></p>
+</li>
+<li>
+<p><code>validate:</code> - &lt;boolean&gt;, default false - Should poms or ivy files be
+validated (true), or should we trust the cache (false).</p>
+</li>
+<li>
+<p><code>noExceptions:</code> - &lt;boolean&gt;, default false - If ClassLoader resolution
+or repository querying fails, should we throw an exception (false) or
+fail silently (true).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-CommandLineTool">2.4. Command Line Tool</h3>
+<div class="paragraph">
+<p>Grape added a command line executable &#8216;grape&#8217; that allows for the
+inspection and management of the local grape cache.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>grape install &lt;groupId&gt; &lt;artifactId&gt; [&lt;version&gt;]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This installs the specified groovy module or maven artifact. If a
+version is specified that specific version will be installed, otherwise
+the most recent version will be used (as if &#8216;*&#8217; we passed in).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>grape list</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lists locally installed modules (with their full maven name in the case
+of groovy modules) and versions.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>grape resolve (&lt;groupId&gt; &lt;artifactId&gt; &lt;version&gt;)+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This returns the file locations of the jars representing the artifcats
+for the specified module(s) and the respective transitive dependencies.
+You may optionally pass in -ant, -dos, or -shell to get the dependencies
+expressed in a format applicable for an ant script, windows batch file,
+or unix shell script respectively. -ivy may be passed to see the
+dependencies expressed in an ivy like format.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-Advancedconfiguration">2.5. Advanced configuration</h3>
+<div class="sect3">
+<h4 id="Grape-RepositoryDirectory">2.5.1. Repository Directory</h4>
+<div class="paragraph">
+<p>If you need to change the directory grape uses for downloading libraries
+you can specify the grape.root system property to change the default
+(which is ~/.groovy/grape)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>groovy -Dgrape.root=/repo/grape yourscript.groovy</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Grape-CustomizeIvysettings">2.5.2. Customize Ivy settings</h4>
+<div class="paragraph">
+<p>You can customize the ivy settings that Grape uses by creating a
+~/.groovy/grapeConfig.xml file. If no such file exists,
+<a href="http://svn.codehaus.org/groovy/tags/GROOVY_1_6_0/src/main/groovy/grape/defaultGrapeConfig.xml">here</a>
+are the default settings used by Grape:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="xml language-xml">&lt;ivysettings&gt;
+  &lt;settings defaultResolver="downloadGrapes"/&gt;
+  &lt;resolvers&gt;
+    &lt;chain name="downloadGrapes"&gt;
+      &lt;filesystem name="cachedGrapes"&gt;
+        &lt;ivy pattern="${user.home}/.groovy/grapes/[organisation]/[module]/ivy-[revision].xml"/&gt;
+        &lt;artifact pattern="${user.home}/.groovy/grapes/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/&gt;
+      &lt;/filesystem&gt;
+      &lt;!-- todo add 'endorsed groovy extensions' resolver here --&gt;
+      &lt;ibiblio name="codehaus" root="http://repository.codehaus.org/" m2compatible="true"/&gt;
+      &lt;ibiblio name="ibiblio" m2compatible="true"/&gt;
+      &lt;ibiblio name="java.net2" root="http://download.java.net/maven/2/" m2compatible="true"/&gt;
+    &lt;/chain&gt;
+  &lt;/resolvers&gt;
+&lt;/ivysettings&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information on how to customize these settings, please refer to
+the <a href="http://ant.apache.org/ivy/history/latest-release/settings.html">Ivy
+documentation</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Grape-AddyourlocalMaven2repository">2.5.3. Add your local Maven2 repository</h4>
+<div class="paragraph">
+<p>If you find yourself wanting to reuse artifacts that you already have
+locally in your Maven2 repository, then you can add this line to your
+~/.groovy/grapeConfig.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="xml language-xml">&lt;ibiblio name="local" root="file:${user.home}/.m2/repository/" m2compatible="true"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And further customize your Grape configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="xml language-xml">&lt;?xml version="1.0"?&gt;
+&lt;ivysettings&gt;
+    &lt;settings defaultResolver="downloadGrapes"/&gt;
+    &lt;resolvers&gt;
+        &lt;chain name="downloadGrapes"&gt;
+            &lt;!-- todo add 'endorsed groovy extensions' resolver here --&gt;
+            &lt;ibiblio name="local" root="file:${user.home}/.m2/repository/" m2compatible="true"/&gt;
+            &lt;filesystem name="cachedGrapes"&gt;
+                &lt;ivy pattern="${user.home}/.groovy/grapes/[organisation]/[module]/ivy-[revision].xml"/&gt;
+                &lt;artifact pattern="${user.home}/.groovy/grapes/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/&gt;
+            &lt;/filesystem&gt;
+            &lt;ibiblio name="codehaus" root="http://repository.codehaus.org/" m2compatible="true"/&gt;
+            &lt;ibiblio name="ibiblio" m2compatible="true"/&gt;
+            &lt;ibiblio name="java.net2" root="http://download.java.net/maven/2/" m2compatible="true"/&gt;
+        &lt;/chain&gt;
+    &lt;/resolvers&gt;
+&lt;/ivysettings&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Grape-MoreExamples">2.6. More Examples</h3>
+<div class="paragraph">
+<p>Using Apache Commons Collections:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">// create and use a primitive array
+import org.apache.commons.collections.primitives.ArrayIntList
+
+@Grab(group='commons-primitives', module='commons-primitives', version='1.0')
+def createEmptyInts() { new ArrayIntList() }
+
+def ints = createEmptyInts()
+ints.add(0, 42)
+assert ints.size() == 1
+assert ints.get(0) == 42</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using TagSoup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">// find the PDF links in the Java 1.5.0 documentation
+@Grab(group='org.ccil.cowan.tagsoup', module='tagsoup', version='0.9.7')
+def getHtml() {
+    def parser = new XmlParser(new org.ccil.cowan.tagsoup.Parser())
+    parser.parse("http://java.sun.com/j2se/1.5.0/download-pdf.html")
+}
+html.body.'**'.a.@href.grep(~/.*\.pdf/).each{ println it }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using Google Collections:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">// Google Collections example
+
+
+import com.google.common.collect.HashBiMap
+@Grab(group='com.google.code.google-collections', module='google-collect', version='snapshot-20080530')
+def getFruit() { [grape:'purple', lemon:'yellow', orange:'orange'] as HashBiMap }
+assert fruit.lemon == 'yellow'
+assert fruit.inverse().yellow == 'lemon'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Launching a Jetty server to serve Groovy templates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">@Grapes([
+    @Grab(group='org.eclipse.jetty.aggregate', module='jetty-server', version='8.1.7.v20120910'),
+    @Grab(group='org.eclipse.jetty.aggregate', module='jetty-servlet', version='8.1.7.v20120910'),
+    @Grab(group='javax.servlet', module='javax.servlet-api', version='3.0.1')])
+
+import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.servlet.*
+import groovy.servlet.*
+
+def runServer(duration) {
+    def server = new Server(8080)
+    def context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);
+    context.resourceBase = "."
+    context.addServlet(TemplateServlet, "*.gsp")
+    server.start()
+    sleep duration
+    server.stop()
+}
+
+runServer(10000)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Grape will download Jetty and its dependencies on first launch of this
+script, and cache them. We’re creating a new Jetty Server on port 8080,
+then expose Groovy’s TemplateServlet at the root of the context — Groovy
+comes with its own powerful template engine mechanism. We start the
+server and let it run for a certain duration. Each time someone will hit
+<a href="http://localhost:8080/somepage.gsp">http://localhost:8080/somepage.gsp</a>, it will display the somepage.gsp
+template to the user — those template pages should be situated in the
+same directory as this server script.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.4.0-SNAPSHOT<br>
+Last updated 2014-07-10 23:39:15 CST
+</div>
+</div>
+</body>
+</html>

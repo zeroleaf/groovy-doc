@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<title>Template engines</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="assets/css/view-example.css">
+<script src='assets/js/jquery-2.1.1.min.js'></script>
+<script src='assets/js/view-example.js'></script></head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Template engines</h1>
+<span id="revnumber">version 2.4.0-SNAPSHOT</span>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_template_framework">2. Template framework</a></li>
+<li><a href="#_simpletemplateengine">3. SimpleTemplateEngine</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_advanced_usage_note">3.1. Advanced Usage Note</a></li>
+</ul>
+</li>
+<li><a href="#_gstringtemplateengine">4. GStringTemplateEngine</a></li>
+<li><a href="#_xmltemplateengine">5. XmlTemplateEngine</a></li>
+<li>
+<ul class="sectlevel4">
+<li><a href="#_other_solutions">Other solutions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy supports multiple ways to generate text dynamically including <code>GStrings</code>, <code>printf</code> if you are using Java 5, and <a href="#_markupbuilder">MarkupBuilder</a> just to name a few. In addition to these, there is a dedicated template framework which is well-suited to applications where the text to be generated follows the form of a static template.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_template_framework">2. Template framework</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The template framework in Groovy consists of a <code>TemplateEngine</code> abstract base class that engines must implement and a <code>Template</code> interface that the resulting templates they generate must implement.</p>
+</div>
+<div class="paragraph">
+<p>Included with Groovy are several template engines:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>SimpleTemplateEngine</code> - for basic templates</p>
+</li>
+<li>
+<p><code>GStringTemplateEngine</code> - stores the template as writable closures (useful for streaming scenarios)</p>
+</li>
+<li>
+<p><code>XmlTemplateEngine</code> - works well when the template and output are valid XML</p>
+</li>
+<li>
+<p><code>MarkupTemplateEngine</code> - a very complete, optimized, template engine</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simpletemplateengine">3. SimpleTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Shown here is the <code>SimpleTemplateEngine</code> that allows you to use JSP-like scriptlets (see example below), script, and EL expressions in your template in order to generate parameterized text. Here is an example of using the system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def text = 'Dear "$firstname $lastname",\nSo nice to meet you in &lt;% print city %&gt;.\nSee you in ${month},\n${signed}'
+
+def binding = ["firstname":"Sam", "lastname":"Pullara", "city":"San Francisco", "month":"December", "signed":"Groovy-Dev"]
+
+def engine = new groovy.text.SimpleTemplateEngine()
+def template = engine.createTemplate(text).make(binding)
+
+def result = 'Dear "Sam Pullara",\nSo nice to meet you in San Francisco.\nSee you in December,\nGroovy-Dev'
+
+assert result == template.toString()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While it is generally not deemed good practice to mix processing logic in your template (or view), sometimes very simple logic can be useful. E.g. in the example above, we could change this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">$firstname</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to this (assuming we have set up a static import for capitalize <strong>inside</strong> the template):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">${firstname.capitalize()}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">&lt;% print city %&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">&lt;% print city == "New York" ? "The Big Apple" : city %&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_usage_note">3.1. Advanced Usage Note</h3>
+<div class="paragraph">
+<p>If you happen to be embedding your template directly in your script (as we did above) you have to be careful about backslash escaping. Because the template string itself will be parsed by Groovy before it is passed to the the templating framework, you have to escape any backslashes inside GString expressions or scriptlet <em>code</em> that are entered as part of a Groovy program. E.g. if we wanted quotes around <em>The Big Apple</em> above, we would use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">&lt;% print city == "New York" ? "\\"The Big Apple\\"" : city %&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, if we wanted a newline, we would use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">\\n</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in any GString expression or scriptlet 'code' that appears inside a Groovy script. A normal "<code>\n</code>" is fine within the static template text itself or if the entire template itself is in an external template file. Similarly, to represent an actual backslash in your text you would need</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">\\\\</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in an external file or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">\\\\</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in any GString expression or scriptlet 'code'. (Note: the necessity to have this extra slash may go away in a future version of Groovy if we can find an easy way to support such a change.)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gstringtemplateengine">4. GStringTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As an example of using the <code>GStringTemplateEngine</code>, here is the example above done again (with a few changes to show some other options). First we will store the template in a file this time:</p>
+</div>
+<div class="listingblock">
+<div class="title">test.template</div>
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">Dear "$firstname $lastname",
+So nice to meet you in &lt;% out &lt;&lt; (city == "New York" ? "\\"The Big Apple\\"" : city) %&gt;.
+See you in ${month},
+${signed}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that we used <code>out</code> instead of <code>print</code> to support the streaming nature of <code>GStringTemplateEngine</code>. Because we have the template in a separate file, there is no need to escape the backslashes. Here is how we call it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def f = new File('test.template')
+def engine = new groovy.text.GStringTemplateEngine()
+def template = engine.createTemplate(f).make(binding)
+println template.toString()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and here is the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Dear "Sam Pullara",
+So nice to meet you in "The Big Apple".
+See you in December,
+Groovy-Dev</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_xmltemplateengine">5. XmlTemplateEngine</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>XmlTemplateEngine</code> for use in templating scenarios where both the template source and the expected output are intended to be XML. Templates may use the normal <code>${expression}</code> and <code>$variable</code> notations to insert an arbitrary expression into the template. In addition, support is also provided for special tags: <code>&lt;gsp:scriptlet&gt;</code> (for inserting code fragments) and <code>&lt;gsp:expression&gt;</code> (for code fragments which produce output).</p>
+</div>
+<div class="paragraph">
+<p>Comments and processing instructions will be removed as part of processing and special XML characters such as <code>&lt;</code>, <code>&gt;</code>, <code>"</code> and <code>'</code> will be escaped using the respective XML notation. The output will also be indented using standard XML pretty printing.</p>
+</div>
+<div class="paragraph">
+<p>The xmlns namespace definition for gsp: tags will be removed but other namespace definitions will be preserved (but may change to an equivalent position within the XML tree).</p>
+</div>
+<div class="paragraph">
+<p>Normally, the template source will be in a file but here is a simple example providing the XML template as a string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="groovy language-groovy">def binding = [firstname: 'Jochen', lastname: 'Theodorou', nickname: 'blackdrag', salutation: 'Dear']
+def engine = new groovy.text.XmlTemplateEngine()
+def text = '''\
+    &lt;document xmlns:gsp='http://groovy.codehaus.org/2005/gsp' xmlns:foo='baz' type='letter'&gt;
+        &lt;gsp:scriptlet&gt;def greeting = "${salutation}est"&lt;/gsp:scriptlet&gt;
+        &lt;gsp:expression&gt;greeting&lt;/gsp:expression&gt;
+        &lt;foo:to&gt;$firstname "$nickname" $lastname&lt;/foo:to&gt;
+        How are you today?
+    &lt;/document&gt;
+'''
+def template = engine.createTemplate(text).make(binding)
+println template.toString()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example will produce this output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint"><code class="xml language-xml">&lt;document type='letter'&gt;
+  Dearest
+  &lt;foo:to xmlns:foo='baz'&gt;
+    Jochen &amp;quot;blackdrag&amp;quot; Theodorou
+  &lt;/foo:to&gt;
+  How are you today?
+&lt;/document&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unresolved directive in template-engines.adoc - include::/usr/project/git/groovy-doc/subprojects/groovy-templates/src/spec/doc/markup-template-engine.adoc[]
+:leveloffset: 2</p>
+</div>
+<div class="sect4">
+<h5 id="_other_solutions">Other solutions</h5>
+<div class="paragraph">
+<p>Also, there are other templating solutions that can be used along with Groovy, such as <a href="http://freemarker.org">FreeMarker</a>, <a href="http://velocity.apache.org">Velocity</a>, <a href="http://stringtemplate.org">StringTemplate</a> and others.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.4.0-SNAPSHOT<br>
+Last updated 2014-07-10 23:39:15 CST
+</div>
+</div>
+</body>
+</html>

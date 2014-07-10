@@ -1,12 +1,448 @@
-apply plugin: 'java'
+apply from: 'gradle/filter.gradle'
+apply from: 'gradle/indy.gradle'
 
-sourceCompatibility = 1.5
-version = '1.0'
+if (JavaVersion.current().java6Compatible) {
+    apply from: 'gradle/bintray.gradle'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name 'Bintray Asciidoctor repo'
+            url 'http://dl.bintray.com/content/aalmiray/asciidoctor'
+        }
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:0.7.2'
+        classpath 'net.saliman:gradle-cobertura-plugin:1.1.2'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.2.3'
+    }
+}
+
+File javaHome = new File(System.getProperty('java.home'))
+logger.lifecycle "Using Java from $javaHome (version ${System.getProperty('java.version')})"
+
+// TODO use antlr plugin
+//apply plugin: 'antlr'
+
+allprojects {
+    apply plugin: 'java'
+
+    buildDir = 'target'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+
+    group = 'org.codehaus.groovy'
+    version = groovyVersion
+    repositories {
+        jcenter()
+    }
+
+    apply plugin: 'groovy'
+    apply from: "${rootProject.projectDir}/gradle/indy.gradle"
+    apply from: "${rootProject.projectDir}/gradle/asciidoctor.gradle"
+}
+
+// todo: use the conventional "resources" directory for classpath resources
+task(copyResources, type: Copy) {
+    destinationDir = file("$buildDir/classes")
+    // text files requiring filtering
+    into('main') {
+        from('src/main')
+        include('**/*.txt', '**/*.xml', '**/*.properties', '**/*.html')
+        filter(rootProject.propertiesFilter, org.apache.tools.ant.filters.ReplaceTokens)
+    }
+    // other resources
+    into('main') {
+        from 'src/main'
+        include('**/*.png', '**/*.gif', '**/*.ico', '**/*.css')
+    }
+}
+compileJava.dependsOn(copyResources)
+task(copyTestResources, type: Copy)
+        .from('src/test')
+        .into("$buildDir/classes/test")
+        .include('**/*.txt', '**/*.xml', '**/*.properties', '**/*.png', '**/*.html', '**/*.gif', '**/*.ico', '**/*.css')
+compileTestJava.dependsOn(copyTestResources)
+
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from 'src/main'
+}
+
+subprojects {
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
 
 repositories {
-    mavenCentral()
+    // todo Some repos are needed only for some configs. Declare them just for the configuration once Gradle allows this.
+    maven { url 'http://www.aQute.biz/repo' } // tools
+    maven { url 'http://repository.jboss.org/nexus/content/groups/m2-release-proxy' } // examples, tools
+}
+
+// todo do we need compile and runtime scope for examples?
+configurations {
+    compilerCompile
+    tools
+    examplesCompile.extendsFrom compile
+    examplesRuntime.extendsFrom examplesCompile
+    antlr
+    spec
+}
+
+ext {
+    antVersion = '1.9.4'
+    asmVersion = '5.0.3'
+    antlrVersion = '2.7.7'
+    bndVersion = '0.0.401'
+    checkstyleVersion = '4.4'
+    coberturaVersion = '1.9.4.1'
+    commonsCliVersion = '1.2'
+    commonsHttpClientVersion = '3.1'
+    eclipseOsgiVersion = '3.9.1-v20140110-1610'
+    gparsVersion = '1.2.1'
+    ivyVersion = '2.4.0-rc1'
+    jansiVersion = '1.11'
+    jarjarVersion = '1.3'
+    jlineVersion = '2.12'
+    jmockVersion = '1.2.0'
+    logbackVersion = '1.1.2'
+    log4jVersion = '1.2.17'
+    log4j2Version = '2.0-rc1'
+    luceneVersion = '4.7.2'
+    openejbVersion = '1.0'
+    qdoxVersion = '1.12.1'
+    simianVersion = '2.2.4'
+    slf4jVersion = '1.7.6'
+    xmlunitVersion = '1.5'
+    xstreamVersion = '1.4.7'
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile "antlr:antlr:$antlrVersion"
+    compile "org.ow2.asm:asm:$asmVersion"
+    compile "org.ow2.asm:asm-analysis:$asmVersion"
+    compile "org.ow2.asm:asm-commons:$asmVersion"
+    compile "org.ow2.asm:asm-tree:$asmVersion"
+    compile "org.ow2.asm:asm-util:$asmVersion"
+
+    compile "commons-cli:commons-cli:$commonsCliVersion"
+    compile "org.apache.ant:ant:$antVersion"
+    compile("com.thoughtworks.xstream:xstream:$xstreamVersion") {
+        exclude(group: 'xpp3', module: 'xpp3_min')
+        exclude(group: 'junit', module: 'junit')
+        exclude(group: 'jmock', module: 'jmock')
+    }
+    compile files("lib/openbeans-1.0.jar")
+    compile "org.fusesource.jansi:jansi:$jansiVersion"
+    compile("org.apache.ivy:ivy:$ivyVersion") {
+        transitive = false
+    }
+    compile files("${buildDir}/generated-classes")
+
+    compile "commons-cli:commons-cli:$commonsCliVersion"
+    compile("com.thoughtworks.xstream:xstream:$xstreamVersion") {
+        exclude(group: 'xpp3', module: 'xpp3_min')
+        exclude(group: 'junit', module: 'junit')
+        exclude(group: 'jmock', module: 'jmock')
+    }
+    compile "org.fusesource.jansi:jansi:$jansiVersion"
+    compile("org.apache.ivy:ivy:$ivyVersion") {
+        transitive = false
+    }
+    runtime("org.codehaus.gpars:gpars:$gparsVersion") {
+        exclude(group: 'org.codehaus.groovy', module: 'groovy-all')
+    }
+    testCompile "jmock:jmock:$jmockVersion"
+    testCompile "jmock:jmock-cglib:$jmockVersion"
+    testCompile "xmlunit:xmlunit:$xmlunitVersion"
+    testCompile "ch.qos.logback:logback-classic:$logbackVersion"
+    testCompile "log4j:log4j:$log4jVersion"
+    testCompile "org.apache.logging.log4j:log4j-core:$log4j2Version"
+    testCompile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+    testCompile "com.thoughtworks.qdox:qdox:$qdoxVersion"
+
+    tools "com.googlecode.jarjar:jarjar:$jarjarVersion"
+    tools("checkstyle:checkstyle:$checkstyleVersion") {
+        exclude(module: 'junit')
+    }
+    tools "redhill:simian:$simianVersion"
+    tools("net.sourceforge.cobertura:cobertura:$coberturaVersion") {
+        exclude(module: 'asm')
+        exclude(module: 'asm')
+        exclude(module: 'ant')
+    }
+    tools "org.ow2.asm:asm-all:$asmVersion"
+    tools "com.thoughtworks.qdox:qdox:$qdoxVersion"
+    tools "biz.aQute:bnd:$bndVersion"
+
+//    examplesCompile project(':groovy-test')
+//    examplesCompile project(':groovy-swing')
+    examplesCompile "org.apache.lucene:lucene-core:$luceneVersion"
+    examplesCompile "org.apache.lucene:lucene-analyzers-common:$luceneVersion"
+    examplesCompile "org.apache.lucene:lucene-queryparser:$luceneVersion"
+    examplesCompile "org.eclipse:osgi:$eclipseOsgiVersion"
+    examplesRuntime("commons-httpclient:commons-httpclient:$commonsHttpClientVersion") {
+        exclude(module: 'junit')
+        exclude(module: 'commons-logging')
+        exclude(module: 'commons-codec')
+    }
+    examplesRuntime("openejb:openejb-loader:$openejbVersion") {
+        exclude(module: 'log4j')
+        exclude(module: 'openejb-core')
+        exclude(module: 'geronimo-jta_1.0.1B_spec')
+        exclude(module: 'geronimo-servlet_2.4_spec')
+        exclude(module: 'geronimo-ejb_2.1_spec')
+        exclude(module: 'geronimo-j2ee-connector_1.5_spec')
+    }
+
+// TODO use antlr plugin
+//    antlr "antlr:antlr:$antlrVersion"
+    antlr "org.apache.ant:ant-antlr:$antVersion"
+
+//    testCompile project(':groovy-ant')
+//    testCompile project(':groovy-test')
+}
+
+ext.generatedDirectory = "${buildDir}/generated-sources"
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    'src/main',
+                    "$generatedDirectory/src/main"
+            ]
+            fileTree('src/main/groovy/ui').matching {
+                exclude 'GroovyMain.java', 'GroovySocketServer.java'
+            }.visit { details ->
+                exclude "groovy/ui/$details.path"
+            }
+            if (!JavaVersion.current().isJava7Compatible()) {
+                exclude '**/indy/*'
+                exclude '**/v7/*'
+                exclude '**/vm7/*'
+            }
+        }
+        groovy {
+            srcDirs = [
+                    'src/main',
+                    "$generatedDirectory/src/main"
+            ]
+            if (!JavaVersion.current().isJava7Compatible()) {
+                exclude '**/indy/*'
+                exclude '**/v7/*'
+                exclude '**/vm7/*'
+            }
+        }
+        resources {
+            srcDirs = ['src/main', 'src/tools', 'src/resources']
+            include 'META-INF/services/*',
+                    'META-INF/groovy-release-info.properties',
+                    'groovy/grape/*.xml',
+                    'groovy/ui/*.properties',
+                    'groovy/ui/**/*.png',
+                    'groovy/inspect/swingui/AstBrowserProperties.groovy',
+                    'org/codehaus/groovy/tools/shell/**/*.properties',
+                    'org/codehaus/groovy/tools/shell/**/*.xml',
+                    'org/codehaus/groovy/tools/groovydoc/gstringTemplates/**/*.*',
+                    'org/codehaus/groovy/tools/groovy.ico'
+        }
+    }
+    test {
+        groovy {
+            srcDirs = ['src/test']
+        }
+        resources {
+            srcDirs = ['src/test-resources']
+        }
+        output.classesDir = "$buildDir/test-classes" as File
+    }
+    tools {
+        groovy {
+            srcDirs = ['src/tools']
+        }
+        resources {
+            srcDirs = ['src/tools']
+        }
+        compileClasspath = configurations.tools + sourceSets.main.runtimeClasspath
+        runtimeClasspath = output + compileClasspath
+        output.classesDir = "$buildDir/tools-classes" as File
+    }
+    examples {
+        groovy {
+            srcDirs = ['src/examples']
+        }
+        resources {
+            srcDirs = ['src/examples']
+        }
+//        compileClasspath = configurations.examplesRuntime + sourceSets.main.output + project(':groovy-xml').sourceSets.main.output
+        output.classesDir = "$buildDir/examples-classes" as File
+    }
+}
+
+// make sure examples can be compiled, even if we don't run them
+// todo: reorganize examples so that we can run them too
+check {
+    dependsOn examplesClasses
+}
+
+// remove this from config once GRADLE-854 is fixed.
+processResources.doLast {
+    copy {
+        from('src/main') {
+            include 'groovy/inspect/swingui/AstBrowserProperties.groovy',
+                    'org/codehaus/groovy/tools/groovydoc/gstringTemplates/GroovyDocTemplateInfo.java'
+        }
+        into sourceSets.main.output.classesDir
+    }
+}
+
+task ensureGrammars {
+    description = 'Ensure all the Antlr generated files are up to date.'
+    ext.antlrDirectory = "$projectDir/src/main/org/codehaus/groovy/antlr"
+    ext.groovyParserDirectory = "$ext.antlrDirectory/parser"
+    ext.javaParserDirectory = "$ext.antlrDirectory/java"
+    ext.genPath = "$generatedDirectory/src/main/org/codehaus/groovy/antlr"
+    ext.groovyOutDir = "$ext.genPath/parser"
+    ext.javaOutDir = "$ext.genPath/java"
+    inputs.dir(antlrDirectory)
+    outputs.dir(groovyOutDir)
+    outputs.dir(javaOutDir)
+    doFirst {
+        new File(groovyOutDir).mkdirs()
+        new File(javaOutDir).mkdirs()
+        ant {
+            taskdef(name: 'antlr',
+                    classname: 'org.apache.tools.ant.taskdefs.optional.ANTLR',
+                    classpath: configurations.antlr.asPath)
+
+            mkdir dir: ext.groovyParserDirectory
+            antlr(target: "$ext.antlrDirectory/groovy.g", outputdirectory: ext.groovyOutDir) {
+                classpath path: configurations.compile.asPath
+            }
+            antlr(target: "$ext.javaParserDirectory/java.g", outputdirectory: ext.javaOutDir) {
+                classpath path: configurations.compile.asPath
+            }
+        }
+    }
+}
+
+apply from: 'gradle/utils.gradle'
+
+ext.modules = {
+    subprojects
+}
+
+task dgmConverter(dependsOn:compileJava) {
+    description = 'Generates DGM info file required for faster startup.'
+    def classesDir = sourceSets.main.output.classesDir
+    def classpath = files(classesDir, configurations.compile).asPath
+
+    //main = 'org.codehaus.groovy.tools.DgmConverter'
+    //args = ['--info', classesDir.absolutePath]
+    doFirst {
+        file("$classesDir/META-INF").mkdirs()
+        // we use ant.java because Gradle is a bit "too smart" with JavaExec
+        // as it will invalidate the task if classpath changes, which will
+        // happen once Groovy files are compiled
+        ant.java(classname:'org.codehaus.groovy.tools.DgmConverter', classpath: classpath) {
+            arg(value: '--info')
+            arg(value: classesDir.absolutePath)
+        }
+    }
+    inputs.files fileTree('src').include('**/*GroovyMethods.java')
+    outputs.file file("${classesDir}/META-INF/dgminfo")
+}
+
+compileJava {
+    dependsOn ensureGrammars, exceptionUtils
+    options.fork(memoryMaximumSize: javacMain_mx)
+}
+
+    // Gradle classloading magic with Groovy will only work if it finds a *jar*
+    // on classpath. This "bootstrap jar" contains the minimal compiler, without .groovy compiled files
+
+task bootstrapJar {
+    dependsOn compileJava, dgmConverter
+
+    def destinationDir = file("$buildDir/bootstrap")
+    def archiveName = "groovy-${version}-bootstrap.jar"
+    ext.archivePath = file("$destinationDir/$archiveName")
+
+    doLast {
+        // we use ant.jar because Gradle is a bit "too smart" with JavaExec
+        // as it will invalidate the task if classpath changes, which will
+        // happen once Groovy files are compiled
+        destinationDir.mkdirs()
+        ant.jar(
+                destfile: archivePath,
+                basedir: file(sourceSets.main.output.classesDir)
+        )
+    }
+    inputs.property('indy', useIndy())
+    inputs.files fileTree('src')
+    outputs.file archivePath
+}
+
+compileGroovy.dependsOn bootstrapJar
+
+allprojects {
+
+    tasks.withType(GroovyCompile) {
+        groovyOptions.fork(memoryMaximumSize: groovycMain_mx)
+        groovyClasspath = files(
+                rootProject.compileJava.classpath,
+                rootProject.bootstrapJar.archivePath
+        )
+
+        classpath = classpath + groovyClasspath
+    }
+
+    if (useIndy()) {
+        tasks.withType(GroovyCompile) {
+            logger.info("Building ${project.name}:${name} with InvokeDynamic support activated")
+            groovyOptions.optimizationOptions.indy = true
+            sourceCompatibility = 1.7
+            targetCompatibility = 1.7
+        }
+        tasks.withType(JavaCompile) {
+            sourceCompatibility = 1.7
+            targetCompatibility = 1.7
+        }
+        jar {
+            classifier = 'indy'
+        }
+    }
+}
+
+compileTestGroovy {
+    groovyOptions.fork(memoryMaximumSize: groovycTest_mx)
+}
+
+apply from: 'gradle/test.gradle'
+apply from: 'gradle/groovydoc.gradle'
+apply from: 'gradle/docs.gradle'
+apply from: 'gradle/assemble.gradle'
+apply from: 'gradle/upload.gradle'
+apply from: 'gradle/idea.gradle'
+apply from: 'gradle/eclipse.gradle'
+apply from: 'gradle/codehaus.gradle'
+// If a local configuration file for tweaking the build is present, apply it
+if (file('user.gradle').exists()) {
+    apply from: 'user.gradle'
+}
+
+if (!JavaVersion.current().java7Compatible) {
+    logger.lifecycle '''
+    **************************************** WARNING **********************************************
+    ****** You are running the build with an older JDK. NEVER try to release with 1.6.       ******
+    ****** You must use a JDK 1.7+ in order to compile all features of the language.         ******
+    ***********************************************************************************************
+'''
 }

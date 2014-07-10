@@ -1,0 +1,96 @@
+= Groovy Language Documentation
+:doctype: book
+ifndef::projectdir[:projectdir: ../../..]
+
+include::{projectdir}/src/spec/doc/core-introduction.adoc[]
+
+== Groovy Language Specification
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/core-syntax.adoc[]
+
+include::{projectdir}/src/spec/doc/core-operators.adoc[]
+
+include::{projectdir}/src/spec/doc/core-program-structure.adoc[]
+
+include::{projectdir}/src/spec/doc/core-object-orientation.adoc[]
+
+include::{projectdir}/src/spec/doc/core-closures.adoc[]
+
+include::{projectdir}/src/spec/doc/core-semantics.adoc[]
+
+:leveloffset: 0
+
+== Tools
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/tools-groovyc.adoc[]
+
+include::{projectdir}/src/spec/doc/tools-groovysh.adoc[]
+
+include::{projectdir}/src/spec/doc/tools-groovyconsole.adoc[]
+
+include::{projectdir}/src/spec/doc/tools-groovydoc.adoc[]
+
+include::{projectdir}/src/spec/doc/tools-ide.adoc[]
+
+:leveloffset: 0
+
+== User Guides
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/core-getting-started.adoc[]
+
+include::{projectdir}/src/spec/doc/core-differences-java.adoc[]
+
+include::{projectdir}/src/spec/doc/core-gdk.adoc[]
+
+include::{projectdir}/src/spec/doc/core-metaprogramming.adoc[]
+
+include::{projectdir}/src/spec/doc/grape.adoc[]
+
+include::{projectdir}/src/spec/doc/core-testing-guide.adoc[]
+
+include::{subprojroot}json/{specfolder}/json-userguide.adoc[]
+
+=== Interacting with a SQL database (TBD)
+=== Processing XML (TBD)
+=== Scripting Ant tasks (TBD)
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/template-engines.adoc[]
+
+:leveloffset: 0
+
+=== Servlet support (TBD)
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/guide-integrating.adoc[]
+
+include::{projectdir}/src/spec/doc/core-domain-specific-languages.adoc[]
+
+include::{projectdir}/subprojects/groovy-jmx/src/spec/doc/jmx.adoc[]
+
+:leveloffset: 0
+
+=== Creating Swing UIs (TBD)
+=== Security (TBD)
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/design-pattern-in-groovy.adoc[]
+
+:leveloffset: 0
+
+== Acknowledgements
+
+:leveloffset: 2
+
+include::{projectdir}/src/spec/doc/license-contributors.adoc[]
+
+:leveloffset: 0

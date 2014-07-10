@@ -1,0 +1,107 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+allprojects {
+    test {
+        if (JavaVersion.current().isJava8Compatible()) {
+            jvmArgs '-ea', "-Xms${groovyJUnit_ms}", "-Xmx${groovyJUnit_mx}"
+        } else {
+            jvmArgs '-ea', "-Xms${groovyJUnit_ms}", "-Xmx${groovyJUnit_mx}", "-XX:PermSize=${groovyJUnit_permSize}", "-XX:MaxPermSize=${groovyJUnit_maxPermSize}"
+        }
+        def headless = System.properties['java.awt.headless']
+        if (headless == 'true') {
+            systemProperties 'java.awt.headless': 'true'
+        }
+        if (rootProject.useIndy()) {
+            logger.debug 'Adding indy target'
+            systemProperties 'groovy.target.indy': true
+        }
+        forkEvery = 50
+        maxParallelForks = isRunningOnCI() ? 1 : Runtime.runtime.availableProcessors()
+        scanForTestClasses = true
+        ignoreFailures = false
+        testLogging {
+            exceptionFormat = 'full'
+            // uncomment the following line if you need more logging
+            // events "failed", "started"
+        }
+    }
+
+    sourceSets {
+        test {
+            groovy {
+                srcDirs += 'src/spec/test'
+            }
+            resources {
+                srcDirs += 'src/spec/test-resources'
+            }
+        }
+    }
+}
+
+test {
+    def testdb = System.properties['groovy.testdb.props']
+    if (testdb) {
+        systemProperties 'groovy.testdb.props': testdb
+    }
+    systemProperties 'apple.awt.UIElement': 'true', 'javadocAssertion.src.dir': './src/main'
+    systemProperties 'gradle.home': gradle.gradleHomeDir // this is needed by the security.policy
+
+    classpath = files('src/test') + classpath
+    exclude buildExcludeFilter()
+    ext.resultText = ''
+    doLast {
+        ant.delete {
+            fileset(dir: '.', includes: '*.class')
+        }
+    }
+}
+
+boolean isRunningOnCI() {
+    def path = new File('.').absolutePath
+    path.contains('ci.codehaus.org') || path.contains('teamcity')
+}
+
+logger.lifecycle "Detected ${isRunningOnCI() ? 'Continuous Integration environment' : 'development environment'}"
+
+tasks.addRule('Pattern: testSingle<Name> will test **/<Name>.class') { String taskName ->
+    if (taskName.startsWith('testSingle')) {
+        tasks.create(taskName).dependsOn(test)
+        test.includes = ['**/' + taskName.substring(10) + '.class']
+        test.outputs.upToDateWhen { false }
+    }
+}
+
+def buildExcludeFilter() {
+    def excludes = ['GroovyTestCase', 'TestSupport', 'DummyTestDerivation', 'LineColumnChecker']
+
+    // temporary disabling Groovy4393Bug because it requires a specific configuration
+    excludes << 'Groovy4393Bug'
+
+    // deal with OS specific tests
+    def windowsTests = ['ExecuteTest_Windows']
+    def unixTests = ['ExecuteTest_LinuxSolaris']
+    Set osSpecificTests = [*windowsTests, *unixTests]
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        osSpecificTests.removeAll windowsTests
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        osSpecificTests.removeAll unixTests
+    }
+    excludes += osSpecificTests
+
+    // temporarily disable security tests, see GRADLE-2170
+    excludes << 'security'
+
+    // if not compiled with indy support, disable indy tests
+    if (!rootProject.useIndy()) {
+        excludes += ['indy', 'Indy']
+    }
+
+    // if no network available, disable Grapes
+    if (!System.properties['junit.network']) {
+        excludes  << 'groovy/grape/'
+    }
+
+    return { f ->
+        excludes.any { f.file =~ it }
+    }
+}

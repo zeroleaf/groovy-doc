@@ -1,73 +1,71 @@
-= Syntax
+[[_syntax]]
+= 语法(Syntax)
 
-This chapter covers the syntax of the Groovy programming language.
-The grammar of the language derives from the Java grammar,
-but enhances it with specific constructs for Groovy, and allows certain simplifications.
+这个章节主要涵盖 Groovy 编程语言的语法(syntax). Groovy 的语法(grammar)派生自(derives from)
+Java 的语法, 但是针对 Groovy 的具体结构做了增强, 并允许一定的简化.
 
-== Comments
+[[_comments]]
+== 注释
 
-=== Single line comment
+[[_single_line_comment]]
+=== 单行注释
 
-Single line comments start with +//+ and can be found at any position in the line.
-The characters following +//+, till the end of the line, are considered part of the comment.
+单行注释由 +//+ 开始, 允许出现在一行的任意位置. +//+ 之后换行符之前的字符都被认为是注释的一部分.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=single_line_comment,indent=0]
 ----
 
-=== Multiline comment
+[[_multiline_comment]]
+=== 多行注释
 
-A multiline comment starts with +/\*+ and can be found at any position in the line.
-The characters following +/*+ will be considered part of the comment, including new line characters,
-up to the first +*/+ closing the comment.
-Multiline comments can thus be put at the end of a statement, or even inside a statement.
+多行注释以 +/\*+ 开始, 可以出现在一行的任意位置. +/*+ 之后的字符会被认为是注释的一部分,
+包括换行符, 直到第一个 +*/+ 元素. 因此多行注释可以放在语句之后, 甚至语句之间.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=multiline_comment,indent=0]
 ----
 
-=== GroovyDoc comment
+[[_groovydoc_comment]]
+=== GroovyDoc 注释
 
-Similarly to multiline comments, GroovyDoc comments are multiline, but start with +/\**+ and end with +*/+.
-Lines following the first GroovyDoc comment line can optionally start with a star +*+.
-Those comments are associated with:
+与多行注释类似, GroovyDoc 也是多行的, 但以 +/\**+ 开始, 以 +*/+ 结束.
+首行注释之后的行可以以可选的 +*+ 号开始. 这些注释关联于:
 
-* type definitions (classes, interfaces, enums, annotations),
-* fields and properties definitions
-* methods definitions
+* 类型定义(类, 接口, 枚举, 注解)
+* 字段和属性定义
+* 方法定义
 
-Although the compiler will not complain about GroovyDoc comments not being associated with the above language elements,
-you should prepend those constructs with the comment right before it.
+对以上元素, 即使没有 GroovyDoc 编译器也不会抱怨, 但应优先考虑使用该注释.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=groovydoc_comment,indent=0]
 ----
 
-GroovyDoc follows the same conventions as Java's own JavaDoc.
-So you'll be able to use the same tags as with JavaDoc.
+GroovyDoc 遵循 JavaDoc 的约定(conventions), 因此你可以使用 JavaDoc 中的标签(tags).
 
 === Shebang line
 
-Beside the single line comment, there is a special line comment, often called the _shebang_ line understood by UNIX systems
-which allows scripts to be run directly from the command-line, provided you have installed the Groovy distribution
-and the +groovy+ command is available on the +PATH+.
+单行注释之外还有一个特殊的行注释, 在 Unix 系统下通常称为 _shebang line_, 它允许脚本直接
+从命令行启动, 前提是已安装了 Groovy 并且 +groovy+ 命令包含在 +PATH+ 环境变量中.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=shebang_comment_line,indent=0]
 ----
 
-NOTE: The +#+ character must be the first character of the file. Any indentation would yield a compilation error.
+NOTE: +#+ 字符必须是文件的第一个字符, 任何缩进都会导致一个变异错误.
 
+[[_keywords]]
 == Keywords
 
-The following list represents all the keywords of the Groovy language:
+下表列出了 Groovy 中的所有关键字:
 
 [cols="1,1,1,1"]
-.Keywords
+.关键字
 |===
 |as
 |assert

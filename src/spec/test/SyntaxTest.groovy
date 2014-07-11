@@ -193,17 +193,17 @@ class SyntaxTest extends CompilableTestSupport {
 
     void testSingleLineComment() {
         // tag::single_line_comment[]
-        // a standalone single line comment
-        println "hello" // a comment till the end of the line
+        // 一个标准的单行注释
+        println "hello" // 直到行尾的注释
         // end::single_line_comment[]
     }
 
     void testMultilineComment() {
         // tag::multiline_comment[]
-        /* a standalone multiline comment
-           spanning two lines */
-        println "hello" /* a multiline comment starting
-                           at the end of a statement */
+        /* 一个典型的多行注释
+           占 2 行 */
+        println "hello" /* 一个在语句之后的
+                           多行注释 */
         println 1 /* one */ + 2 /* two */
         // end::multiline_comment[]
     }
@@ -212,17 +212,17 @@ class SyntaxTest extends CompilableTestSupport {
         shouldCompile '''
             // tag::groovydoc_comment[]
             /**
-             * A Class description
+             * 一个类定义
              */
             class Person {
-                /** the name of the person */
+                /** 姓名 */
                 String name
 
                 /**
-                 * Creates a greeting method for a certain person.
+                 * 为特定的人创建一个问候方法.
                  *
-                 * @param otherPerson the person to greet
-                 * @return ag reeting message
+                 * @param otherPerson 待问候的人
+                 * @return 问候信息
                  */
                 String greet(String otherPerson) {
                    "Hello ${otherPerson}"

@@ -1,5 +1,5 @@
 [[_introduction]]
-= 介绍
+= 简介
 
 Groovy...
 

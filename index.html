@@ -21,21 +21,21 @@
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel0">
-<li><a href="#_introduction">介绍</a></li>
+<li><a href="#_introduction">简介</a></li>
 <li>
 <ul class="sectlevel1">
 <li><a href="#_groovy_language_specification">1. Groovy Language Specification</a></li>
 <li>
 <ul class="sectlevel2">
-<li><a href="#_syntax">1.1. Syntax</a></li>
+<li><a href="#_syntax">1.1. 语法(Syntax)</a></li>
 <li>
 <ul class="sectlevel3">
-<li><a href="#_comments">1.1.1. Comments</a></li>
+<li><a href="#_comments">1.1.1. 注释</a></li>
 <li>
 <ul class="sectlevel4">
-<li><a href="#_single_line_comment">Single line comment</a></li>
-<li><a href="#_multiline_comment">Multiline comment</a></li>
-<li><a href="#_groovydoc_comment">GroovyDoc comment</a></li>
+<li><a href="#_single_line_comment">单行注释</a></li>
+<li><a href="#_multiline_comment">多行注释</a></li>
+<li><a href="#_groovydoc_comment">GroovyDoc 注释</a></li>
 <li><a href="#_shebang_line">Shebang line</a></li>
 </ul>
 </li>
@@ -1387,7 +1387,7 @@
 </div>
 </div>
 <div id="content">
-<h1 id="_introduction" class="sect0">介绍</h1>
+<h1 id="_introduction" class="sect0">简介</h1>
 <div class="openblock partintro">
 <div class="content">
 <div class="paragraph">
@@ -1433,83 +1433,77 @@
 <h2 id="_groovy_language_specification">1. Groovy Language Specification</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_syntax">1.1. Syntax</h3>
+<h3 id="_syntax">1.1. 语法(Syntax)</h3>
 <div class="paragraph">
-<p>This chapter covers the syntax of the Groovy programming language.
-The grammar of the language derives from the Java grammar,
-but enhances it with specific constructs for Groovy, and allows certain simplifications.</p>
+<p>这个章节主要涵盖 Groovy 编程语言的语法(syntax). Groovy 的语法(grammar)派生自(derives from)
+Java 的语法, 但是针对 Groovy 的具体结构做了增强, 并允许一定的简化.</p>
 </div>
 <div class="sect3">
-<h4 id="_comments">1.1.1. Comments</h4>
+<h4 id="_comments">1.1.1. 注释</h4>
 <div class="sect4">
-<h5 id="_single_line_comment">Single line comment</h5>
+<h5 id="_single_line_comment">单行注释</h5>
 <div class="paragraph">
-<p>Single line comments start with <code>//</code> and can be found at any position in the line.
-The characters following <code>//</code>, till the end of the line, are considered part of the comment.</p>
+<p>单行注释由 <code>//</code> 开始, 允许出现在一行的任意位置. <code>//</code> 之后换行符之前的字符都被认为是注释的一部分.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint"><code class="groovy language-groovy">// a standalone single line comment
-println "hello" // a comment till the end of the line</code></pre>
+<pre class="prettyprint"><code class="groovy language-groovy">// 一个标准的单行注释
+println "hello" // 直到行尾的注释</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_multiline_comment">Multiline comment</h5>
+<h5 id="_multiline_comment">多行注释</h5>
 <div class="paragraph">
-<p>A multiline comment starts with <code>/*</code> and can be found at any position in the line.
-The characters following <code>/*</code> will be considered part of the comment, including new line characters,
-up to the first <code>*/</code> closing the comment.
-Multiline comments can thus be put at the end of a statement, or even inside a statement.</p>
+<p>多行注释以 <code>/*</code> 开始, 可以出现在一行的任意位置. <code>/*</code> 之后的字符会被认为是注释的一部分,
+包括换行符, 直到第一个 <code>*/</code> 元素. 因此多行注释可以放在语句之后, 甚至语句之间.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint"><code class="groovy language-groovy">/* a standalone multiline comment
-   spanning two lines */
-println "hello" /* a multiline comment starting
-                   at the end of a statement */
+<pre class="prettyprint"><code class="groovy language-groovy">/* 一个典型的多行注释
+   占 2 行 */
+println "hello" /* 一个在语句之后的
+                   多行注释 */
 println 1 /* one */ + 2 /* two */</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_groovydoc_comment">GroovyDoc comment</h5>
+<h5 id="_groovydoc_comment">GroovyDoc 注释</h5>
 <div class="paragraph">
-<p>Similarly to multiline comments, GroovyDoc comments are multiline, but start with <code>/**</code> and end with <code>*/</code>.
-Lines following the first GroovyDoc comment line can optionally start with a star <code>*</code>.
-Those comments are associated with:</p>
+<p>与多行注释类似, GroovyDoc 也是多行的, 但以 <code>/**</code> 开始, 以 <code>*/</code> 结束.
+首行注释之后的行可以以可选的 <code>*</code> 号开始. 这些注释关联于:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>type definitions (classes, interfaces, enums, annotations),</p>
+<p>类型定义(类, 接口, 枚举, 注解)</p>
 </li>
 <li>
-<p>fields and properties definitions</p>
+<p>字段和属性定义</p>
 </li>
 <li>
-<p>methods definitions</p>
+<p>方法定义</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Although the compiler will not complain about GroovyDoc comments not being associated with the above language elements,
-you should prepend those constructs with the comment right before it.</p>
+<p>对以上元素, 即使没有 GroovyDoc 编译器也不会抱怨, 但应优先考虑使用该注释.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint"><code class="groovy language-groovy">/**
- * A Class description
+ * 一个类定义
  */
 class Person {
-    /** the name of the person */
+    /** 姓名 */
     String name
 
     /**
-     * Creates a greeting method for a certain person.
+     * 为特定的人创建一个问候方法.
      *
-     * @param otherPerson the person to greet
-     * @return ag reeting message
+     * @param otherPerson 待问候的人
+     * @return 问候信息
      */
     String greet(String otherPerson) {
        "Hello ${otherPerson}"
@@ -1518,16 +1512,14 @@ class Person {
 </div>
 </div>
 <div class="paragraph">
-<p>GroovyDoc follows the same conventions as Java&#8217;s own JavaDoc.
-So you&#8217;ll be able to use the same tags as with JavaDoc.</p>
+<p>GroovyDoc 遵循 JavaDoc 的约定(conventions), 因此你可以使用 JavaDoc 中的标签(tags).</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_shebang_line">Shebang line</h5>
 <div class="paragraph">
-<p>Beside the single line comment, there is a special line comment, often called the <em>shebang</em> line understood by UNIX systems
-which allows scripts to be run directly from the command-line, provided you have installed the Groovy distribution
-and the <code>groovy</code> command is available on the <code>PATH</code>.</p>
+<p>单行注释之外还有一个特殊的行注释, 在 Unix 系统下通常称为 <em>shebang line</em>, 它允许脚本直接
+从命令行启动, 前提是已安装了 Groovy 并且 <code>groovy</code> 命令包含在 <code>PATH</code> 环境变量中.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1542,7 +1534,7 @@ println "Hello from the shebang line"</code></pre>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-The <code>#</code> character must be the first character of the file. Any indentation would yield a compilation error.
+<code>#</code> 字符必须是文件的第一个字符, 任何缩进都会导致一个变异错误.
 </td>
 </tr>
 </table>
@@ -1552,10 +1544,10 @@ The <code>#</code> character must be the first character of the file. Any indent
 <div class="sect3">
 <h4 id="_keywords">1.1.2. Keywords</h4>
 <div class="paragraph">
-<p>The following list represents all the keywords of the Groovy language:</p>
+<p>下表列出了 Groovy 中的所有关键字:</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 100%;">
-<caption class="title">Table 1. Keywords</caption>
+<caption class="title">Table 1. 关键字</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -26108,7 +26100,7 @@ class NodeType1Counter extends DefaultVisitor {
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2014-07-10 23:39:15 CST
+Last updated 2014-07-11 17:19:36 CST
 </div>
 </div>
 </body>

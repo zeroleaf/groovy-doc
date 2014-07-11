@@ -4,7 +4,8 @@ ifndef::projectdir[:projectdir: ../../..]
 
 include::{projectdir}/src/spec/doc/core-introduction.adoc[]
 
-== Groovy Language Specification
+[[_groovy_language_specification]]
+== Groovy 语言规范
 
 :leveloffset: 2
 

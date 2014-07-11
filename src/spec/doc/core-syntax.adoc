@@ -1,5 +1,5 @@
 [[_syntax]]
-= 语法(Syntax)
+= 语法
 
 这个章节主要涵盖 Groovy 编程语言的语法(syntax). Groovy 的语法(grammar)派生自(derives from)
 Java 的语法, 但是针对 Groovy 的具体结构做了增强, 并允许一定的简化.
@@ -57,10 +57,10 @@ GroovyDoc 遵循 JavaDoc 的约定(conventions), 因此你可以使用 JavaDoc �
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=shebang_comment_line,indent=0]
 ----
 
-NOTE: +#+ 字符必须是文件的第一个字符, 任何缩进都会导致一个变异错误.
+NOTE: +#+ 字符必须是文件的第一个字符, 任何缩进都会导致一个编译错误.
 
 [[_keywords]]
-== Keywords
+== 关键字
 
 下表列出了 Groovy 中的所有关键字:
 

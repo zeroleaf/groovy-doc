@@ -1,0 +1,18 @@
+= 疑难
+
+该文件用于记录翻译过程中比较难的语句.
+
+== 格式
+
+----
+. 所在文章 +
+语句
+----
+
+== 难句
+
+. core-syntax +
+The expression value inside the placeholder is evaluated to its string
+representation when the GString is passed to a method taking a String as argument
+by calling toString() on that expression.
+

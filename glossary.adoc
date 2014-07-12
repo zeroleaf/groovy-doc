@@ -1,0 +1,14 @@
+= 术语表
+
+该文件用于记录翻译过程中碰到的专有名词, 方便查阅, 避免出现一个词出现前后翻译不一致的现象.
+
+== 格式
+
+`. 名词 - 意思`
+
+== 术语
+
+. interpolated strings - 插值字符串
+. plain Java strings - 普通Java字符串
+. interpolated values - 插入值
+

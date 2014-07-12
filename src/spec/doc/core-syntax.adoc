@@ -175,8 +175,8 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=quoted_id,indent=0]
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=quoted_id_with_all_strings,indent=0]
 ----
 
-普通字符串和 Groovy 的 GStrings(interpolated strings, 内插字符串)是有区别的,
-对于后者, 在判断(evaluating)整个标识符时内插值会被插入到最终的字符串中:
+普通字符串和 Groovy 的 GStrings(interpolated strings, 插值字符串)是有区别的,
+对于后者, 在判断(evaluating)整个标识符时插值会被插入到最终的字符串中:
 
 [source,groovy]
 ----
@@ -190,7 +190,7 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=quoted_id_with_gstrin
 // Text literals are represented in the form of chain of characters called strings.
 文本也即字符串, 以字符链的形式表示.
 Groovy 允许你实例化 +java.lang.String+ 和 GStrings (+groovy.lang.GString+)对象, GStrings
-在其他语言中称为 _内插字符串_.
+在其他语言中称为 _插值字符串_.
 
 [[_single_quoted_string]]
 === 单引号字符串
@@ -202,7 +202,7 @@ Groovy 允许你实例化 +java.lang.String+ 和 GStrings (+groovy.lang.GString+
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=quoted_id_with_gstring,indent=0]
 ----
 
-NOTE: 单引号字符串是 +java.lang.String+, 不支持内插.
+NOTE: 单引号字符串是 +java.lang.String+, 不支持插值.
 
 [[_string_concatenation]]
 === 字符串拼接
@@ -225,7 +225,7 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=string_plus,indent=0]
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=string_1,indent=0]
 ----
 
-NOTE: 三单引号字符串是 +java.lang.String+, 不支持内插.
+NOTE: 三单引号字符串是 +java.lang.String+, 不支持插值.
 
 三单引号字符串是多行的.
 你可以用换行符分隔字符串内容, 而不用把字符串分割为多部分, 不用拼接字符串或者转义换行符.
@@ -427,44 +427,44 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=closure_in_gstring_2,
 [NOTE]
 一个嵌入式闭包表达式接受超过1个参数将会在运行时抛出(generate)异常, 只有0或者1个参数的闭包是允许的.
 
-==== Inteoperability with Java
+[[_interoperability_with_java]]
+==== 与 Java 交互
 
-When a method (whether implemented in Java or Groovy) expects a +java.lang.String+, 
-but we pass a +groovy.lang.GString+ instance, 
-the +toString()+ method of the GString is automatically and transparently called.
+当一个方法(不管是在 Java 还是在 Groovy 中实现)期望(expects)一个 +java.lang.String+,
+但我们传入一个 +groovy.lang.GString+ 实例时, GString 的 +toString()+ 方法会自动, 透明地被调用.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=java_gstring_interop_1,indent=0]
 ----
-<1> We create a GString variable
-<2> We double check it's an instance of the GString
-<3> We then pass that GString to a method taking a String as parameter
-<4> The signature of the +takeString()+ method explicitly says its sole parameter is a String
-<5> We also verify that the parameter is indeed a String and not a GString.
+<1> 我们创建了一个 GString 变量.
+<2> 我们仔细检查它是一个 GString 实例.
+<3> 然后我们把这个 GString 传入到接受 String 作为参数的方法.
+<4> +takeString()+ 方法的签名明确声明(says)它唯一的参数是一个 String.
+<5> 我们进一步核实该参数确实是个 String 而不是 GString.
 
-==== GString and String hashCodes
+[[_gstring_and_string_hashcodes]]
+==== GString 和 String 的哈希码
 
-Although interpolated strings can be used in lieu of plain Java strings,
-they differ with strings in a particular way: their hashCodes are different.
-Plain Java strings are immutable, whereas the resulting String representation of a GString can vary,
-depending on its interpolated values.
-Even for the same resulting string, GStrings and Strings don't have the same hashCode.
+尽管插值字符串可以用来代替普通 Java 字符串, 但它们与普通字符串在某一方面还是有区别的:
+即它们的哈希码(hashCodes)是不一样的. 普通 Java 字符串是不可变的, 然而 GString 的结果字符串
+表示是可变的, 取决于它的插入值. 即使结果字符串相同, GString 和 String 还是有不同的哈希码.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=gstring_hashcode_1,indent=0]
 ----
 
-GString and Strings having different hashCode values, using GString as Map keys should be avoided,
-especially if we try to retrieve an associated value with a String instead of a GString.
+GString 和 Strings 有着不一样的哈希码值, 所以应该避免把 GString 当做 Map 的键来用,
+尤其是在检索关联值(associated value)时应该使用 String 而不是 GString.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=gstring_hashcode_2,indent=0]
 ----
-<1> The map is created with an initial pair whose key is a GString
-<2> When we try to fetch the value with a String key, we will not find it, as Strings and GString have different hashCode values
+<1> 创建一个 map, 带有初始键值对(initial pair), 键为一个 GString.
+<2> 当我们视图获取该 String 键所对应的值时, 会发现无法找到, 由于 String 和 GString 有着
+不同的哈希码值.
 
 === Triple double quoted string
 

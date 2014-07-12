@@ -11,53 +11,122 @@ Groovy 中文文档, 源文档来自 https://github.com/groovy/groovy-core[groov
 
 . 首先, 安装 http://git-scm.com/download/win[git], 或者
 https://github-windows.s3.amazonaws.com/GitHubSetup.exe[Github].
+
 . 其次, Groovy 的原始文档采用 *adoc* 书写, 所以你需要对此有基本的了解, 具体可参考
 http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[这里].
 
-一切准备妥当之后就可以开始了, 这里假设你使用的是 git.
+. 请查看之后的信息.
 
-请依次执行以下命令
+
+== 项目结构
+
+=== 目录及文件说明
+
+* *英文原始文档* - +src/spec/doc+ 文件夹下, 拓展名为 +.adoc+
+* *build.sh* - 生成当前文档对应的 html, 主要用于发布, 可忽略.
+* *cmp.sh* - 判断前后两个文档之间的差异, 记录这些文件并保存到 _todolist_ 文件中, 可忽略.
+* *current文件夹* - 最后翻译的中文文档所对应的英文版本, 当前请忽略.
+* *next文件夹* - 最新的英文文档, 当前也请忽略.
+
+=== 分支说明
+
+该项目主要有如下3个分支:
+
+* *master* - 主分支, 用来保存最近一次的完整翻译版本.
+* *trans* - 翻译分支, 此次翻译所对的分支.
+* *gh-pages* - 存放 html 文件, 用于网页访问.
+
+=== 详细说明
+
+*master* 分支保存的是最近完整翻译的版本, 对其的 commit 一般发生在 merge +trans+ 分支
+或者 构建基础工具上.
+
+以下以一次完整的文档翻译过程对此进行说明.
+
+. 首先是发现有文档更新了, 则从 +master+ 分支中检出一个 +trans+ 分支,
+用于此次文档更新的翻译工作, 也即你可以认为所有的翻译工作都是在 +trans+ 分支上完成.
+
+. 检出 +trans+ 分支后用 +cmp.sh+ 脚本生成 +todolist+ 文件, 判断前后两次文档发生的变化.
+
+. 查看 +todolist+ 文件, 在你要翻译的那篇文章前面填入你的名字, 保存然后 commit 与 push.
+之所以这样做是避免一篇文档有多人同时翻译, 浪费时间又容易产生冲突.
+
+. 在当前的 +trans+ 分支上检出一个开发分支, 名字建议命名为所翻译的文档名, 假设为 +syntax+,
+在这个 +syntax+ 分支上进行那篇文章的翻译工作.
+
+. 在翻译的过程中你可能有多次的 commit, 但请注意不要对这个分支 +syntax+ 进行 push.
+
+. 当你完成文章的翻译工作之后, checkout +trans+ 分支, merge +syntax+ 分支, 然后 push
++trans+ 分支, 之后你就可以删除 +syntax+ 分支了.
+
+. 当 +trans+ 分支有了新的 commit 时, 执行 +build.sh+ 脚本, 生成最新的 html 文件,
++gh-pages+ 分支 push 之后访问 http://groovy.zeroleaf.com 即可看到最新的中文文档.
+
+. 重复步骤 3 ~ 7, 直到文档全部翻译完成.
+
+. 文档翻译完成之后, checkout +master+ 分支, merge +trans+ 分支, push.
+
+于是就完成了此次翻译工作.
+
+NOTE: 一般翻译而言, 可以忽略步骤2与7.
+
+[NOTE]
+====
+根目录下有2个有用的 adoc 文件:
+
+* +dft.adoc+ - 用于记录翻译过程中碰到的比较难翻译的句子.
+* +glossary.adoc+ - 用于记录你翻译的专有名词.
+
+如果需要, 也可以添加新的文件, 不过请说明好文件的用途以及格式.
+====
+
+以下, 从命令的角度对上述过程再一次的说明
 
 [source, shell]
 ----
-# 克隆版本库
-git clone https://github.com/zeroleaf/groovy-doc.git
-# 转到所克隆的版本库中
-cd groovy-core
-# 检出 trans 分支
-git checkout trans
-----
+# 准备工作
+## 克隆版本库
+# git clone https://github.com/zeroleaf/groovy-doc.git
+## 转到所克隆的版本库中
+# cd groovy-core
+## 检出 trans 分支
+# git checkout trans
 
-为了避免一份文档多人同时翻译, 请先浏览下 +todolist+ 文件, 看看里面还有那些文档还未开始翻译,
-找到你想翻译的文档名称, 在前面写入你的名字, 保存, 然后提交一个 commit. 该过程用到的命令:
-
-[source, shell]
-----
+# 修改 todolist 文件之后
 git add todolist
-git commit -m "这里键入提交信息"
+git commit -m "这里键入提交信息, 如 xx start translate xx"
 git push
-----
 
-完了之后就可以在此基础上检出一个分支, 开始翻译工作了.
+# 假设我想翻译 core-syntax 这篇文档
+# 当前应该在 trans 分支中, 不是可以用 git checkout trans 检出
+git checkout -b core-syntax
 
-`git checkout -b branch_name`
+# 然后打开你喜欢的编辑器, 对 src/spec/core-syntax.adoc 进行翻译.
 
-上述 *branch_name* 为分支名称, 一般建议命名为所翻译的文档的名称.
+# 完成翻译, commit, 较长的文章可能需要多次 commit
+git add src/spec/core-syntax.adoc
+git commit -m "键入提交信息"
 
-当翻译完成之后, 执行如下命令
+# 合并到 trans 分支
+git checkout trans
+git push
 
-[source, shell]
-----
-git commit -m "提交说明"
-git merge master
+# 如果不需要 core-syntax 分支了, 删除
+# git branch -d core-syntax
+
+# 继续修改 todolist 到删除分支的过程, 直到完成全部翻译工作
+
+# 将 trans 合并到 master 分支, push
+git checkout master
+git merge trans
 git push
 ----
 
 关于 Git 的使用可以参考 http://git-scm.com/book/zh[Pro Git].
 
-=== 注意事项
+== 注意事项
 
-.锚点
+=== 锚点
 在文档渲染(render)的时候, 会把标题当做锚点, 方便文章的定位.
 但是如果把标题翻译成中文则根据默认的规则锚点名会变成一个 +_+, 这样很不直观.
 所以, 如果对标题进行翻译的时候要明确指定描点名称, 格式为 +[[锚点名]]+.
@@ -77,7 +146,6 @@ git push
 = Groovy 语言规范
 ----
 
-== 其他
+== 联系
 
-最后, 有啥问题可以给我发邮件, zeroleaf021@gmail.com.
-欢迎你的任何意见或者建议.
+最后, 我的邮件地址为 zeroleaf021@gmail.com. 欢迎你的任何意见或建议.

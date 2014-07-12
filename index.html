@@ -40,32 +40,32 @@
 </ul>
 </li>
 <li><a href="#_keywords">1.1.2. 关键字</a></li>
-<li><a href="#_identifiers">1.1.3. Identifiers</a></li>
+<li><a href="#_identifiers">1.1.3. 标识符</a></li>
 <li>
 <ul class="sectlevel4">
-<li><a href="#_normal_identifiers">Normal identifiers</a></li>
-<li><a href="#_quoted_identifiers">Quoted identifiers</a></li>
+<li><a href="#_normal_identifiers">普通标识符</a></li>
+<li><a href="#_quoted_identifiers">引用标识符</a></li>
 </ul>
 </li>
-<li><a href="#all-strings">1.1.4. Strings</a></li>
+<li><a href="#all-strings">1.1.4. 字符串</a></li>
 <li>
 <ul class="sectlevel4">
-<li><a href="#_single_quoted_string">Single quoted string</a></li>
-<li><a href="#_string_concatenation">String concatenation</a></li>
-<li><a href="#_triple_single_quoted_string">Triple single quoted string</a></li>
+<li><a href="#_single_quoted_string">单引号字符串</a></li>
+<li><a href="#_string_concatenation">字符串拼接</a></li>
+<li><a href="#_triple_single_quoted_string">三单引号字符串</a></li>
 <li>
 <ul class="sectlevel5">
-<li><a href="#_escaping_special_characters">Escaping special characters</a></li>
-<li><a href="#_unicode_escape_sequence">Unicode escape sequence</a></li>
+<li><a href="#_escaping_special_characters">转义特殊字符</a></li>
+<li><a href="#_unicode_escape_sequence">Unicode 转义序列</a></li>
 </ul>
 </li>
-<li><a href="#_double_quoted_string">Double quoted string</a></li>
+<li><a href="#_double_quoted_string">双引号字符串</a></li>
 <li>
 <ul class="sectlevel5">
-<li><a href="#_string_interpolation">String interpolation</a></li>
-<li><a href="#_special_case_of_interpolating_closure_expressions">Special case of interpolating closure expressions</a></li>
-<li><a href="#_inteoperability_with_java">Inteoperability with Java</a></li>
-<li><a href="#_gstring_and_string_hashcodes">GString and String hashCodes</a></li>
+<li><a href="#_string_interpolation">字符串插值</a></li>
+<li><a href="#_special_case_of_interpolating_closure_expressions">特例 插入闭包表达式</a></li>
+<li><a href="#_interoperability_with_java">与 Java 交互</a></li>
+<li><a href="#_gstring_and_string_hashcodes">GString 和 String 的哈希码</a></li>
 </ul>
 </li>
 <li><a href="#_triple_double_quoted_string">Triple double quoted string</a></li>
@@ -1613,43 +1613,42 @@ println "Hello from the shebang line"</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_identifiers">1.1.3. Identifiers</h4>
+<h4 id="_identifiers">1.1.3. 标识符</h4>
 <div class="sect4">
-<h5 id="_normal_identifiers">Normal identifiers</h5>
+<h5 id="_normal_identifiers">普通标识符</h5>
 <div class="paragraph">
-<p>Identifiers start with a letter, a dollar or an underscore.
-They cannot start with a number.</p>
+<p>标识符(identifiers)以字母, 美元符号($)或者下划线开始. 不能以数字开始.</p>
 </div>
 <div class="paragraph">
-<p>A letter can be in the following ranges:</p>
+<p>字母的取值范围如下:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><em>a</em> to <em>z</em> (lowercase ascii letter)</p>
+<p><em>a</em> 到 <em>z</em> (小写的 ascii 字母)</p>
 </li>
 <li>
-<p><em>A</em> to <em>Z</em> (uppercase ascii letter)</p>
+<p><em>A</em> 到 <em>Z</em> (大写的 ascii 字母)</p>
 </li>
 <li>
-<p><em>\u00C0</em> to <em>\u00D6</em></p>
+<p><em>\u00C0</em> 到 <em>\u00D6</em></p>
 </li>
 <li>
-<p><em>\u00D8</em> to <em>\u00F6</em></p>
+<p><em>\u00D8</em> 到 <em>\u00F6</em></p>
 </li>
 <li>
-<p><em>\u00F8</em> to <em>\u00FF</em></p>
+<p><em>\u00F8</em> 到 <em>\u00FF</em></p>
 </li>
 <li>
-<p><em>\u0100</em> to <em>\uFFFE</em></p>
+<p><em>\u0100</em> 到 <em>\uFFFE</em></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Then following characters can contain letters and numbers.</p>
+<p>之后的字符可以包含字母或者数字.</p>
 </div>
 <div class="paragraph">
-<p>Here are a few examples of valid identifiers (here, variable names):</p>
+<p>以下是一些有效标识符示例(变量名):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1660,7 +1659,7 @@ def $dollarStart</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>But the following ones are invalid identifiers:</p>
+<p>但是以下的标识符是无效的:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1670,7 +1669,7 @@ def a#b</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>All keywords are also valid identifiers when following a dot:</p>
+<p>点号之后的所有关键字也是无效的标识符:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1683,12 +1682,12 @@ foo.catch</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_quoted_identifiers">Quoted identifiers</h5>
+<h5 id="_quoted_identifiers">引用标识符</h5>
 <div class="paragraph">
-<p>Quoted identifiers appear after the dot of a dotted expression.
-For instance, the <code>name</code> part of the <code>person.name</code> expression can be quoted with <code>person."name"</code> or <code>person.'name&#8217;</code>.
-This is particularly interesting when certain identifiers contain illegal characters that are forbidden by the Java Language Specification,
-but which are allowed by Groovy when quoted. For example, characters like a dash, a space, an exclamation mark, etc.</p>
+<p>引用标识符(quoted identifiers)位于点表达式(dotted expression)的点号之后.
+例如, 表达式 <code>person.name</code> 的 <code>name</code> 部分可以像 <code>person."name"</code> 或者 <code>person.<em>name</em></code> 那样添加引号.
+这相当有趣, 当某些标识符包含 Java 语言规范(Java Language Specification)所禁止的非法字符时,
+在 Groovy 中通过添加引号是被允许的. 如 破择号(dash), 空格, 感叹号等.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1702,8 +1701,8 @@ assert map.'with-dash-signs-and-single-quotes' == "ALLOWED"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As we shall see in the <a href="#all-strings">following section on strings</a>, Groovy provides different string literals.
-All kind of strings are actually allowed after the dot:</p>
+<p>我们将会在<a href="#all-strings">之后的字符串章节</a>中看到, Groovy 提供了不同的 字符串字面量(literals).
+点号之后所有类型的字符串都是允许的.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1716,8 +1715,8 @@ map.$/dollar slashy string/$</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>There&#8217;s a difference between plain character strings and Groovy&#8217;s GStrings (interpolated strings),
-as in that the latter case, the interpolated values are inserted in the final string for evaluating the whole identifier:</p>
+<p>普通字符串和 Groovy 的 GStrings(interpolated strings, 插值字符串)是有区别的,
+对于后者, 在判断(evaluating)整个标识符时插值会被插入到最终的字符串中:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1730,16 +1729,16 @@ assert map.'Simson-Homer' == "Homer Simson"</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="all-strings">1.1.4. Strings</h4>
+<h4 id="all-strings">1.1.4. 字符串</h4>
 <div class="paragraph">
-<p>Text literals are represented in the form of chain of characters called strings.
-Groovy lets you instantiate <code>java.lang.String</code> objects, as well as GStrings (<code>groovy.lang.GString</code>)
-which are also called <em>interpolated strings</em> in other programming languages.</p>
+<p>文本也即字符串, 以字符链的形式表示.
+Groovy 允许你实例化 <code>java.lang.String</code> 和 GStrings (<code>groovy.lang.GString</code>)对象, GStrings
+在其他语言中称为 <em>插值字符串</em>.</p>
 </div>
 <div class="sect4">
-<h5 id="_single_quoted_string">Single quoted string</h5>
+<h5 id="_single_quoted_string">单引号字符串</h5>
 <div class="paragraph">
-<p>Single quoted strings are a series of characters surounded by single quotes:</p>
+<p>单引号字符串即由单引号包围的一系列字符:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1756,16 +1755,16 @@ assert map.'Simson-Homer' == "Homer Simson"</code></pre>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Single quoted strings are plain <code>java.lang.String</code> and don&#8217;t support interpolation.
+单引号字符串是 <code>java.lang.String</code>, 不支持插值.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_string_concatenation">String concatenation</h5>
+<h5 id="_string_concatenation">字符串拼接</h5>
 <div class="paragraph">
-<p>All the Groovy strings can be concatenated with the <code>+</code> operator:</p>
+<p>Groovy 中的所有字符串都可以用 <code>+</code> 操作符来拼接(concatenation):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1774,9 +1773,9 @@ Single quoted strings are plain <code>java.lang.String</code> and don&#8217;t su
 </div>
 </div>
 <div class="sect4">
-<h5 id="_triple_single_quoted_string">Triple single quoted string</h5>
+<h5 id="_triple_single_quoted_string">三单引号字符串</h5>
 <div class="paragraph">
-<p>Triple single quoted strings are a series of characters surrounded by single quotes:</p>
+<p>三单引号字符串即由单引号包围的一系列字符:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1790,14 +1789,14 @@ Single quoted strings are plain <code>java.lang.String</code> and don&#8217;t su
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Triple single quoted strings are plain <code>java.lang.String</code> and don&#8217;t support interpolation.
+三单引号字符串是 <code>java.lang.String</code>, 不支持插值.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Triple single quoted strings are multiline.
-You can span the content of the string across line boundaries without the need to split the string in several pieces, without contatenation or newline escape characters:</p>
+<p>三单引号字符串是多行的.
+你可以用换行符分隔字符串内容, 而不用把字符串分割为多部分, 不用拼接字符串或者转义换行符.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1807,12 +1806,12 @@ line three'''</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If your code is indented, for example in the body of the method of a class, your string will contain the whitespace of the indentation.
-The Groovy Development Kit contains methods for stripping out the indentation with the <code>String#stripIndent()</code> method,
-and with the <code>String#stripMargin()</code> method that takes a delimiter character to identify the text to remove from the beginning of a string.</p>
+<p>如果代码包含缩进, 如在类或者方法的主体(body)部分, 则字符串也会包含这些缩进的空白字符(whitespace).
+可以通过 Groovy 开发工具(Development Kit) 中的 <code>String#stripIndent()</code> 方法来移除这些缩进,
+通过 <code>String#stripMargin()</code> 方法, 传入一个分界字符(delimiter character)参数, 来指定要从字符串中移除的字符.</p>
 </div>
 <div class="paragraph">
-<p>When creating a string as follows:</p>
+<p>当创建如下的字符串:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1824,8 +1823,7 @@ line three
 </div>
 </div>
 <div class="paragraph">
-<p>You will notice that the resulting string contains a newline character as first character.
-It is possible to strip that character by escaping the newline with a backslash:</p>
+<p>你会发现结果字符串的第一个字符是一个换行符. 可以用反斜杠(backslash)转义换行符来移除该字符:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1839,9 +1837,9 @@ assert !strippedFirstNewline.startsWith('\n')</code></pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_escaping_special_characters">Escaping special characters</h6>
+<h6 id="_escaping_special_characters">转义特殊字符</h6>
 <div class="paragraph">
-<p>You can escape single quotes with the the backslash character to avoid terminating the string literal:</p>
+<p>可以用反斜杠来转义单引号以避免终止(terminating)字符串字面量:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1849,7 +1847,7 @@ assert !strippedFirstNewline.startsWith('\n')</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And you can escape the escape character itself with a double backslash:</p>
+<p>可以用两个反斜杠来转义转义符本身:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1857,7 +1855,7 @@ assert !strippedFirstNewline.startsWith('\n')</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Some special characters also use the backslash as escape character:</p>
+<p>一些特殊字符也使用反斜杠当做转义符:</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 100%;">
 <colgroup>
@@ -1866,54 +1864,54 @@ assert !strippedFirstNewline.startsWith('\n')</code></pre>
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Escape sequence</th>
-<th class="tableblock halign-left valign-top">Character</th>
+<th class="tableblock halign-left valign-top">转义序列</th>
+<th class="tableblock halign-left valign-top">字符</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\t</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">tabulation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">水平制表</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\b</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">backspace</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">退格</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\n</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">newline</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">换行</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\r</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">carriage return</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">回车</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\f</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">formfeed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">换页</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\\</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">backslash</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">反斜杠字符 <em>\</em></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\</em>'</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">single quote (for single quoted and triple single quoted strings)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">单引号字符 (单引号或三单引号字符串中使用)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>\"</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">double quote (for double quoted and triple double quoted strings)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">双引号字符 (双引号或三双引号字符串中使用)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect5">
-<h6 id="_unicode_escape_sequence">Unicode escape sequence</h6>
+<h6 id="_unicode_escape_sequence">Unicode 转义序列</h6>
 <div class="paragraph">
-<p>For characters that are not present on your keyboard, you can use unicode escape sequances:
-a backslash, followed by <em>u</em>, then 4 hexadecimal digits.</p>
+<p>那些没有出现在你键盘上的字符, 可以使用 unicode 转义序列来表示: 一个反斜杠, 之后是一个 <em>u</em>,
+然后是4个十六进制数字.</p>
 </div>
 <div class="paragraph">
-<p>For example, the Euro currency symbol can be represented with:</p>
+<p>例如, 欧元货币符号可以这样表示:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1923,9 +1921,9 @@ a backslash, followed by <em>u</em>, then 4 hexadecimal digits.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_double_quoted_string">Double quoted string</h5>
+<h5 id="_double_quoted_string">双引号字符串</h5>
 <div class="paragraph">
-<p>Double quoted strings are a series of characters surrounded by double quotes:</p>
+<p>双引号字符串即由双引号包围的一系列字符:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1939,8 +1937,8 @@ a backslash, followed by <em>u</em>, then 4 hexadecimal digits.</p>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Double quoted strings are plain <code>java.lang.String</code> if there&#8217;s no interpolated expression,
-but are <code>groovy.lang.GString</code> instances if interpolation is present.
+在没有插入表达式(interpolated expression)的情况下双引号字符串为 <code>java.lang.String</code>;
+如果有, 则为 <code>groovy.lang.GString</code>.
 </td>
 </tr>
 </table>
@@ -1952,21 +1950,22 @@ but are <code>groovy.lang.GString</code> instances if interpolation is present.
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-To escape a double quote, you can use the backslash character: <code>"A double quote: \""</code>.
+可以使用反斜杠字符来转义双引号, 如: <code>"A double quote: \""</code>.
 </td>
 </tr>
 </table>
 </div>
 <div class="sect5">
-<h6 id="_string_interpolation">String interpolation</h6>
+<h6 id="_string_interpolation">字符串插值</h6>
 <div class="paragraph">
-<p>Any Groovy expression can be interpolated in all string literals, apart from single and triple single quoted strings.
-Interpolation is the act of replacing a placeholder in the string with its value upon evaluation of the string.
-The placeholder expressions are surrounded by <code>${}</code> or prefixed with <code>$</code> for dotted expressions.
-The expression value inside the placeholder is evaluated to its string representation when the GString is passed to a method taking a String as argument by calling <code>toString()</code> on that expression.</p>
+<p>任何 Groovy 表达式都可以插入到所有的字符串字面量中, 除了单引号和三单引号字符串.
+插值即把字符串中的占位符用其在对字符串求值(evaluation)中的值来替代的操作.
+占位符表达式由 <code>${}</code> 包围, 对点表达式可以以 <code>$</code> 开头.
+当 GString 传入到一个以 String 为参数的方法时, 占位符中的表达式会通过调用 <code>toString()</code> 方法
+将其值转换为对应的字符串表示.</p>
 </div>
 <div class="paragraph">
-<p>Here, we have a string with a placeholder referencing a local variable:</p>
+<p>这里, 我们有一个带有占位符的字符串, 该占位符引用了一个本地变量:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1977,7 +1976,7 @@ assert greeting.toString() == 'Hello Guillaume'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>But any Groovy expression is valid, as we can see in this example with an arithmetic expression:</p>
+<p>Groovy 中的任何表达式都是有效的, 在这个例子中我们可以看到其带有一个算术表达式:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1992,15 +1991,16 @@ assert sum.toString() == 'The sum of 2 and 3 equals 5'</code></pre>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Not only expressions are actually allowed in between the <code>${}</code> placeholder. Statements are also allowed, but a statement&#8217;s value is just <code>null</code>.
-So if several statements are inserted in that placeholder, the last one should somehow return a meaningful value to be inserted.
-For instance, <code>"The sum of 1 and 2 is equal to ${def a = 1; def b = 2; a + b}"</code> is supported and works as expected but a good practice is usually to stick to simple expressions inside GString placeholders.
+<code>${}</code> 占位符中不仅仅允许表达式, 语句(statements)也是允许的, 但一个语句的值单纯(is just)为 <code>null</code>.
+所以, 如果多个语句被插入到占位符中, 最后一个应该返回一个有意义的值.
+例如, <code>"The sum of 1 and 2 is equal to ${def a = 1; def b = 2; a + b}"</code> 是支持的同时也能
+如预期的工作, 但坚持在 GString 占位符中使用简单的表达式是一个好习惯.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>In addition to <code>${}</code> placeholders, we can also use a lone <code>$</code> sign prefixing a dotted expression:</p>
+<p>除了 <code>${}</code> 占位符, 对于点表达式我们也可以使用一个单独的 <code>$</code> 符号作为其前缀:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2009,8 +2009,8 @@ assert "$person.name is $person.age years old" == 'Guillaume is 36 years old'</c
 </div>
 </div>
 <div class="paragraph">
-<p>But only dotted expressions of the form <code>a.b</code>, <code>a.b.c</code>, etc, are valid, but expressions that would contain parentheses like method calls, curly braces for closures, or arithmetic operators would be invalid.
-Given the following variable definition of a number:</p>
+<p>但是只有形式如 <code>a.b</code>, <code>a.b.c</code> 之类的是有效的, 表达式中含有括号如方法调用, 花括号如闭包,
+算术操作符符等都是无效的. 以下变量定义为一个数字:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2018,7 +2018,8 @@ Given the following variable definition of a number:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The following statement will throw a <code>groovy.lang.MissingPropertyException</code> because Groovy believes you&#8217;re trying to access the <code>toString</code> property of that number, which doesn&#8217;t exist:</p>
+<p>下面的语句会抛出 <code>groovy.lang.MissingPropertyException</code> 异常, 因为 Groovy 认为你
+试图访问 number 的 <code>toString</code> 属性, 但是它是不存在的.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2034,14 +2035,14 @@ Given the following variable definition of a number:</p>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-You can think of <code>"$number.toString()"</code> as being interpreted by the parser as <code>"${number.toString}()"</code>.
+可以认为 <code>"$number.toString()"</code> 被语法分析器(parser) 解释为 <code>"${number.toString}()"</code>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>If you need to escape the <code>$</code> or <code>${}</code> placeholders in a GString so they appear as is without interpolation,
-you just need to use a <code>\</code> backslash character to escape the dollar sign:</p>
+<p>如果你想在 GString 中转义 <code>$</code> 或者 <code>${}</code> 占位符, 让它们能显示而不会进行插值, 你只需要用
+<code>\</code> 反斜杠字符来转义美元符号:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2050,9 +2051,10 @@ you just need to use a <code>\</code> backslash character to escape the dollar s
 </div>
 </div>
 <div class="sect5">
-<h6 id="_special_case_of_interpolating_closure_expressions">Special case of interpolating closure expressions</h6>
+<h6 id="_special_case_of_interpolating_closure_expressions">特例 插入闭包表达式</h6>
 <div class="paragraph">
-<p>So far, we&#8217;ve seen we could interpolate arbitrary expressions inside the <code>${}</code> placeholder, but there is a special case and notation for closure expressions. When the placeholder contains an arrow, <code>${&#8594;}</code>, the expression is actually a closure expression&#8201;&#8212;&#8201;you can think of it as a closure with a dollar prepended in front of it:</p>
+<p>到目前为止, 我们看到可以在 <code>${}</code> 占位符中放入任意的表达式, 但闭包是个特例并且有着特别的表示法.
+当占位符包含一个箭头, <code>${-&gt;}</code>, 该表达式即是一个闭包表达式&#8201;&#8212;&#8201;你可以认为它是一个前面带有美元符号的闭包.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2067,21 +2069,21 @@ assert sOneParamClosure == '1 + 2 == 3'</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The closure is a parameterless closure which doesn&#8217;t take arguments.</td>
+<td>该闭包是一个无参闭包, 不接受参数.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Here, the closure takes a single <code>java.io.StringWriter</code> argument, to which you can append content  with the <code>&lt;&lt;</code> leftShift operator.
-In either case, both placeholders are embedded closures.</td>
+<td>这里, 闭包接受一个 <code>java.io.StringWriter</code> 参数, 可以用 <code>&lt;&lt;</code> 左移操纵符来给它添加内容.
+两种情况中, 占位符都是嵌入式闭包(embedded closures).</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>In appearance, it looks like a more verbose way of defining expressions to be interpolated,
-but closure have an interesting advantage over mere expressions: lazy evaluation.</p>
+<p>以这种方式定义插入的表达式显得更加冗长(verbose), 但与单纯的(mere)表达式相比, 闭包有一个
+有趣的特性: 惰性求值(lazy evaluation).</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s consider the following sample:</p>
+<p>让我们考虑下面的例子:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2101,29 +2103,29 @@ assert lazyGString ==  "value == 2" <i class="conum" data-value="6"></i><b>(6)</
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We define a <code>number</code> variable containing <code>1</code> that we then interpolate within two GStrings,
-as an expression in <code>eagerGString</code> and as a closure in <code>lazyGString</code>.</td>
+<td>我们定义了一个 <code>number</code> 变量, 值为 <code>1</code>, 然后我们它插入到2个 GStrings 中,
+<code>eagerGString</code> 中作为表达式, <code>lazyGString</code> 中作为闭包.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We expect the resulting string to contain the same string value of 1 for <code>eagerGString</code>.</td>
+<td>对 <code>eagerGString</code> 我们预期结果字符串包含有 1.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Similarily for <code>lazyGString</code></td>
+<td><code>lazyGString</code> 类似.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Then we change the value of the variable to a new number</td>
+<td>然后我们改变该变量, 为其赋一个新值.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>With a plain interpolated expression, the value was actually bound at the time of creation of the GString.</td>
+<td>对于单纯的(plain)插入表达式, 其值实际上是绑定到了 GString 创建时的值.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>But with a closure expression, the closure is called upon each coercion of the GString into String,
-resulting in an updated string containing the new number value.</td>
+<td>但是对闭包表达式, 每次强制(coercion)把 GString 转换为 String 的时候都会调用闭包,
+其结果是生成一个包含有新值的新字符串.</td>
 </tr>
 </table>
 </div>
@@ -2134,19 +2136,17 @@ resulting in an updated string containing the new number value.</td>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-An embedded closure expression taking more than one parameter will generate an exception at runtime.
-Only closures with zero or one paramaters are allowed.
+一个嵌入式闭包表达式接受超过1个参数将会在运行时抛出(generate)异常, 只有0或者1个参数的闭包是允许的.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_inteoperability_with_java">Inteoperability with Java</h6>
+<h6 id="_interoperability_with_java">与 Java 交互</h6>
 <div class="paragraph">
-<p>When a method (whether implemented in Java or Groovy) expects a <code>java.lang.String</code>,
-but we pass a <code>groovy.lang.GString</code> instance,
-the <code>toString()</code> method of the GString is automatically and transparently called.</p>
+<p>当一个方法(不管是在 Java 还是在 Groovy 中实现)期望(expects)一个 <code>java.lang.String</code>,
+但我们传入一个 <code>groovy.lang.GString</code> 实例时, GString 的 <code>toString()</code> 方法会自动, 透明地被调用.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2167,35 +2167,33 @@ assert result == 'The message is hello'</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We create a GString variable</td>
+<td>我们创建了一个 GString 变量.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We double check it&#8217;s an instance of the GString</td>
+<td>我们仔细检查它是一个 GString 实例.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>We then pass that GString to a method taking a String as parameter</td>
+<td>然后我们把这个 GString 传入到接受 String 作为参数的方法.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The signature of the <code>takeString()</code> method explicitly says its sole parameter is a String</td>
+<td><code>takeString()</code> 方法的签名明确声明(says)它唯一的参数是一个 String.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>We also verify that the parameter is indeed a String and not a GString.</td>
+<td>我们进一步核实该参数确实是个 String 而不是 GString.</td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_gstring_and_string_hashcodes">GString and String hashCodes</h6>
+<h6 id="_gstring_and_string_hashcodes">GString 和 String 的哈希码</h6>
 <div class="paragraph">
-<p>Although interpolated strings can be used in lieu of plain Java strings,
-they differ with strings in a particular way: their hashCodes are different.
-Plain Java strings are immutable, whereas the resulting String representation of a GString can vary,
-depending on its interpolated values.
-Even for the same resulting string, GStrings and Strings don&#8217;t have the same hashCode.</p>
+<p>尽管插值字符串可以用来代替普通 Java 字符串, 但它们与普通字符串在某一方面还是有区别的:
+即它们的哈希码(hashCodes)是不一样的. 普通 Java 字符串是不可变的, 然而 GString 的结果字符串
+表示是可变的, 取决于它的插入值. 即使结果字符串相同, GString 和 String 还是有不同的哈希码.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2203,8 +2201,8 @@ Even for the same resulting string, GStrings and Strings don&#8217;t have the sa
 </div>
 </div>
 <div class="paragraph">
-<p>GString and Strings having different hashCode values, using GString as Map keys should be avoided,
-especially if we try to retrieve an associated value with a String instead of a GString.</p>
+<p>GString 和 Strings 有着不一样的哈希码值, 所以应该避免把 GString 当做 Map 的键来用,
+尤其是在检索关联值(associated value)时应该使用 String 而不是 GString.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2218,11 +2216,12 @@ assert m["a"] == null                   <i class="conum" data-value="2"></i><b>(
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The map is created with an initial pair whose key is a GString</td>
+<td>创建一个 map, 带有初始键值对(initial pair), 键为一个 GString.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>When we try to fetch the value with a String key, we will not find it, as Strings and GString have different hashCode values</td>
+<td>当我们视图获取该 String 键所对应的值时, 会发现无法找到, 由于 String 和 GString 有着
+不同的哈希码值.</td>
 </tr>
 </table>
 </div>
@@ -26100,7 +26099,7 @@ class NodeType1Counter extends DefaultVisitor {
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2014-07-11 22:43:19 CST
+Last updated 2014-07-12 21:09:11 CST
 </div>
 </div>
 </body>

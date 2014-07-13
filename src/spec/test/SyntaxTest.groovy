@@ -499,14 +499,14 @@ class SyntaxTest extends CompilableTestSupport {
 
     void testIntegralNumberDeclarations() {
         // tag::int_decl[]
-        // primitive types
+        // 原生类型(primitive types)
         byte  b = 1
         char  c = 2
         short s = 3
         int   i = 4
         long  l = 5
 
-        // infinite precision
+        // 无限精度(infinite precision)
         BigInteger bi =  6
         // end::int_decl[]
 

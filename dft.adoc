@@ -16,3 +16,7 @@ The expression value inside the placeholder is evaluated to its string
 representation when the GString is passed to a method taking a String as argument
 by calling toString() on that expression.
 
+. core-syntax +
+Alternative non-base 10 representations
+
+

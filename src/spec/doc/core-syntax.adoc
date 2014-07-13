@@ -603,13 +603,16 @@ NOTE: 当字符存储在变量中时, 做法(option) [conum,data-value=1]_1_ 比
 而其他两种做法([conum,data-value=2]_2_ 和 [conum,data-value=3]_3_), 在必须传入一个
 字符参数以调用方法时比较好.
 
-== Numbers
+[[_numbers]]
+== 数值
 
-Groovy supports different kinds of integral literals and decimal literals, backed by the usual +Number+ types of Java.
+Groovy 支持不同类型的整型字面量(integral literals)和浮点型字面量(decimal literals),
+依靠 Java 中通用的(usual) +Number+ 类型.
 
-=== Integral literals
+[[_integral_literals]]
+=== 整数
 
-The integral literal types are the same as in Java:
+整数类型与 Java 中的一样:
 
 * +byte+
 * +char+
@@ -618,87 +621,95 @@ The integral literal types are the same as in Java:
 * +long+
 * +java.lang.BigInteger+
 
-You can create integral numbers of those types with the following declarations:
+可以用下面的声明来创建这些整型数字:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=int_decl,indent=0]
 ----
 
-If you use optional typing by using the +def+ keyword, the type of the integral number will vary:
-it'll adapt to the capacity of the type that can hold that number.
+如果使用 +def+ 关键字来声明可选类型(optional type), 那么整数的类型将会发生变化:
+它会采用取值范围包含该整数的类型.
 
-For positive numbers:
+对正数而言:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=wide_int_positive,indent=0]
 ----
 
-As well as for negative numbers:
+对负数也是一样的:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=wide_int_negative,indent=0]
 ----
 
-==== Alternative non-base 10 representations
+[[_alternative_non_base_10_representations]]
+// @TODO Alternative non-base 10 representations 更好的翻译
+==== 可选的非十进制表示
 
-===== Binary literal
+[[_binary_literal]]
+===== 二进制
 
-In Java 6 and before, as well as in Groovy, numbers could be represented in decimal, octal and hexadecimal bases, and with Java 7 and Groovy 2, you can use a binary notation with the ++0b++ prefix:
+在 Java 6 及之前版本, 以及在 Groovy 中, 数字可以以 十进制, 八进制, 十六进制 表示,
+在 Java 7 及 Groovy 2 中, 可以附加 +0b+ 前缀来使用二进制:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=binary_literal_example,indent=0]
 ----
 
-===== Octal literal
+[[_octal_literal]]
+===== 八进制
 
-Octal numbers are specified in the typical format of ++0++ followed by octal digits.
+八进制数字是以 ++0++ 为前缀, 之后跟上八进制数字(digits), 这样典型的格式来定义的(specified).
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=octal_literal_example,indent=0]
 ----
 
-===== Hexadecimal literal
+[[_hexadecimal_literal]]
+===== 十六进制
 
-Hexadecimal numbers are specified in the typical format of ++0x++ followed by hex digits.
+十六进制数值是以 ++0x++ 为前缀, 之后跟上十六进制数字, 这样典型的格式来定义的.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=hexadecimal_literal_example,indent=0]
 ----
 
-=== Decimal literals
+[[_decimal_literals]]
+=== 浮点数
 
-The decimal literal types are the same as in Java:
+浮点数类型与 Java 中的一样:
 
 * +float+
 * +double+
 * +java.lang.BigDecimal+
 
-You can create decimal numbers of those types with the following declarations:
+可以用下面的声明来创建这些浮点型数字:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=float_decl,indent=0]
 ----
 
-Decimals can use exponents, with the +e+ or +E+ exponent letter, followed by an optional sign,
-and a integral number representing the exponent:
+浮点数可以用指数表示, (格式为)表示指数的 +e+ 或 +E+ 字母, 之后是一个可选的正负号,
+和一个代表指数的整数:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=float_exp,indent=0]
 ----
 
-Conveniently for exact decimal number calculations, Groovy choses +java.lang.BigDecimal+ as its decimal number type.
-In addition, both +float+ and +double+ are supported, but require an explicit type declaration, type coercion or suffix.
-Even if +BigDecimal+ is the default for decimal numbers, such literals are accepted in methods or closures taking +float+ or +double+ as parameter types.
+为了方便(conveniently)浮点数精确计算, Groovy 选择 +java.lang.BigDecimal+ 作为它的
+浮点数类型. 此外, +float+ 和 +double+ 都是支持的, 但是需要明确的类型声明, 强制类型转换
+或者添加后缀. 尽管 +BigDecimal+ 是浮点数的默认类型, 在接受 +float+ 或者 +double+
+为参数的方法或闭包中, 浮点数字面量也是能被接受的.
 
-NOTE: Decimal numbers can't be represented using a binary, octal or hexadecimal representation.
+NOTE: 浮点数不能用二进制, 八进制, 十六进制表示法来表示.
 
 === Underscore in literals
 

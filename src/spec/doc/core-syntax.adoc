@@ -158,7 +158,7 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=keywords_valid_id_aft
 === 引用标识符
 
 引用标识符(quoted identifiers)位于点表达式(dotted expression)的点号之后.
-例如, 表达式 +person.name+ 的 +name+ 部分可以像 +person."name"+ 或者 +person.'name'+ 那样添加引号.
+例如, 表达式 +person.name+ 的 +name+ 部分可以像 +person."name"+ 或者 +person.\'name\'+ 那样添加引号.
 这相当有趣, 当某些标识符包含 Java 语言规范(Java Language Specification)所禁止的非法字符时,
 在 Groovy 中通过添加引号是被允许的. 如 破择号(dash), 空格, 感叹号等.
 
@@ -367,7 +367,7 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=gstring_3,indent=0]
 ----
 
 但是只有形式如 +a.b+, +a.b.c+ 之类的是有效的, 表达式中含有括号如方法调用, 花括号如闭包,
-算术操作符符等都是无效的. 以下变量定义为一个数字:
+算术操作符等都是无效的. 以下变量定义为一个数字:
 
 [source,groovy]
 ----

@@ -12,7 +12,7 @@ A spec/doc/core-semantics.adoc
 zeroleaf A spec/doc/core-syntax.adoc
 A spec/doc/core-testing-guide.adoc
 A spec/doc/core-traits.adoc
-A spec/doc/design-pattern-abstract-factory.adoc
+baiyangtx A spec/doc/design-pattern-abstract-factory.adoc
 A spec/doc/design-pattern-adapter.adoc
 A spec/doc/design-pattern-bouncer.adoc
 A spec/doc/design-pattern-chain-of-responsibility.adoc

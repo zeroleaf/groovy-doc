@@ -11,4 +11,10 @@
 . interpolated strings - 插值字符串
 . plain Java strings - 普通Java字符串
 . interpolated values - 插入值
+. slashy string - 斜线字符串
+. dollar slashy string - 美元斜线字符串
+. slash - 斜杠
+. forward slash - 正斜杠 /
+. delimiter - 定界符
+. (Groovy) parser - (Groovy) 语法分析器
 

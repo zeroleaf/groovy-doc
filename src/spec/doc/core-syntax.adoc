@@ -466,136 +466,142 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=gstring_hashcode_2,in
 <2> 当我们视图获取该 String 键所对应的值时, 会发现无法找到, 由于 String 和 GString 有着
 不同的哈希码值.
 
-=== Triple double quoted string
+[[_triple_double_quoted_string]]
+=== 三双引号字符串
 
-Triple double quoted strings behave like double quoted strings, with the addition that they are multiline, like the triple single quoted strings.
+三双引号字符串类似(behave like)双引号字符串, 只是它们是多行的, 这点可类比三单引号字符串.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=triple_double_1,indent=0]
 ----
 
-NOTE: Neither double quotes nor single quotes need be escaped in triple double quoted strings.
+NOTE: 在三双引号字符串中, 双引号跟单引号都不需要转义.
 
-=== Slashy string
+[[_slashy_string]]
+=== 斜线字符串
 
-Beyond the usual quoted strings, Groovy offers slashy strings, which use +/+ as delimiters.
-Slashy strings are particularly useful for defining regular expressions and patterns, 
-as there is no need to escape backslashes.
+除了通常的引号字符串, Groovy 还提供了 斜线字符串(slashy strings), 其使用 +/+ 作为定界符.
+斜线字符串在定义正则表达式或者模式(patterns)时特别有用的, 因为不需要对反斜杠进行转义.
 
-Example of a slashy string:
+斜线字符串的示例:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_1,indent=0]
 ----
 
-Only forward slashes need to be escaped with a backslash:
+只有斜线需要用反斜杠来转义:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_2,indent=0]
 ----
 
-Slashy strings are multiline:
+斜线字符串是多行的:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_3,indent=0]
 ----
 
-Slashy strings can also be interpolated (ie. a GString):
+斜线字符串也可以插值(如, GString):
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_4,indent=0]
 ----
 
-There are a few gotchas to be aware of.
+有几个陷阱需要注意.
 
-An empty slashy string cannot be represented with a double forward slash, as it's understood by the Groovy parser as a line comment. 
-That's why the following assert would actually not compile as it would look like a non-terminated statement:
+不能用两个斜线来表示空(斜线)字符串, 因为它被 Groovy 语法分析器当做一个行注释来理解.
+这是为什么下面的断言实际上会导致一个编译错误, 因为它看起来像一个没结束(non-terminated)的语句.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_5,indent=0]
 ----
 
-=== Dollar slashy string
+[[_dollar_slashy_string]]
+=== 美元斜线字符串
 
-Dollar slashy strings are multiline GStrings delimited with an opening +$/+ and and a closing +/$+.
-The escaping character is the dollar sign, and it can escape another dollar, or a forward slash.
-But both dollar and forward slashes don't need to be escaped, except to escape the dollar of a string subsequence that would start like a GString placeholder sequence, or if you need to escape a sequence that would start like a closing dollar slashy string delimiter.
+美元斜线字符串(dollar slashy string)是以 +$/+ 开始, 以 +/$+ 结束的多行 GStrings.
+转义字符为美元符号, 可以用来转义另一美元符号或者正斜杠.
+但是美元符号跟正斜杠都可以不用转义, 除了像 GString 占位符那样的字符串序列需要对美元符号进行转义,
+以及像美元斜线字符串关闭标签那样的字符序列进行转义.
 
-Here's an example:
+请看下面的例子:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=dollar_slashy_1,indent=0]
 ----
 
-=== String summary table
+[[_string_summary_table]]
+=== 字符串总结表
 
 [cols="5*", ptions="header"]
 |====
-|String name
-|String syntax
-|Interpolated
-|Multiline
-|Escape character
+|名称
+|语法
+|插值
+|多行
+|转义符
 
-|Single quoted
+|单引号
 |+\'...'+
 |icon:check-empty[]
 |icon:check-empty[]
 |+\+
 
-|Triple single quoted
+|三单引号
 |+\'''...\'''+
 |icon:check-empty[]
 |icon:check[]
 |+\+
 
-|Double quoted
+|双引号
 |+"..."+
 |icon:check[]
 |icon:check-empty[]
 |+\+
 
-|Triple double quoted
+|三双引号
 |+"""..."""+
 |icon:check[]
 |icon:check[]
 |+\+
 
-|Slashy
+|斜线
 |+/.../+
 |icon:check[]
 |icon:check[]
 |+\+
 
-|Dollar slashy
+|美元斜线
 |+$/.../$+
 |icon:check[]
 |icon:check[]
 |+$+
 |====
 
-=== Characters
+[[_characters]]
+=== 字符
 
-Unlike Java, Groovy doesn't have an explicit character literal.
-However, you can be explicit about making a Groovy string an actual character, by three different means:
+与 Java 不同, Groovy 没有明确的字符字面量.
+但是, 你可以通过 3 种不同的方式明确的将 Groovy 字符串转换为字符:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=char,indent=0]
 ----
-<1> by being explicit when declaring a variable holding the character by specifying the +char+ type
-<2> by using type coercion with the +as+ operator
-<3> by using a cast to char operation
+<1> 声明变量时明确指定其类型为 +char+.
+<2> 使用 +as+ 操作符强制类型转换(type coercion).
+<3> 使用 +(char)+ 强制类型转换.
 
-NOTE: The first option [conum,data-value=1]_1_ is interesting when the character is held in a variable,
-while the other two ([conum,data-value=2]_2_ and [conum,data-value=3]_3_) are more interesting when a char value must be passed as argument of a method call.
+NOTE: 当字符存储在变量中时, 做法(option) [conum,data-value=1]_1_ 比较好(interesting),
+而其他两种做法([conum,data-value=2]_2_ 和 [conum,data-value=3]_3_), 在必须传入一个
+字符参数以调用方法时比较好.
 
 == Numbers
 

@@ -68,30 +68,30 @@
 <li><a href="#_gstring_and_string_hashcodes">GString 和 String 的哈希码</a></li>
 </ul>
 </li>
-<li><a href="#_triple_double_quoted_string">Triple double quoted string</a></li>
-<li><a href="#_slashy_string">Slashy string</a></li>
-<li><a href="#_dollar_slashy_string">Dollar slashy string</a></li>
-<li><a href="#_string_summary_table">String summary table</a></li>
-<li><a href="#_characters">Characters</a></li>
+<li><a href="#_triple_double_quoted_string">三双引号字符串</a></li>
+<li><a href="#_slashy_string">斜线字符串</a></li>
+<li><a href="#_dollar_slashy_string">美元斜线字符串</a></li>
+<li><a href="#_string_summary_table">字符串总结表</a></li>
+<li><a href="#_characters">字符</a></li>
 </ul>
 </li>
-<li><a href="#_numbers">1.1.5. Numbers</a></li>
+<li><a href="#_numbers">1.1.5. 数值</a></li>
 <li>
 <ul class="sectlevel4">
-<li><a href="#_integral_literals">Integral literals</a></li>
+<li><a href="#_integral_literals">整数</a></li>
 <li>
 <ul class="sectlevel5">
-<li><a href="#_alternative_non_base_10_representations">Alternative non-base 10 representations</a></li>
+<li><a href="#_alternative_non_base_10_representations">可选的非十进制表示</a></li>
 <li>
 <ul class="sectlevel6">
-<li><a href="#_binary_literal">Binary literal</a></li>
-<li><a href="#_octal_literal">Octal literal</a></li>
-<li><a href="#_hexadecimal_literal">Hexadecimal literal</a></li>
+<li><a href="#_binary_literal">二进制</a></li>
+<li><a href="#_octal_literal">八进制</a></li>
+<li><a href="#_hexadecimal_literal">十六进制</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_decimal_literals">Decimal literals</a></li>
+<li><a href="#_decimal_literals">浮点数</a></li>
 <li><a href="#_underscore_in_literals">Underscore in literals</a></li>
 <li><a href="#_number_type_suffixes">Number type suffixes</a></li>
 <li><a href="#_math_operations">Math operations</a></li>
@@ -1685,7 +1685,7 @@ foo.catch</code></pre>
 <h5 id="_quoted_identifiers">引用标识符</h5>
 <div class="paragraph">
 <p>引用标识符(quoted identifiers)位于点表达式(dotted expression)的点号之后.
-例如, 表达式 <code>person.name</code> 的 <code>name</code> 部分可以像 <code>person."name"</code> 或者 <code>person.<em>name</em></code> 那样添加引号.
+例如, 表达式 <code>person.name</code> 的 <code>name</code> 部分可以像 <code>person."name"</code> 或者 <code>person.'name'</code> 那样添加引号.
 这相当有趣, 当某些标识符包含 Java 语言规范(Java Language Specification)所禁止的非法字符时,
 在 Groovy 中通过添加引号是被允许的. 如 破择号(dash), 空格, 感叹号等.</p>
 </div>
@@ -2010,7 +2010,7 @@ assert "$person.name is $person.age years old" == 'Guillaume is 36 years old'</c
 </div>
 <div class="paragraph">
 <p>但是只有形式如 <code>a.b</code>, <code>a.b.c</code> 之类的是有效的, 表达式中含有括号如方法调用, 花括号如闭包,
-算术操作符符等都是无效的. 以下变量定义为一个数字:</p>
+算术操作符等都是无效的. 以下变量定义为一个数字:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2228,9 +2228,9 @@ assert m["a"] == null                   <i class="conum" data-value="2"></i><b>(
 </div>
 </div>
 <div class="sect4">
-<h5 id="_triple_double_quoted_string">Triple double quoted string</h5>
+<h5 id="_triple_double_quoted_string">三双引号字符串</h5>
 <div class="paragraph">
-<p>Triple double quoted strings behave like double quoted strings, with the addition that they are multiline, like the triple single quoted strings.</p>
+<p>三双引号字符串类似(behave like)双引号字符串, 只是它们是多行的, 这点可类比三单引号字符串.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2255,21 +2255,20 @@ assert template.toString().contains('Groovy')</code></pre>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Neither double quotes nor single quotes need be escaped in triple double quoted strings.
+在三双引号字符串中, 双引号跟单引号都不需要转义.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_slashy_string">Slashy string</h5>
+<h5 id="_slashy_string">斜线字符串</h5>
 <div class="paragraph">
-<p>Beyond the usual quoted strings, Groovy offers slashy strings, which use <code>/</code> as delimiters.
-Slashy strings are particularly useful for defining regular expressions and patterns,
-as there is no need to escape backslashes.</p>
+<p>除了通常的引号字符串, Groovy 还提供了 斜线字符串(slashy strings), 其使用 <code>/</code> 作为定界符.
+斜线字符串在定义正则表达式或者模式(patterns)时特别有用的, 因为不需要对反斜杠进行转义.</p>
 </div>
 <div class="paragraph">
-<p>Example of a slashy string:</p>
+<p>斜线字符串的示例:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2278,7 +2277,7 @@ assert fooPattern == '.*foo.*'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Only forward slashes need to be escaped with a backslash:</p>
+<p>只有斜线需要用反斜杠来转义:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2287,7 +2286,7 @@ assert escapeSlash == 'The character / is a forward slash'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Slashy strings are multiline:</p>
+<p>斜线字符串是多行的:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2299,7 +2298,7 @@ assert multilineSlashy.contains('\n')</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Slashy strings can also be interpolated (ie. a GString):</p>
+<p>斜线字符串也可以插值(如, GString):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2310,11 +2309,11 @@ assert interpolatedSlashy == 'a blue car'</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>There are a few gotchas to be aware of.</p>
+<p>有几个陷阱需要注意.</p>
 </div>
 <div class="paragraph">
-<p>An empty slashy string cannot be represented with a double forward slash, as it&#8217;s understood by the Groovy parser as a line comment.
-That&#8217;s why the following assert would actually not compile as it would look like a non-terminated statement:</p>
+<p>不能用两个斜线来表示空(斜线)字符串, 因为它被 Groovy 语法分析器当做一个行注释来理解.
+这是为什么下面的断言实际上会导致一个编译错误, 因为它看起来像一个没结束(non-terminated)的语句.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2323,14 +2322,15 @@ That&#8217;s why the following assert would actually not compile as it would loo
 </div>
 </div>
 <div class="sect4">
-<h5 id="_dollar_slashy_string">Dollar slashy string</h5>
+<h5 id="_dollar_slashy_string">美元斜线字符串</h5>
 <div class="paragraph">
-<p>Dollar slashy strings are multiline GStrings delimited with an opening <code>$/</code> and and a closing <code>/$</code>.
-The escaping character is the dollar sign, and it can escape another dollar, or a forward slash.
-But both dollar and forward slashes don&#8217;t need to be escaped, except to escape the dollar of a string subsequence that would start like a GString placeholder sequence, or if you need to escape a sequence that would start like a closing dollar slashy string delimiter.</p>
+<p>美元斜线字符串(dollar slashy string)是以 <code>$/</code> 开始, 以 <code>/$</code> 结束的多行 GStrings.
+转义字符为美元符号, 可以用来转义另一美元符号或者正斜杠.
+但是美元符号跟正斜杠都可以不用转义, 除了像 GString 占位符那样的字符串序列需要对美元符号进行转义,
+以及像美元斜线字符串关闭标签那样的字符序列进行转义.</p>
 </div>
 <div class="paragraph">
-<p>Here&#8217;s an example:</p>
+<p>请看下面的例子:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2364,7 +2364,7 @@ assert [
 </div>
 </div>
 <div class="sect4">
-<h5 id="_string_summary_table">String summary table</h5>
+<h5 id="_string_summary_table">字符串总结表</h5>
 <table class="tableblock frame-all grid-all" style="width: 100%;">
 <colgroup>
 <col style="width: 20%;">
@@ -2375,49 +2375,49 @@ assert [
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String syntax</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Interpolated</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Multiline</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Escape character</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">名称</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">语法</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">插值</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">多行</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">转义符</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Single quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">单引号</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>'&#8230;'</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check-empty"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check-empty"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Triple single quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">三单引号</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>'''&#8230;'''</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check-empty"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Double quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">双引号</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>"&#8230;"</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check-empty"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Triple double quoted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">三双引号</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>"""&#8230;"""</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Slashy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">斜线</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>/&#8230;/</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>\</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dollar slashy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">美元斜线</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>$/&#8230;/$</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="icon"><i class="icon-check"></i></span></p></td>
@@ -2427,10 +2427,10 @@ assert [
 </table>
 </div>
 <div class="sect4">
-<h5 id="_characters">Characters</h5>
+<h5 id="_characters">字符</h5>
 <div class="paragraph">
-<p>Unlike Java, Groovy doesn&#8217;t have an explicit character literal.
-However, you can be explicit about making a Groovy string an actual character, by three different means:</p>
+<p>与 Java 不同, Groovy 没有明确的字符字面量.
+但是, 你可以通过 3 种不同的方式明确的将 Groovy 字符串转换为字符:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2448,15 +2448,15 @@ assert c3 instanceof Character</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>by being explicit when declaring a variable holding the character by specifying the <code>char</code> type</td>
+<td>声明变量时明确指定其类型为 <code>char</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>by using type coercion with the <code>as</code> operator</td>
+<td>使用 <code>as</code> 操作符强制类型转换(type coercion).</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>by using a cast to char operation</td>
+<td>使用 <code>(char)</code> 强制类型转换.</td>
 </tr>
 </table>
 </div>
@@ -2467,8 +2467,9 @@ assert c3 instanceof Character</code></pre>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-The first option <em class="conum">1</em> is interesting when the character is held in a variable,
-while the other two (<em class="conum">2</em> and <em class="conum">3</em>) are more interesting when a char value must be passed as argument of a method call.
+当字符存储在变量中时, 做法(option) <em class="conum">1</em> 比较好(interesting),
+而其他两种做法(<em class="conum">2</em> 和 <em class="conum">3</em>), 在必须传入一个
+字符参数以调用方法时比较好.
 </td>
 </tr>
 </table>
@@ -2476,14 +2477,15 @@ while the other two (<em class="conum">2</em> and <em class="conum">3</em>) are 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_numbers">1.1.5. Numbers</h4>
+<h4 id="_numbers">1.1.5. 数值</h4>
 <div class="paragraph">
-<p>Groovy supports different kinds of integral literals and decimal literals, backed by the usual <code>Number</code> types of Java.</p>
+<p>Groovy 支持不同类型的整型字面量(integral literals)和浮点型字面量(decimal literals),
+依靠 Java 中通用的(usual) <code>Number</code> 类型.</p>
 </div>
 <div class="sect4">
-<h5 id="_integral_literals">Integral literals</h5>
+<h5 id="_integral_literals">整数</h5>
 <div class="paragraph">
-<p>The integral literal types are the same as in Java:</p>
+<p>整数类型与 Java 中的一样:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2508,27 +2510,27 @@ while the other two (<em class="conum">2</em> and <em class="conum">3</em>) are 
 </ul>
 </div>
 <div class="paragraph">
-<p>You can create integral numbers of those types with the following declarations:</p>
+<p>可以用下面的声明来创建这些整型数字:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint"><code class="groovy language-groovy">// primitive types
+<pre class="prettyprint"><code class="groovy language-groovy">// 原生类型(primitive types)
 byte  b = 1
 char  c = 2
 short s = 3
 int   i = 4
 long  l = 5
 
-// infinite precision
+// 无限精度(infinite precision)
 BigInteger bi =  6</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you use optional typing by using the <code>def</code> keyword, the type of the integral number will vary:
-it&#8217;ll adapt to the capacity of the type that can hold that number.</p>
+<p>如果使用 <code>def</code> 关键字来声明可选类型(optional type), 那么整数的类型将会发生变化:
+它会采用取值范围包含该整数的类型.</p>
 </div>
 <div class="paragraph">
-<p>For positive numbers:</p>
+<p>对正数而言:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2553,7 +2555,7 @@ assert e instanceof BigInteger</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As well as for negative numbers:</p>
+<p>对负数也是一样的:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2578,11 +2580,12 @@ assert ne instanceof BigInteger</code></pre>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_alternative_non_base_10_representations">Alternative non-base 10 representations</h6>
+<h6 id="_alternative_non_base_10_representations">可选的非十进制表示</h6>
 <div class="sect6">
-<h7 id="_binary_literal">Binary literal</h7>
+<h7 id="_binary_literal">二进制</h7>
 <div class="paragraph">
-<p>In Java 6 and before, as well as in Groovy, numbers could be represented in decimal, octal and hexadecimal bases, and with Java 7 and Groovy 2, you can use a binary notation with the <code>0b</code> prefix:</p>
+<p>在 Java 6 及之前版本, 以及在 Groovy 中, 数字可以以 十进制, 八进制, 十六进制 表示,
+在 Java 7 及 Groovy 2 中, 可以附加 <code>0b</code> 前缀来使用二进制:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2607,9 +2610,9 @@ assert xNegativeInt == -175</code></pre>
 </div>
 </div>
 <div class="sect6">
-<h7 id="_octal_literal">Octal literal</h7>
+<h7 id="_octal_literal">八进制</h7>
 <div class="paragraph">
-<p>Octal numbers are specified in the typical format of <code>0</code> followed by octal digits.</p>
+<p>八进制数字是以 <code>0</code> 为前缀, 之后跟上八进制数字(digits), 这样典型的格式来定义的(specified).</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2634,9 +2637,9 @@ assert xNegativeInt == -63</code></pre>
 </div>
 </div>
 <div class="sect6">
-<h7 id="_hexadecimal_literal">Hexadecimal literal</h7>
+<h7 id="_hexadecimal_literal">十六进制</h7>
 <div class="paragraph">
-<p>Hexadecimal numbers are specified in the typical format of <code>0x</code> followed by hex digits.</p>
+<p>十六进制数值是以 <code>0x</code> 为前缀, 之后跟上十六进制数字, 这样典型的格式来定义的.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2666,9 +2669,9 @@ assert xNegativeInt == -119</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_decimal_literals">Decimal literals</h5>
+<h5 id="_decimal_literals">浮点数</h5>
 <div class="paragraph">
-<p>The decimal literal types are the same as in Java:</p>
+<p>浮点数类型与 Java 中的一样:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2684,7 +2687,7 @@ assert xNegativeInt == -119</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>You can create decimal numbers of those types with the following declarations:</p>
+<p>可以用下面的声明来创建这些浮点型数字:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2697,8 +2700,8 @@ BigDecimal bd =  3.456</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Decimals can use exponents, with the <code>e</code> or <code>E</code> exponent letter, followed by an optional sign,
-and a integral number representing the exponent:</p>
+<p>浮点数可以用指数表示, (格式为)表示指数的 <code>e</code> 或 <code>E</code> 字母, 之后是一个可选的正负号,
+和一个代表指数的整数:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2710,9 +2713,10 @@ assert 5e-1 ==      0.5</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Conveniently for exact decimal number calculations, Groovy choses <code>java.lang.BigDecimal</code> as its decimal number type.
-In addition, both <code>float</code> and <code>double</code> are supported, but require an explicit type declaration, type coercion or suffix.
-Even if <code>BigDecimal</code> is the default for decimal numbers, such literals are accepted in methods or closures taking <code>float</code> or <code>double</code> as parameter types.</p>
+<p>为了方便(conveniently)浮点数精确计算, Groovy 选择 <code>java.lang.BigDecimal</code> 作为它的
+浮点数类型. 此外, <code>float</code> 和 <code>double</code> 都是支持的, 但是需要明确的类型声明, 强制类型转换
+或者添加后缀. 尽管 <code>BigDecimal</code> 是浮点数的默认类型, 在接受 <code>float</code> 或者 <code>double</code>
+为参数的方法或闭包中, 浮点数字面量也是能被接受的.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2721,7 +2725,7 @@ Even if <code>BigDecimal</code> is the default for decimal numbers, such literal
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Decimal numbers can&#8217;t be represented using a binary, octal or hexadecimal representation.
+浮点数不能用二进制, 八进制, 十六进制表示法来表示.
 </td>
 </tr>
 </table>
@@ -26099,7 +26103,7 @@ class NodeType1Counter extends DefaultVisitor {
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2014-07-12 21:09:11 CST
+Last updated 2014-07-13 08:31:32 CST
 </div>
 </div>
 </body>

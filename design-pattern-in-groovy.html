@@ -24,10 +24,10 @@
 <li><a href="#_patterns">1. Patterns</a></li>
 <li>
 <ul class="sectlevel4">
-<li><a href="#_abstract_factory_pattern">Abstract Factory Pattern</a></li>
+<li><a href="#_abstract_factory_pattern">抽象工厂模式</a></li>
 <li>
 <ul class="sectlevel5">
-<li><a href="#_example">Example</a></li>
+<li><a href="#_example">示例</a></li>
 </ul>
 </li>
 <li><a href="#_adapter_pattern">Adapter Pattern</a></li>
@@ -189,23 +189,29 @@
 <h2 id="_patterns">1. Patterns</h2>
 <div class="sectionbody">
 <div class="sect4">
-<h5 id="_abstract_factory_pattern">Abstract Factory Pattern</h5>
+<h5 id="_abstract_factory_pattern">抽象工厂模式</h5>
 <div class="paragraph">
-<p>The <a href="http://en.wikipedia.org/wiki/Abstract_factory_pattern">Abstract Factory Pattern</a> provides a way to encapsulate a group of individual factories that have a common theme. It embodies the intent of a normal factory, i.e. remove the need for code using an interface to know the concrete implementation behind the interface, but applies to a set of interfaces and selects an entire family of concrete classes which implement those interfaces.</p>
+<p><a href="http://en.wikipedia.org/wiki/Abstract_factory_pattern">抽象工厂模式</a>提供了一种对拥有
+共同产品族的不同工厂进行封装的一种方法. 它体现了一个标准工厂的意图, 即不需要使用代码去确定具体的接口,
+也不需要了解隐藏的接口后的实现, 而是适用于一组接口,并使用实现了这些接口的某个系列的实现类作为其实现.</p>
 </div>
 <div class="paragraph">
-<p>As an example, I might have interfaces Button, TextField and Scrollbar. I might have WindowsButton, MacButton, FlashButton as concrete classes for Button. I might have WindowsScrollBar, MacScrollBar and FlashScrollBar as concrete implementations for ScrollBar. Using the Abstract Factory Pattern should allow me to select which windowing system (i.e. Windows, Mac, Flash) I want to use once and from then on should be able to write code that references the interfaces but is always using the appropriate concrete classes (all from the one windowing system) under the covers.</p>
+<p>举个例子, 我可能有Button, TextField 和 Scrollbar这三个接口. 我可能会用WindowsButton,
+MacButton, FlashButton作为Button的实现类. 我可能会用WindowsScrollBar, MacScrollBar
+及 FlashScrollBar作为ScrollBar的实现类. 通过使用抽象工厂模式, 使我能一次选择一个窗口系统
+(如 Windows, Mac, Flash), 然后每次写到相关的代码时总是引用到这个接口,
+而且这个接口的实现类总是和窗口系统相适应(即所有的控件都来自同一个窗口系统).</p>
 </div>
 <div class="sect5">
-<h6 id="_example">Example</h6>
+<h6 id="_example">示例</h6>
 <div class="paragraph">
-<p>Suppose we want to write a game system. We might note that many games have very similar features and control.</p>
+<p>假设我们希望写个游戏系统. 我们可能会注意到很多游戏都拥有相似的功能和控制.</p>
 </div>
 <div class="paragraph">
-<p>We decide to try to split the common and game-specific code into separate classes.</p>
+<p>我们决定将这些游戏共有的代码和每个游戏特有的代码分配到不同的类中.</p>
 </div>
 <div class="paragraph">
-<p>First let&#8217;s look at the game-specific code for a <a href="http://en.wikipedia.org/wiki/Two-Up">Two-up</a> game:</p>
+<p>首先,我们看一看http://en.wikipedia.org/wiki/Two-Up[Two-up]游戏特有的代码.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -250,7 +256,7 @@ class TwoupControl {
 </div>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s look at the game-specific code for a number guessing game:</p>
+<p>现在,我们看一下猜数字游戏所特有的代码:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -287,7 +293,7 @@ class GuessGameControl {
 </div>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s write our factory code:</p>
+<p>现在,写我们的工厂代码(factory code):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -303,10 +309,11 @@ class GameFactory {
 </div>
 </div>
 <div class="paragraph">
-<p>The important aspect of this factory is that it allows selection of an entire family of concrete classes.</p>
+<p>抽象工厂模式中最重要的部分就是允许选择一类族(an entire family of concrete classes)作为
+这些工厂的实现类.</p>
 </div>
 <div class="paragraph">
-<p>Here is how we would use the factory:</p>
+<p>抽象工厂模式是这样使用的:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -324,10 +331,13 @@ println messages.done</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note that the first line configures which family of concrete game classes we will use. It&#8217;s not important that we selected which family to use by using the factory property as shown in the first line. Other ways would be equally valid examples of this pattern. For example, we may have asked the user which game they wanted to play or determined which game from an environment setting.</p>
+<p>注意第一行配置了我们将会使用哪一类族(family)的游戏实现类.
+我们通过第一行代码展示的工厂属性,选择具体使用哪一类族这一过程并不重要.
+我们可以使用另一种等价的方式使用这种模式,比如,我们可以询问用户想玩哪一种游戏,
+或者使用环境设置来觉得进行哪总游戏等等.</p>
 </div>
 <div class="paragraph">
-<p>With the code as shown, the game might look like this when run:</p>
+<p>按照我们的代码,游戏运行起来会像这样:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -345,7 +355,8 @@ Sorry, you have no money left, goodbye</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If we change the first line of the script to <code>GameFactory.factory = guessFactory</code>, then the sample run might look like this:</p>
+<p>如果我们将脚本(script)的第一行改为 <code>GameFactory.factory = guessFactory</code>,
+那么示例程序运行起来会是这个样子:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3289,7 +3300,7 @@ class NodeType1Counter extends DefaultVisitor {
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2014-07-10 23:39:15 CST
+Last updated 2014-07-16 00:29:12 CST
 </div>
 </div>
 </body>

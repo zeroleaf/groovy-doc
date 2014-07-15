@@ -711,64 +711,69 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=float_exp,indent=0]
 
 NOTE: 浮点数不能用二进制, 八进制, 十六进制表示法来表示.
 
-=== Underscore in literals
+[[_underscore_in_literals]]
+=== 下划线
 
-When writing long literal numbers, it’s harder on the eye to figure out how some numbers are grouped together, for example with groups of thousands, of words, etc. By allowing you to place underscore in number literals, it’s easier to spot those groups:
+当书写很长的数字时, 很难分辨出数字是怎么组织在一起的,
+例如以千的分组(groups of thousands), 字符分组(of words) 等.
+通过在数字中添加下划线, 将能更容易的区分这些分组:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=underscore_in_number_example,indent=0]
 ----
 
-=== Number type suffixes
+[[_number_type_suffixes]]
+=== 数字后缀
 
-We can force a number (including binary, octals and hexadecimals) to have a specific type by giving a suffix (see table bellow), either uppercase or lowercase.
+通过添加后缀(见下表), 我们可以强制指定一个数字(包括二进制, 八进制, 十六进制)的类型, 后缀大小写均可.
 
 [cols="1,2" options="header"]
 |====
-|Type
-|Suffix
+|类型
+|后缀
 
 |BigInteger
-|+G+ or +g+
+|+G+ 或 +g+
 
 |Long
-|+L+ or +l+
+|+L+ 或 +l+
 
 |Integer
-|+I+ or +i+
+|+I+ 或 +i+
 
 |BigDecimal
-|+G+ or +g+
+|+G+ 或 +g+
 
 |Double
-|+D+ or +d+
+|+D+ 或 +d+
 
 |Float
-|+F+ or +f+
+|+F+ 或 +f+
 |====
 
-Examples:
+举例:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=number_type_suffixes_example,indent=0]
 ----
 
-=== Math operations
+[[_math_operations]]
+=== 数学运算
 
-Although <<_operators,operators>> are covered later on, it's important to discuss the behavior of math operations
-and what their resulting types are.
+尽管 <<groovy-operators, 操作符>>在后面才讲到, 但讨论数学运算(math operations)的行为(behavior)
+和它们的结果类型也是很重要的(important).
 
-Division and power binary operations aside (covered below),
+除法和乘方二元运算(binary operations)除外(之后讨论),
 
-* binary operations between +byte+, +char+, +short+ and +int+ result in +int+
-* binary operations involving +long+ with +byte+, +char+, +short+ and +int+ result in +long+
-* binary operations involving +BigInteger+ and any other integral type result in +BigInteger+
-* binary operations between +float+, +double+ and +BigDecimal+ result in +double+
-* binary operations between two +BigDecimal+ result in +BigDecimal+
+* +byte+, +char+, +short+ 和 +int+ 之间二元运算的结果为 +int+.
+* +long+ 和 +byte+, +char+, +short+, 以及 +int+ 之间二元运算的结果为 +long+.
+* +BigInteger+ 和其它任意整型之间二元运算的结果为 +BigInteger+.
+* +float+, +double+ 以及 +BigDecimal+ 之间二元运算的结果为 +double+.
+* 两个 +BigDecimal+ 之间二元运算的结果为 +BigDecimal+.
 
-The following table summarizes those rules:
+下表对这些规则做了总结:
 
 [cols="10" options="header"]
 |====
@@ -884,8 +889,8 @@ The following table summarizes those rules:
 |====
 
 [NOTE]
-Thanks Groovy's operator overloading, the usual arithmetic operators work as well with +BigInteger+ and +BigDecimal+,
-unlike in Java where you have to use explict methods for operating on those numbers.
+感谢 Groovy 的运算符重载, 基本的(usual)算术运算(arithmetic operators)同样能工作于
++BigInteger+ 和 +BigDecimal+, 不像 Java, 对于这些类型上的操作你不得不使用明确的方法调用.
 
 [[integer_division]]
 ==== The case of the division operator

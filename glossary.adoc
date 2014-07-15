@@ -18,3 +18,4 @@
 . delimiter - 定界符
 . (Groovy) parser - (Groovy) 语法分析器
 . decimal literal - 浮点数字面量
+. binary operations - 二元运算

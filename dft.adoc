@@ -16,3 +16,10 @@ The expression value inside the placeholder is evaluated to its string
 representation when the GString is passed to a method taking a String as argument
 by calling toString() on that expression.
 
+. core-syntax +
+Alternative non-base 10 representations
+
+. core-syntax +
+When writing long literal numbers, it’s harder on the eye to figure out how some numbers are grouped together, for example with groups of thousands, of words, etc.
+
+

@@ -158,7 +158,7 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=keywords_valid_id_aft
 === 引用标识符
 
 引用标识符(quoted identifiers)位于点表达式(dotted expression)的点号之后.
-例如, 表达式 +person.name+ 的 +name+ 部分可以像 +person."name"+ 或者 +person.'name'+ 那样添加引号.
+例如, 表达式 +person.name+ 的 +name+ 部分可以像 +person."name"+ 或者 +person.\'name\'+ 那样添加引号.
 这相当有趣, 当某些标识符包含 Java 语言规范(Java Language Specification)所禁止的非法字符时,
 在 Groovy 中通过添加引号是被允许的. 如 破择号(dash), 空格, 感叹号等.
 
@@ -367,7 +367,7 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=gstring_3,indent=0]
 ----
 
 但是只有形式如 +a.b+, +a.b.c+ 之类的是有效的, 表达式中含有括号如方法调用, 花括号如闭包,
-算术操作符符等都是无效的. 以下变量定义为一个数字:
+算术操作符等都是无效的. 以下变量定义为一个数字:
 
 [source,groovy]
 ----
@@ -466,144 +466,153 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=gstring_hashcode_2,in
 <2> 当我们视图获取该 String 键所对应的值时, 会发现无法找到, 由于 String 和 GString 有着
 不同的哈希码值.
 
-=== Triple double quoted string
+[[_triple_double_quoted_string]]
+=== 三双引号字符串
 
-Triple double quoted strings behave like double quoted strings, with the addition that they are multiline, like the triple single quoted strings.
+三双引号字符串类似(behave like)双引号字符串, 只是它们是多行的, 这点可类比三单引号字符串.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=triple_double_1,indent=0]
 ----
 
-NOTE: Neither double quotes nor single quotes need be escaped in triple double quoted strings.
+NOTE: 在三双引号字符串中, 双引号跟单引号都不需要转义.
 
-=== Slashy string
+[[_slashy_string]]
+=== 斜线字符串
 
-Beyond the usual quoted strings, Groovy offers slashy strings, which use +/+ as delimiters.
-Slashy strings are particularly useful for defining regular expressions and patterns, 
-as there is no need to escape backslashes.
+除了通常的引号字符串, Groovy 还提供了 斜线字符串(slashy strings), 其使用 +/+ 作为定界符.
+斜线字符串在定义正则表达式或者模式(patterns)时特别有用的, 因为不需要对反斜杠进行转义.
 
-Example of a slashy string:
+斜线字符串的示例:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_1,indent=0]
 ----
 
-Only forward slashes need to be escaped with a backslash:
+只有斜线需要用反斜杠来转义:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_2,indent=0]
 ----
 
-Slashy strings are multiline:
+斜线字符串是多行的:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_3,indent=0]
 ----
 
-Slashy strings can also be interpolated (ie. a GString):
+斜线字符串也可以插值(如, GString):
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_4,indent=0]
 ----
 
-There are a few gotchas to be aware of.
+有几个陷阱需要注意.
 
-An empty slashy string cannot be represented with a double forward slash, as it's understood by the Groovy parser as a line comment. 
-That's why the following assert would actually not compile as it would look like a non-terminated statement:
+不能用两个斜线来表示空(斜线)字符串, 因为它被 Groovy 语法分析器当做一个行注释来理解.
+这是为什么下面的断言实际上会导致一个编译错误, 因为它看起来像一个没结束(non-terminated)的语句.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=slashy_5,indent=0]
 ----
 
-=== Dollar slashy string
+[[_dollar_slashy_string]]
+=== 美元斜线字符串
 
-Dollar slashy strings are multiline GStrings delimited with an opening +$/+ and and a closing +/$+.
-The escaping character is the dollar sign, and it can escape another dollar, or a forward slash.
-But both dollar and forward slashes don't need to be escaped, except to escape the dollar of a string subsequence that would start like a GString placeholder sequence, or if you need to escape a sequence that would start like a closing dollar slashy string delimiter.
+美元斜线字符串(dollar slashy string)是以 +$/+ 开始, 以 +/$+ 结束的多行 GStrings.
+转义字符为美元符号, 可以用来转义另一美元符号或者正斜杠.
+但是美元符号跟正斜杠都可以不用转义, 除了像 GString 占位符那样的字符串序列需要对美元符号进行转义,
+以及像美元斜线字符串关闭标签那样的字符序列进行转义.
 
-Here's an example:
+请看下面的例子:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=dollar_slashy_1,indent=0]
 ----
 
-=== String summary table
+[[_string_summary_table]]
+=== 字符串总结表
 
 [cols="5*", ptions="header"]
 |====
-|String name
-|String syntax
-|Interpolated
-|Multiline
-|Escape character
+|名称
+|语法
+|插值
+|多行
+|转义符
 
-|Single quoted
+|单引号
 |+\'...'+
 |icon:check-empty[]
 |icon:check-empty[]
 |+\+
 
-|Triple single quoted
+|三单引号
 |+\'''...\'''+
 |icon:check-empty[]
 |icon:check[]
 |+\+
 
-|Double quoted
+|双引号
 |+"..."+
 |icon:check[]
 |icon:check-empty[]
 |+\+
 
-|Triple double quoted
+|三双引号
 |+"""..."""+
 |icon:check[]
 |icon:check[]
 |+\+
 
-|Slashy
+|斜线
 |+/.../+
 |icon:check[]
 |icon:check[]
 |+\+
 
-|Dollar slashy
+|美元斜线
 |+$/.../$+
 |icon:check[]
 |icon:check[]
 |+$+
 |====
 
-=== Characters
+[[_characters]]
+=== 字符
 
-Unlike Java, Groovy doesn't have an explicit character literal.
-However, you can be explicit about making a Groovy string an actual character, by three different means:
+与 Java 不同, Groovy 没有明确的字符字面量.
+但是, 你可以通过 3 种不同的方式明确的将 Groovy 字符串转换为字符:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=char,indent=0]
 ----
-<1> by being explicit when declaring a variable holding the character by specifying the +char+ type
-<2> by using type coercion with the +as+ operator
-<3> by using a cast to char operation
+<1> 声明变量时明确指定其类型为 +char+.
+<2> 使用 +as+ 操作符强制类型转换(type coercion).
+<3> 使用 +(char)+ 强制类型转换.
 
-NOTE: The first option [conum,data-value=1]_1_ is interesting when the character is held in a variable,
-while the other two ([conum,data-value=2]_2_ and [conum,data-value=3]_3_) are more interesting when a char value must be passed as argument of a method call.
+NOTE: 当字符存储在变量中时, 做法(option) [conum,data-value=1]_1_ 比较好(interesting),
+而其他两种做法([conum,data-value=2]_2_ 和 [conum,data-value=3]_3_), 在必须传入一个
+字符参数以调用方法时比较好.
 
-== Numbers
+[[_numbers]]
+== 数值
 
-Groovy supports different kinds of integral literals and decimal literals, backed by the usual +Number+ types of Java.
+Groovy 支持不同类型的整型字面量(integral literals)和浮点型字面量(decimal literals),
+依靠 Java 中通用的(usual) +Number+ 类型.
 
-=== Integral literals
+[[_integral_literals]]
+=== 整数
 
-The integral literal types are the same as in Java:
+整数类型与 Java 中的一样:
 
 * +byte+
 * +char+
@@ -612,146 +621,159 @@ The integral literal types are the same as in Java:
 * +long+
 * +java.lang.BigInteger+
 
-You can create integral numbers of those types with the following declarations:
+可以用下面的声明来创建这些整型数字:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=int_decl,indent=0]
 ----
 
-If you use optional typing by using the +def+ keyword, the type of the integral number will vary:
-it'll adapt to the capacity of the type that can hold that number.
+如果使用 +def+ 关键字来声明可选类型(optional type), 那么整数的类型将会发生变化:
+它会采用取值范围包含该整数的类型.
 
-For positive numbers:
+对正数而言:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=wide_int_positive,indent=0]
 ----
 
-As well as for negative numbers:
+对负数也是一样的:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=wide_int_negative,indent=0]
 ----
 
-==== Alternative non-base 10 representations
+[[_alternative_non_base_10_representations]]
+// @TODO Alternative non-base 10 representations 更好的翻译
+==== 可选的非十进制表示
 
-===== Binary literal
+[[_binary_literal]]
+===== 二进制
 
-In Java 6 and before, as well as in Groovy, numbers could be represented in decimal, octal and hexadecimal bases, and with Java 7 and Groovy 2, you can use a binary notation with the ++0b++ prefix:
+在 Java 6 及之前版本, 以及在 Groovy 中, 数字可以以 十进制, 八进制, 十六进制 表示,
+在 Java 7 及 Groovy 2 中, 可以附加 +0b+ 前缀来使用二进制:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=binary_literal_example,indent=0]
 ----
 
-===== Octal literal
+[[_octal_literal]]
+===== 八进制
 
-Octal numbers are specified in the typical format of ++0++ followed by octal digits.
+八进制数字是以 ++0++ 为前缀, 之后跟上八进制数字(digits), 这样典型的格式来定义的(specified).
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=octal_literal_example,indent=0]
 ----
 
-===== Hexadecimal literal
+[[_hexadecimal_literal]]
+===== 十六进制
 
-Hexadecimal numbers are specified in the typical format of ++0x++ followed by hex digits.
+十六进制数值是以 ++0x++ 为前缀, 之后跟上十六进制数字, 这样典型的格式来定义的.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=hexadecimal_literal_example,indent=0]
 ----
 
-=== Decimal literals
+[[_decimal_literals]]
+=== 浮点数
 
-The decimal literal types are the same as in Java:
+浮点数类型与 Java 中的一样:
 
 * +float+
 * +double+
 * +java.lang.BigDecimal+
 
-You can create decimal numbers of those types with the following declarations:
+可以用下面的声明来创建这些浮点型数字:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=float_decl,indent=0]
 ----
 
-Decimals can use exponents, with the +e+ or +E+ exponent letter, followed by an optional sign,
-and a integral number representing the exponent:
+浮点数可以用指数表示, (格式为)表示指数的 +e+ 或 +E+ 字母, 之后是一个可选的正负号,
+和一个代表指数的整数:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=float_exp,indent=0]
 ----
 
-Conveniently for exact decimal number calculations, Groovy choses +java.lang.BigDecimal+ as its decimal number type.
-In addition, both +float+ and +double+ are supported, but require an explicit type declaration, type coercion or suffix.
-Even if +BigDecimal+ is the default for decimal numbers, such literals are accepted in methods or closures taking +float+ or +double+ as parameter types.
+为了方便(conveniently)浮点数精确计算, Groovy 选择 +java.lang.BigDecimal+ 作为它的
+浮点数类型. 此外, +float+ 和 +double+ 都是支持的, 但是需要明确的类型声明, 强制类型转换
+或者添加后缀. 尽管 +BigDecimal+ 是浮点数的默认类型, 在接受 +float+ 或者 +double+
+为参数的方法或闭包中, 浮点数字面量也是能被接受的.
 
-NOTE: Decimal numbers can't be represented using a binary, octal or hexadecimal representation.
+NOTE: 浮点数不能用二进制, 八进制, 十六进制表示法来表示.
 
-=== Underscore in literals
+[[_underscore_in_literals]]
+=== 下划线
 
-When writing long literal numbers, it’s harder on the eye to figure out how some numbers are grouped together, for example with groups of thousands, of words, etc. By allowing you to place underscore in number literals, it’s easier to spot those groups:
+当书写很长的数字时, 很难分辨出数字是怎么组织在一起的,
+例如以千的分组(groups of thousands), 字符分组(of words) 等.
+通过在数字中添加下划线, 将能更容易的区分这些分组:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=underscore_in_number_example,indent=0]
 ----
 
-=== Number type suffixes
+[[_number_type_suffixes]]
+=== 数字后缀
 
-We can force a number (including binary, octals and hexadecimals) to have a specific type by giving a suffix (see table bellow), either uppercase or lowercase.
+通过添加后缀(见下表), 我们可以强制指定一个数字(包括二进制, 八进制, 十六进制)的类型, 后缀大小写均可.
 
 [cols="1,2" options="header"]
 |====
-|Type
-|Suffix
+|类型
+|后缀
 
 |BigInteger
-|+G+ or +g+
+|+G+ 或 +g+
 
 |Long
-|+L+ or +l+
+|+L+ 或 +l+
 
 |Integer
-|+I+ or +i+
+|+I+ 或 +i+
 
 |BigDecimal
-|+G+ or +g+
+|+G+ 或 +g+
 
 |Double
-|+D+ or +d+
+|+D+ 或 +d+
 
 |Float
-|+F+ or +f+
+|+F+ 或 +f+
 |====
 
-Examples:
+举例:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=number_type_suffixes_example,indent=0]
 ----
 
-=== Math operations
+[[_math_operations]]
+=== 数学运算
 
-Although <<_operators,operators>> are covered later on, it's important to discuss the behavior of math operations
-and what their resulting types are.
+尽管 <<groovy-operators, 操作符>>在后面才讲到, 但讨论数学运算(math operations)的行为(behavior)
+和它们的结果类型也是很重要的(important).
 
-Division and power binary operations aside (covered below),
+除法和乘方二元运算(binary operations)除外(之后讨论),
 
-* binary operations between +byte+, +char+, +short+ and +int+ result in +int+
-* binary operations involving +long+ with +byte+, +char+, +short+ and +int+ result in +long+
-* binary operations involving +BigInteger+ and any other integral type result in +BigInteger+
-* binary operations between +float+, +double+ and +BigDecimal+ result in +double+
-* binary operations between two +BigDecimal+ result in +BigDecimal+
+* +byte+, +char+, +short+ 和 +int+ 之间二元运算的结果为 +int+.
+* +long+ 和 +byte+, +char+, +short+, 以及 +int+ 之间二元运算的结果为 +long+.
+* +BigInteger+ 和其它任意整型之间二元运算的结果为 +BigInteger+.
+* +float+, +double+ 以及 +BigDecimal+ 之间二元运算的结果为 +double+.
+* 两个 +BigDecimal+ 之间二元运算的结果为 +BigDecimal+.
 
-The following table summarizes those rules:
+下表对这些规则做了总结:
 
 [cols="10" options="header"]
 |====
@@ -867,8 +889,8 @@ The following table summarizes those rules:
 |====
 
 [NOTE]
-Thanks Groovy's operator overloading, the usual arithmetic operators work as well with +BigInteger+ and +BigDecimal+,
-unlike in Java where you have to use explict methods for operating on those numbers.
+感谢 Groovy 的运算符重载, 基本的(usual)算术运算(arithmetic operators)同样能工作于
++BigInteger+ 和 +BigDecimal+, 不像 Java, 对于这些类型上的操作你不得不使用明确的方法调用.
 
 [[integer_division]]
 ==== The case of the division operator

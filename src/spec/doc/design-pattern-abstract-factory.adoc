@@ -1,48 +1,50 @@
-= Abstract Factory Pattern
+= 抽象工厂模式
 
-The http://en.wikipedia.org/wiki/Abstract_factory_pattern[Abstract Factory Pattern] provides a way to encapsulate a group of individual factories that have a common theme. It embodies the intent of a normal factory, i.e. remove the need for code using an interface to know the concrete implementation behind the interface, but applies to a set of interfaces and selects an entire family of concrete classes which implement those interfaces.
+The http://en.wikipedia.org/wiki/Abstract_factory_pattern[抽象工厂模式]提供了一种对拥有共同产品族的不同工厂进行封装的一种方法. 它体现了一个标准工厂的意图,即不需要使用代码去确定具体的接口,也不需要了解隐藏的接口后的实现, 而是适用于一组接口,并使用实现了这些接口的某个系列的实现类作为其实现. 
 
-As an example, I might have interfaces Button, TextField and Scrollbar. I might have WindowsButton, MacButton, FlashButton as concrete classes for Button. I might have WindowsScrollBar, MacScrollBar and FlashScrollBar as concrete implementations for ScrollBar. Using the Abstract Factory Pattern should allow me to select which windowing system (i.e. Windows, Mac, Flash) I want to use once and from then on should be able to write code that references the interfaces but is always using the appropriate concrete classes (all from the one windowing system) under the covers.
+举个例子, 我可能有Button, TextField 和 Scrollbar这三个接口. 我可能会用WindowsButton, MacButton, FlashButton作为Button的实现类. 我可能会用WindowsScrollBar, MacScrollBar and FlashScrollBar作为ScrollBar的实现类. 
+使用抽象工厂模式,可以使我选择一个窗口系统(即Windows,Mac,Flash),我希望只选择一次,然后每次写到相关的代码时总是引用到这个接口,而且这个接口的实现类总是和窗口系统相适应(即所有的控件都来自同一个窗口系统).
 
-== Example
+== 示例
 
-Suppose we want to write a game system. We might note that many games have very similar features and control.
+假设我们希望写个游戏系统. 我们可能会注意到很多游戏都拥有相似的功能和控制.
 
-We decide to try to split the common and game-specific code into separate classes.
+我们决定将这些游戏共有的代码和每个游戏特有的代码分配到不同的类中.
 
-First let's look at the game-specific code for a http://en.wikipedia.org/wiki/Two-Up[Two-up] game:
+首先,我们看一看http://en.wikipedia.org/wiki/Two-Up[Two-up]游戏特有的代码.
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/DesignPatternsTest.groovy[tags=abstract_factory_example1,indent=0]
 ----
 
-Now, let's look at the game-specific code for a number guessing game:
+现在,我们看一下猜数字游戏所特有的代码:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/DesignPatternsTest.groovy[tags=abstract_factory_example2,indent=0]
 ----
 
-Now, let's write our factory code:
+现在,写我们的工厂代码:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/DesignPatternsTest.groovy[tags=abstract_factory_code,indent=0]
 ----
 
-The important aspect of this factory is that it allows selection of an entire family of concrete classes.
+抽象工厂模式中最重要的部分就是允许选择一类族(entire family of conrete classes)作为这些工厂的实现类.
 
-Here is how we would use the factory:
+抽象工厂模式是这样使用的:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/DesignPatternsTest.groovy[tags=abstract_factory_usage,indent=0]
 ----
 
-Note that the first line configures which family of concrete game classes we will use. It's not important that we selected which family to use by using the factory property as shown in the first line. Other ways would be equally valid examples of this pattern. For example, we may have asked the user which game they wanted to play or determined which game from an environment setting.
+注意:第一行配置了我们将会使用哪一类族(family)的游戏实现类.我们通过第一行代码展示的工厂属性,选择具体使用哪一类族这一过程并不重要.我们可以使用另一种等价的方式使用这种模式,比如,我们可以询问用户想玩哪一种游戏,或者使用环境设置来觉得进行哪总游戏等等.
 
-With the code as shown, the game might look like this when run:
+
+按照我们的代码,游戏运行起来会像这样:
 
 ----
 Welcome to the twoup game, you start with $1000
@@ -58,7 +60,7 @@ You lose
 Sorry, you have no money left, goodbye
 ----
 
-If we change the first line of the script to ++GameFactory.factory = guessFactory++, then the sample run might look like this:
+如果对第一行的代码做改动 ++GameFactory.factory = guessFactory++, 那么示例程序运行起来会是这个样子:
 
 -------------------------------------------------------------------
 Welcome to the guessing game, my secret number is between 1 and 100

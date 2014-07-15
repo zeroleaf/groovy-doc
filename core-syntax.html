@@ -83,9 +83,9 @@
 </ul>
 </li>
 <li><a href="#_decimal_literals">5.2. 浮点数</a></li>
-<li><a href="#_underscore_in_literals">5.3. Underscore in literals</a></li>
-<li><a href="#_number_type_suffixes">5.4. Number type suffixes</a></li>
-<li><a href="#_math_operations">5.5. Math operations</a></li>
+<li><a href="#_underscore_in_literals">5.3. 下划线</a></li>
+<li><a href="#_number_type_suffixes">5.4. 数字后缀</a></li>
+<li><a href="#_math_operations">5.5. 数学运算</a></li>
 <li>
 <ul class="sectlevel3">
 <li><a href="#integer_division">5.5.1. The case of the division operator</a></li>
@@ -1413,9 +1413,11 @@ assert 5e-1 ==      0.5</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_underscore_in_literals">5.3. Underscore in literals</h3>
+<h3 id="_underscore_in_literals">5.3. 下划线</h3>
 <div class="paragraph">
-<p>When writing long literal numbers, it’s harder on the eye to figure out how some numbers are grouped together, for example with groups of thousands, of words, etc. By allowing you to place underscore in number literals, it’s easier to spot those groups:</p>
+<p>当书写很长的数字时, 很难分辨出数字是怎么组织在一起的,
+例如以千的分组(groups of thousands), 字符分组(of words) 等.
+通过在数字中添加下划线, 将能更容易的区分这些分组:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1431,9 +1433,9 @@ long bytes = 0b11010010_01101001_10010100_10010010</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_number_type_suffixes">5.4. Number type suffixes</h3>
+<h3 id="_number_type_suffixes">5.4. 数字后缀</h3>
 <div class="paragraph">
-<p>We can force a number (including binary, octals and hexadecimals) to have a specific type by giving a suffix (see table bellow), either uppercase or lowercase.</p>
+<p>通过添加后缀(见下表), 我们可以强制指定一个数字(包括二进制, 八进制, 十六进制)的类型, 后缀大小写均可.</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 100%;">
 <colgroup>
@@ -1442,39 +1444,39 @@ long bytes = 0b11010010_01101001_10010100_10010010</code></pre>
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Suffix</th>
+<th class="tableblock halign-left valign-top">类型</th>
+<th class="tableblock halign-left valign-top">后缀</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BigInteger</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>G</code> or <code>g</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>G</code> 或 <code>g</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>L</code> or <code>l</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>L</code> 或 <code>l</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>I</code> or <code>i</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>I</code> 或 <code>i</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BigDecimal</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>G</code> or <code>g</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>G</code> 或 <code>g</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Double</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>D</code> or <code>d</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>D</code> 或 <code>d</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Float</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>F</code> or <code>f</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>F</code> 或 <code>f</code></p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Examples:</p>
+<p>举例:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1495,35 +1497,35 @@ assert 034G.class == BigInteger // octal</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_math_operations">5.5. Math operations</h3>
+<h3 id="_math_operations">5.5. 数学运算</h3>
 <div class="paragraph">
-<p>Although <a href="#_operators">operators</a> are covered later on, it&#8217;s important to discuss the behavior of math operations
-and what their resulting types are.</p>
+<p>尽管 <a href="#groovy-operators">操作符</a>在后面才讲到, 但讨论数学运算(math operations)的行为(behavior)
+和它们的结果类型也是很重要的(important).</p>
 </div>
 <div class="paragraph">
-<p>Division and power binary operations aside (covered below),</p>
+<p>除法和乘方二元运算(binary operations)除外(之后讨论),</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>binary operations between <code>byte</code>, <code>char</code>, <code>short</code> and <code>int</code> result in <code>int</code></p>
+<p><code>byte</code>, <code>char</code>, <code>short</code> 和 <code>int</code> 之间二元运算的结果为 <code>int</code>.</p>
 </li>
 <li>
-<p>binary operations involving <code>long</code> with <code>byte</code>, <code>char</code>, <code>short</code> and <code>int</code> result in <code>long</code></p>
+<p><code>long</code> 和 <code>byte</code>, <code>char</code>, <code>short</code>, 以及 <code>int</code> 之间二元运算的结果为 <code>long</code>.</p>
 </li>
 <li>
-<p>binary operations involving <code>BigInteger</code> and any other integral type result in <code>BigInteger</code></p>
+<p><code>BigInteger</code> 和其它任意整型之间二元运算的结果为 <code>BigInteger</code>.</p>
 </li>
 <li>
-<p>binary operations between <code>float</code>, <code>double</code> and <code>BigDecimal</code> result in <code>double</code></p>
+<p><code>float</code>, <code>double</code> 以及 <code>BigDecimal</code> 之间二元运算的结果为 <code>double</code>.</p>
 </li>
 <li>
-<p>binary operations between two <code>BigDecimal</code> result in <code>BigDecimal</code></p>
+<p>两个 <code>BigDecimal</code> 之间二元运算的结果为 <code>BigDecimal</code>.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The following table summarizes those rules:</p>
+<p>下表对这些规则做了总结:</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 100%;">
 <colgroup>
@@ -1670,8 +1672,8 @@ and what their resulting types are.</p>
 <i class="icon-note" title="Note"></i>
 </td>
 <td class="content">
-Thanks Groovy&#8217;s operator overloading, the usual arithmetic operators work as well with <code>BigInteger</code> and <code>BigDecimal</code>,
-unlike in Java where you have to use explict methods for operating on those numbers.
+感谢 Groovy 的运算符重载, 基本的(usual)算术运算(arithmetic operators)同样能工作于
+<code>BigInteger</code> 和 <code>BigDecimal</code>, 不像 Java, 对于这些类型上的操作你不得不使用明确的方法调用.
 </td>
 </tr>
 </table>
@@ -2269,7 +2271,7 @@ assert !person.containsKey('key')    <i class="conum" data-value="3"></i><b>(3)<
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2014-07-13 22:01:18 CST
+Last updated 2014-07-15 23:37:40 CST
 </div>
 </div>
 </body>

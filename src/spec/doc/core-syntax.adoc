@@ -955,8 +955,10 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=variable_store_boolea
 此外, Groovy 有 <<_the_groovy_truth, 特殊规则>>(通常称为 _Groovy Truth_)
 将一个非 boolean 类型的对象转换为 boolean 值.
 
+[[_lists]]
 == Lists
 
+Groovy 的 list 使用逗号分隔(comma-separated)值, 外面由方括号包围.
 Groovy uses a comma-separated list of values, surrounded by square brackets, to denote lists.
 Groovy lists are plain JDK +java.util.List+, as Groovy doesn't define its own collection classes.
 The concrete list implementation used when defining list literals are +java.util.ArrayList+ by default,

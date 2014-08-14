@@ -893,12 +893,12 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=number_type_suffixes_
 +BigInteger+ 和 +BigDecimal+, 不像 Java, 对于这些类型上的操作你不得不使用明确的方法调用.
 
 [[integer_division]]
-==== The case of the division operator
+==== 除法
 
-The division operators +/+ (and +/=+ for division and assignment) produce a +double+ result 
-if either operand is a +float+ or +double+, and a +BigDecimal+ result otherwise 
-(when both operands are any combination of an integral type +short+, +char+, +byte+, +int+, +long+,
-+BigInteger+ or +BigDecimal+).
+如果操作数中有一个为 +double+ 或者 +float+ 类型, 除法操作 +/+ (除等 +/=+) 的结果为
++double+ 类型, 否则为 +BigDecimal+(即两个操作数是 +short+, +char+, +byte+, +int+,
++long+, +BigInteger+, +BigDecimal+ 的任意组合).
+
 
 +BigDecimal+ division is performed with the +divide()+ method if the division is exact
 (ie. yielding a result that can be represented within the bounds of the same precision and scale),
@@ -908,31 +908,29 @@ and a http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html#scale()
 of the maximum of 10 and the maximum of the operands' scale.
 
 [NOTE]
-For integer division like in Java, you should use the +intdiv()+ method,
-as Groovy doesn't provide a dedicated integer division operator symbol.
+由于 Groovy 没有提供专用的(dedicated)整数除法操作符, 所以 Java 中的整数除法应用
++intdiv()+ 方法代替.
 
 [[power_operator]]
-==== The case of the power operator
+==== 乘方
+乘方运算用 +**+ 操作符符来表示, 带有2个参数: 底数(base)和指数(exponent).
+乘方运算的结果依赖于其操作数, 和运算的结果(尤其是结果能表示为整数)
 
-The power operation is represented by the +**+ operator, with two parameters: the base and the exponent.
-The result of the power operation depends on its operands, and the result of the operation
-(in particular if the result can be represented as an integral value).
+Groovy 使用以下的规则来判断乘方元算的结果类型:
 
-The following rules are used by Groovy's power operation to determine the resulting type:
+* 如果指数是浮点数
+** 如果结果能表示为 +Integer+, 则返回 +Integer+
+** 否则, 如果结果能表示为 +Long+, 则返回 +Long+
+** 否则, 返回 +Double+
+* 如果指数是整数
+** 如果指数是负数(strictly negative), 则可能返回 +Integer+, +Long+, 或者 +Double+, 取决于结果适合那种类型
+** 如果指数是整数或者零
+*** 如果底数是 +BigDecimal+, 则返回 +BigDecimal+
+*** 如果底数是 +BigInteger+, 则返回 +BigInteger+
+*** 如果底数是 +Integer+, 结果能用 +Integer+ 表示则返回 +Integer+, 否则 +BigInteger+
+*** 如果底数是 +Long+, 结果能用 +Long+ 表示则返回 +Long+, 否则 +BigInteger+
 
-* If the exponent is a decimal value
-** if the result can be represented as an +Integer+, then return an +Integer+
-** else if the result can be represented as a +Long+, then return a +Long+
-** otherwise return a +Double+
-* If the exponent is an integral value
-** if the exponent is strictly negative, then return an +Integer+, +Long+ or +Double+ if the result value fits in that type
-** if the exponent is positive or zero
-*** if the base is a +BigDecimal+, then return a +BigDecimal+ result value
-*** if the base is a +BigInteger+, then return a +BigInteger+ result value
-*** if the base is an +Integer+, then return an +Integer+ if the result value fits in it, otherwise a +BigInteger+
-*** if the base is a +Long+, then return a +Long+ if the result value fits in it, otherwise a +BigInteger+
-
-We can illustrate those rules with a few examples:
+以下的例子是对这些规则的说明:
 
 [source,groovy]
 ----
@@ -941,24 +939,26 @@ include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=number_power,indent=0
 
 == Booleans
 
-Boolean is a special data type that is used to represent truth values: ++true++ and ++false++.
-Use this data type for simple flags that track true/false <<_conditional_operators,conditions>>.
+Boolean 是用来表示真值 ++true++ 和 ++false++ 的特殊数据类型. 使用这种数据类型来简单的
+标识 真/假 <<_conditional_operators, 条件>>.
 
-Boolean values can be stored in variables, assigned into fields, just like any other data type:
+Boolean 值可以存储在变量中, 赋值给字段, 就像其他的数据类型:
 
 [source,groovy]
 ----
 include::{projectdir}/src/spec/test/SyntaxTest.groovy[tags=variable_store_boolean_value,indent=0]
 ----
 
-++true++ and ++false++ are the only two primitive boolean values.
-But more complex boolean expressions can be represented using <<_bitwise_and_logical_operators,logical operators>>.
+++true++ 和 ++false++ 是仅有的2个原生(primitive) boolean 值.
+但是可以用<<_bitwise_and_logical_operators, 逻辑操作符>> 来表示更复杂的逻辑表达式.
 
-In addition, Groovy has <<_the_groovy_truth,special rules>> (often referred to as _Groovy Truth_)
-for coercing non-boolean objects to a boolean value.
+此外, Groovy 有 <<_the_groovy_truth, 特殊规则>>(通常称为 _Groovy Truth_)
+将一个非 boolean 类型的对象转换为 boolean 值.
 
+[[_lists]]
 == Lists
 
+Groovy 的 list 使用逗号分隔(comma-separated)值, 外面由方括号包围.
 Groovy uses a comma-separated list of values, surrounded by square brackets, to denote lists.
 Groovy lists are plain JDK +java.util.List+, as Groovy doesn't define its own collection classes.
 The concrete list implementation used when defining list literals are +java.util.ArrayList+ by default,
